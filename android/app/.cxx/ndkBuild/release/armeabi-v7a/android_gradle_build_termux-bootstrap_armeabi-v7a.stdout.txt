@@ -1,0 +1,2 @@
+[armeabi-v7a] Compile thumb  : termux-bootstrap <= termux-bootstrap-zip.S
+[armeabi-v7a] SharedLibrary  : libtermux-bootstrap.so

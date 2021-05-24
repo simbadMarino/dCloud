@@ -1,0 +1,68 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "/home/simbad/Documents/Git_Repos/dCloud/android",
+      "sdkFolder": "/home/simbad/Android/Sdk",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app",
+      "makeFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+      "buildSystem": "NDK_BUILD",
+      "compilerSettingsCacheFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/.cxx",
+      "cxxFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx",
+      "ndkFolder": "/home/simbad/Android/Sdk/ndk/22.0.7026061",
+      "ndkVersion": "22.0.7026061",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [],
+    "cFlagList": [
+      "-std\u003dc11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Os",
+      "-fno-stack-protector",
+      "-Wl,--gc-sections"
+    ],
+    "cppFlagsList": [],
+    "variantName": "debug",
+    "soFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/lib",
+    "objFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj/local",
+    "jsonFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug",
+    "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/cxx/debug",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "X86",
+  "abiPlatformVersion": 24,
+  "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86",
+  "jsonFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86/android_gradle_build.json",
+  "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/cxx/debug/x86",
+  "objFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj/local/x86",
+  "buildCommandFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86/build_command.txt",
+  "buildOutputFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86/build_output.txt",
+  "modelOutputFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86/build_model.json",
+  "jsonGenerationLoggingRecordFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86/json_generation_record.json",
+  "compileCommandsJsonFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/debug/x86/compile_commands.json"
+}
