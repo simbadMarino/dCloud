@@ -21,6 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 
+
 # Android/IntelliJ
 #
 build/
@@ -54,4 +55,6 @@ buck-out/
 #build and bootstraps 
 *.apk
 *.zip
+
+
 

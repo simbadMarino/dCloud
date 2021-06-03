@@ -8,6 +8,7 @@
     android:maxLines="1"
     android:inputType="text"
     android:importantForAutofill="no"
+    android:background="@drawable/current_session_black"
     android:textColor="@android:color/white"
     android:textColorHighlight="@android:color/darker_gray"
     android:paddingTop="0dp"

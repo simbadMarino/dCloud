@@ -1,2 +1,3 @@
 [arm64-v8a] Compile        : termux-bootstrap <= termux-bootstrap-zip.S
+[arm64-v8a] Compile        : termux-bootstrap <= termux-bootstrap.c
 [arm64-v8a] SharedLibrary  : libtermux-bootstrap.so

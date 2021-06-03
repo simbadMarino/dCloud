@@ -1,1 +1,2 @@
-make: Nothing to be done for 'termux'.
+[x86] Compile        : termux <= termux.c
+[x86] SharedLibrary  : libtermux.so
