@@ -16,6 +16,7 @@ import Terminal from "./components/terminal.js";
 import { WebView } from 'react-native-webview';
 import { AppearanceProvider } from 'react-native-appearance';
 import { Dimensions } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView} from 'react-native';
 
 
 var configText = "";
@@ -25,7 +26,9 @@ var configHostRepairEnabled = "";
 var btfsVersion = "";
 var systemCurrentDate = "";
 
-
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 function getNodeID() {
     //console.log('Getting Node ID data..')
@@ -140,18 +143,43 @@ function importNodePK(){
 
 function NodeScreen() {
    const titleText = "Host View";
+   let WebViewRef;
+   const [refreshing, setRefreshing] = React.useState(false);
+
+     const onRefresh = React.useCallback(() => {
+       setRefreshing(true);
+       WebViewRef && WebViewRef.reload();
+       console.log("Entering refreshing...");
+       console.log(refreshing);
+       wait(1000).then(() => setRefreshing(false));
+
+     });
+
     return (
-      <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
-      <Text style={styles.titleText} >
-         {titleText}
-       </Text>
-       <WebView
+     <SafeAreaView >
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+          >
+            <Text
+            style={styles.controlsText}
+            >Pull down to refresh</Text>
+            <WebView
+              ref={WEBVIEW_REF => (WebViewRef = WEBVIEW_REF)}
               source={{uri: 'http://127.0.0.1:5001/hostui'}}
               style={styles.hostView}
-              startInLoadingState = {true}
-              //renderLoading = {true}
-             />
-      </View>
+              //startInLoadingState={true}
+            />
+
+          </ScrollView>
+        </SafeAreaView>
+
+
     );
 }
 
@@ -372,6 +400,12 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center"
     },
+    scrollView: {
+        flex: 1,
+        backgroundColor: '#525248',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -394,7 +428,7 @@ const styles = StyleSheet.create({
       padding: 10
     },
   controlsText: {
-  fontSize: 12,
+  fontSize: 15,
   color: 'white'
   //fontWeight: "normal"
 }
