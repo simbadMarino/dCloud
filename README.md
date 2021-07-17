@@ -19,6 +19,9 @@ a) Compiling from Android Studio by cloning this repo and performing the followi
   1. Perform a `yarn install` in the dCloud root folder to install ALL react-native dependencies ( "react": "16.13.1","react-native": "0.63.4" versions were tested and currently working, any other version might have some unknown issues)
   2. Open the android project using 
 
+*Notes about boostrap packages and architectures: 
+  If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.
+
 b) Downloading latest apk:
   Option 1: Contact me on telegram and I can forward you the APK installer
   Option 2: Download the APK directly from the btfs gateway (file is splitted in 2 files):
@@ -40,6 +43,8 @@ Optionally, if you already have a private key with some BTT do the following ins
 
 
 After this please restart your dCloud app and the GUI should show you the Host UI and your current balance in the Renter tab. From here you can use your app as a full BTFS node.
+
+
 
 **Important Notice:**
 Please note that current effort will be towards making a nice Renter UI and some issues with the host node could appear and won't be prioritized for fixing or developing additional features.
