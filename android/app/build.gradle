@@ -91,7 +91,7 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
@@ -142,7 +142,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "0.4"
 
         externalNativeBuild {
             ndkBuild {
@@ -151,7 +151,7 @@ android {
         }
 
         ndk {
-            abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+          //  abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
 
     }
@@ -159,7 +159,7 @@ android {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk true  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
@@ -270,7 +270,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 def downloadBootstrap(String arch, String expectedChecksum, String qmHash) {
-    return
+
     def digest = java.security.MessageDigest.getInstance("SHA-256")
 
     def localUrl = "src/main/cpp/bootstrap-" + arch + ".zip"
@@ -324,11 +324,10 @@ clean {
 task downloadBootstraps(){
 
     doLast {
-        //def version = "2021.02.19-r1"
-        downloadBootstrap("aarch64", "5a0c6d26a1be3daf4d77cf3c4c38c0257c647cc5f3100f136b19b020c85f84b9", "QmYt4tWk4dkzSamjYgKPZF7TdPVaCPdn5wCzicGBHEKheK")  //Valid until July 22
-        downloadBootstrap("x86_64",  "e47fe087afafa80d22bac27739a02326b6bed73fca502f3d13b3b39e27dce5ce", "QmQjjJwtAGGfxP9LCcJWXiaca99mWde6CfniEbUzFr8t49") //Valid until unti july 25
-        downloadBootstrap("arm",     "2153e1b581b407cffc443674999ccc6d49360c2a543d3f8a738558abe9620aca", "QmPcG3BDP13jWA6NrAJZ14otpeidX8WDPbrSZAZmeabLad") //Valid until unti july 25
-        //downloadBootstrap("i686",    "", version)
+        downloadBootstrap("aarch64", "3729410ce8e6e29f18449661ad1cc351e1ddbf39a61dade073e629d88e675fc", "QmQU9sLRpGYEiVM8r2Y5WGJYFfSxgJ1PfDidtv9QvCXDe9")  //Valid until 120 days from July 16th
+        downloadBootstrap("x86_64", "2d844c6b0435f353cec743d3e68b8c11f0673c9ef9a6d7d7cc50777b1810f9b6", "QmbVH6HDRvX1eC88yhRS2TsGN7zN5XE6mCgB65v38NmJtD") // Valid until 120 120 days from July 16th
+        //downloadBootstrap("arm",  "", "") // Not available yet
+        downloadBootstrap("i686", "6f2ad93c30df309faef361889d0a98b48e7f8c6e13efae56dbca371eb41fa4d3", "QmZeFn7HfWjmub6obCypuneeRvhnhWhvgSEghSHRsYye6T") // Valid until 120 days from July 16th
           }
 }
 

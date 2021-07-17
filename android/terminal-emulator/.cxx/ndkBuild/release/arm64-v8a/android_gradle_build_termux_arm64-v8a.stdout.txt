@@ -1,2 +1,1 @@
-[arm64-v8a] Compile        : termux <= termux.c
-[arm64-v8a] SharedLibrary  : libtermux.so
+make: Nothing to be done for 'termux'.

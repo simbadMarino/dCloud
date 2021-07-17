@@ -1,2 +1,1 @@
-[armeabi-v7a] Compile thumb  : termux <= termux.c
-[armeabi-v7a] SharedLibrary  : libtermux.so
+make: Nothing to be done for 'termux'.

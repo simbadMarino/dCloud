@@ -54,6 +54,7 @@ buck-out/
 
 #build and bootstraps 
 *.apk
+*.aab
 *.zip
 
 

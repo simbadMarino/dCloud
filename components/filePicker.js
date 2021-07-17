@@ -8,9 +8,6 @@ import { ListItem, Icon, Card } from 'react-native-elements';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import { FloatingAction } from "react-native-floating-action";
-//import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
-//import LinearGradient from 'react-native-linear-gradient'; // Only if no expo
-//import ProgressBarAnimated from 'react-native-progress-bar-animated';
 import Root from './Root';
 import Popup from './Popup';
 
@@ -52,8 +49,6 @@ function stopAllIntervals(){
     currentUploadSessionID = "";
     currentFileQMhash = "";
     currentFileName = "";
-
-
 }
 
 async function getBalanceBTT(){

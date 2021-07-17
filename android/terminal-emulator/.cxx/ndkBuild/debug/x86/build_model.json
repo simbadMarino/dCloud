@@ -5,7 +5,7 @@
       "sdkFolder": "/home/simbad/Android/Sdk",
       "isNativeCompilerSettingsCacheEnabled": false,
       "isBuildOnlyTargetAbiEnabled": true,
-      "ideBuildTargetAbi": "x86",
+      "ideBuildTargetAbi": "x86_64,x86",
       "splitsAbiFilterSet": [],
       "intermediatesFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates",
       "gradleModulePathName": ":terminal-emulator",
@@ -48,6 +48,7 @@
     "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/cxx/debug",
     "isDebuggableEnabled": true,
     "validAbiList": [
+      "X86_64",
       "X86"
     ],
     "buildTargetSet": []

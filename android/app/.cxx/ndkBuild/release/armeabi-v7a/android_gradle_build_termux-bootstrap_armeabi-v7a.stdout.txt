@@ -1,3 +1,1 @@
-[armeabi-v7a] Compile thumb  : termux-bootstrap <= termux-bootstrap-zip.S
-[armeabi-v7a] Compile thumb  : termux-bootstrap <= termux-bootstrap.c
-[armeabi-v7a] SharedLibrary  : libtermux-bootstrap.so
+make: Nothing to be done for 'termux-bootstrap'.

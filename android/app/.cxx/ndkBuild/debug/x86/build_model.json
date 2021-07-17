@@ -5,8 +5,13 @@
       "sdkFolder": "/home/simbad/Android/Sdk",
       "isNativeCompilerSettingsCacheEnabled": false,
       "isBuildOnlyTargetAbiEnabled": true,
-      "ideBuildTargetAbi": "x86",
-      "splitsAbiFilterSet": [],
+      "ideBuildTargetAbi": "x86_64,x86",
+      "splitsAbiFilterSet": [
+        "armeabi-v7a",
+        "x86_64",
+        "x86",
+        "arm64-v8a"
+      ],
       "intermediatesFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates",
       "gradleModulePathName": ":app",
       "moduleRootFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app",
@@ -48,6 +53,7 @@
     "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/cxx/debug",
     "isDebuggableEnabled": true,
     "validAbiList": [
+      "X86_64",
       "X86"
     ],
     "buildTargetSet": []
