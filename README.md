@@ -17,7 +17,8 @@ As a Google Play / F-Droid version is not ready yet you will need to install dCl
 a) Compiling from Android Studio by cloning this repo and performing the following actions:
 
   1. Perform a `yarn install` in the dCloud root folder to install ALL react-native dependencies ( "react": "16.13.1","react-native": "0.63.4" versions were tested and currently working, any other version might have some unknown issues)
-  2. Open the android project using 
+  2. Open the android project using Android Studio and perform a "make project" to verify all dependencies are available and configured. #TODO: Start a "Common problems while setting-up a fresh project config" in this README.
+  3. 
 
 *Notes about boostrap packages and architectures: 
   If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.
