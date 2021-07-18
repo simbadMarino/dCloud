@@ -5,7 +5,6 @@
       "sdkFolder": "/home/simbad/Android/Sdk",
       "isNativeCompilerSettingsCacheEnabled": false,
       "isBuildOnlyTargetAbiEnabled": true,
-      "ideBuildTargetAbi": "x86_64,x86",
       "splitsAbiFilterSet": [
         "armeabi-v7a",
         "x86_64",
@@ -53,8 +52,10 @@
     "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/cxx/debug",
     "isDebuggableEnabled": true,
     "validAbiList": [
-      "X86_64",
-      "X86"
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
     ],
     "buildTargetSet": []
   },

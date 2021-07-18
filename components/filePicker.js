@@ -200,7 +200,7 @@ async function getUploadStatus() {
             Popup.show({
                type: 'Success',
                title: 'Upload complete',
-               textBody: currentFileQMhash,
+               textBody: "https://gateway.btfs.io/btfs/" + currentFileQMhash,
                buttontext: 'Ok',
                callback: () => Popup.hide(),
 
