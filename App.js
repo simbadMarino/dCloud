@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { Component, useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Switch,TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Switch,TouchableOpacity, TextInput, Image} from 'react-native';
 //import Overlay from 'react-native-modal-overlay';
 import axios from 'axios';
 import {
@@ -12,12 +12,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon, Input } from 'react-native-elements';
 import FilePicker from "./components/filePicker.js";
 import {strTronAddress} from "./components/filePicker.js";
+import LoginScreen from "./components/Login.js";
 import Terminal from "./components/terminal.js";
 import { WebView } from 'react-native-webview';
 import { AppearanceProvider } from 'react-native-appearance';
 import { Dimensions } from 'react-native';
 import { RefreshControl, SafeAreaView, ScrollView} from 'react-native';
-
+import { QRCode } from 'react-native-custom-qr-codes';
+import prompt from 'react-native-prompt-android';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 var configText = "";
 var configStorageClientEnabled = "";
@@ -25,6 +29,9 @@ var configStorageHostEnabled = "";
 var configHostRepairEnabled = "";
 var btfsVersion = "";
 var systemCurrentDate = "";
+var BTFSNodeID = "";
+var walletPassword = "";
+var amountToDeposit = "";
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -34,16 +41,32 @@ function getNodeID() {
     //console.log('Getting Node ID data..')
   	var response =  axios.post('http://localhost:5001/api/v1/id')
   .then(function (response) {
-      alert(response.data.ID);
+      //alert(response.data.ID);
+      BTFSNodeID = response.data.ID;
     })
   }
 
+function setWalletPassword(){
+try{
+          var passwordSetResp =  axios.post('http://localhost:5001/api/v1/wallet/password?arg='+ walletPassword)
+           .then(function (passwordSetResp) {
+
+           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
+            //float_bttBalance = walletBalance.data.BttWalletBalance;
+            console.log(passwordSetResp);
+            //console.log("BTT balance: " + float_bttBalance);
+            })
+}
+catch (err) {
+                throw err;
+            }
+}
 
 function depositBTT(){
 
 try{
 
-    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/wallet/deposit?arg=10000000&a=&p=password')
+    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/wallet/deposit?arg=' + amountToDeposit*1000000 + '&a=&p='+ walletPassword)
            .then(function (depositBTT_resp) {
 
            // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
@@ -62,7 +85,6 @@ try{
 
 
 }
-
 
 function getCommands() {
 
@@ -105,14 +127,95 @@ function getConfig() {
     configStorageClientEnabled = configDATA.data.Experimental.StorageClientEnabled;
     configStorageHostEnabled = configDATA.data.Experimental.StorageHostEnabled;
     configHostRepairEnabled = configDATA.data.Experimental.HostRepairEnabled;
-    console.log("BTFS version: " + btfsVersion);
-    console.log("System Date: " + systemCurrentDate);
-    console.log("Host Storage enabled?: " + configStorageHostEnabled);
-    console.log("Renter Storage enabled?: " + configStorageClientEnabled);
-    console.log("Host Repair enabled?: " + configHostRepairEnabled);
+    alert("BTFS version: " + btfsVersion + "\n" + "System Date: " + systemCurrentDate + "\n" + "Host Storage enabled?: " + configStorageHostEnabled + "\n" + "Renter Storage enabled?: " + configStorageClientEnabled + "\n" + "Host Repair enabled?: " + configHostRepairEnabled);
+
 
   })
 }
+
+function promptPassword() {
+
+prompt(
+    'Set password',
+    'Input a new password below',
+    [
+     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+     {text: 'OK', onPress: password => {
+         console.log('OK Pressed, password: ' + password);
+         walletPassword = password;
+         console.log(walletPassword);
+         setWalletPassword();
+
+     }
+     },
+    ],
+    {
+        type: 'secure-text',
+        cancelable: false,
+        defaultValue: '',
+        placeholder: 'New password'
+    }
+);
+
+
+}
+
+function depositToBTFS() {
+
+prompt(
+    'Deposit BTT to BTFS',
+    'How much BTT?',
+    [
+     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+     {text: 'OK', onPress: BTTamount => {
+         console.log('OK Pressed, BTT amount: ' + BTTamount);
+         amountToDeposit = BTTamount;
+         console.log(amountToDeposit);
+         promptCurrentPassword();
+     }
+     },
+    ],
+    {
+        type: 'number',
+        cancelable: false,
+        defaultValue: '',
+        placeholder: 'Deposit Amount'
+    }
+);
+
+
+
+
+}
+
+function promptCurrentPassword() {
+
+prompt(
+    'Enter password',
+    'for security...',
+    [
+     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+     {text: 'OK', onPress: password => {
+         console.log('OK Pressed, password: ' + password);
+         walletPassword = password;
+         console.log(walletPassword);
+         depositBTT();
+
+     }
+     },
+    ],
+    {
+        type: 'secure-text',
+        cancelable: false,
+        defaultValue: '',
+        placeholder: 'Password'
+    }
+);
+
+
+}
+
+
 
 
 
@@ -185,8 +288,9 @@ function NodeScreen() {
 
 function RenterScreen() {
   const titleText = "Renter View";
+  getNodeID();
   return (
-    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
+    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42'}}>
       <FilePicker/>
     </View>
   );
@@ -195,27 +299,66 @@ function RenterScreen() {
 function TerminalScreen() {
   //const titleText = "Renter View";
   return (
-    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
+    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
       <Terminal/>
     </View>
   );
 }
 
 function StatsScreen() {
-const titleText = "Stats View";
+const titleText = "Node Info";
+
+const [copiedText, setCopiedText] = useState('');
+
+const copyToClipboard = () => {
+    Clipboard.setString(strTronAddress);
+  };
+
+  const fetchCopiedText = async () => {
+      const text = await Clipboard.getString();
+      setCopiedText(text);
+    };
+
 
   return (
-    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
-    <Text style={styles.titleText} >
-       {titleText}
-     </Text>
+    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
 
 
 
+
+    <QRCode content= {strTronAddress}
+            logoSize = {50}
+            size = {200}
+            logo={require('./components/tronlogo.png')}
+
+            />
+    <Text
+    selectable = {true}
+    style={styles.controlsText}
+    >
+      {strTronAddress}
+    </Text>
+
+    <TouchableOpacity style={styles.copyButton}
+             onPress={copyToClipboard}
+             >
+               <Text style={styles.tabMenuText}>
+               Copy Addy</Text>
+     </TouchableOpacity>
+
+
+     <TouchableOpacity style={styles.tabsButton}
+             onPress={depositToBTFS}
+             >
+               <Text style={styles.tabMenuText}>
+               Deposit BTT</Text>
+     </TouchableOpacity>
     </View>
   );
 
  }
+
+
 
 
 
@@ -252,17 +395,6 @@ function SettingsScreen() {
   const [isEnabledHost, setIsEnabledHost] = useState(false);
   const [isEnabledBTFS, setIsEnabledBTFS] = useState(false);
 
-  const toggleBTFS = () => {
-    if(isEnabledBTFS == false){   //BTFS Storage Rental activated?
-      initBTFS();
-    }
-    else{
-    //Kill BTFS backend
-        deinitBTFS();
-    }
-    setIsEnabledBTFS(previousState => !previousState);
-
-    }
 
   const toggleSwitchRenter = () => {
   if(isEnabled == false){   //BTFS Storage Rental activated?
@@ -290,8 +422,12 @@ function SettingsScreen() {
   const titleText = "BTFS node Configuration";
   const nodeModeText = "Node Mode";
   var [value, onChangeText] = React.useState(configText);
+
+
+
+
   return (
-    <View style={{ margin: 30, flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
+    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
     <Text style={styles.titleText} >
        {titleText}
      </Text>
@@ -299,16 +435,9 @@ function SettingsScreen() {
 
 
 
-        <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleBTFS}
-            value={isEnabledBTFS}
-          />
 
       <Text style={styles.controlsText} >
-                {isEnabled ? 'Renter: Active' : 'Renter: Not Active'}
+                {isEnabled ? 'Renter Enabled' : 'Renter Disabled'}
                 </Text>
         <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -319,7 +448,7 @@ function SettingsScreen() {
           />
 
         <Text style={styles.controlsText} >
-              {isEnabledHost ? 'Host: Active' : 'Host: Not Active'}
+              {isEnabledHost ? 'Host Enabled' : 'Host Disabled'}
               </Text>
         <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -330,10 +459,22 @@ function SettingsScreen() {
           />
 
 
-         <Button onPress={ getNodeID.bind(this) } title=" Node ID" />
-         <Button onPress={ getConfig.bind(this) } title=" Config Data" />
-         <Button onPress={ getRepoData.bind(this) } title="RepoData" />
-         <Button onPress={ depositBTT.bind(this) } title="Deposit BTT" />
+
+
+         <TouchableOpacity style={styles.tabsButton}
+                          onPress={getConfig.bind(this)}
+                          >
+                            <Text style={styles.tabMenuText}>
+                            Get BTFS Data</Text>
+         </TouchableOpacity>
+
+         <TouchableOpacity style={styles.tabsButton}
+                 onPress={promptPassword}
+                 >
+                   <Text style={styles.tabMenuText}>
+                   Set Password</Text>
+         </TouchableOpacity>
+
 
     </View>
   );
@@ -343,10 +484,9 @@ const Tab = createBottomTabNavigator();
 
 export default class App extends Component{
 
-
   render() {
 
-    return (
+       return (
     <AppearanceProvider>
         <NavigationContainer theme={DarkTheme}>
          <Tab.Navigator screenOptions={({ route }) => ({
@@ -354,20 +494,18 @@ export default class App extends Component{
                 let iconName;
 
                 if (route.name === 'Node') {
-                  iconName = focused ? 'link' : 'link';
+                  iconName = focused ? 'poll' : 'poll';
                 }
                   else if (route.name === 'Settings') {
                   iconName = focused ? 'settings' : 'settings';
                 }
-                  else if (route.name === 'Renter') {
+                  else if (route.name === 'Files') {
                   iconName = focused ? 'storage' : 'storage';
                 }
-                  else if (route.name === 'Stats') {
-                  iconName = focused ? 'poll' : 'poll';
-                }
-                else if (route.name === 'Terminal') {
+                  else if (route.name === 'Terminal') {
                   iconName = focused ? 'screen-share' : 'screen-share';
                 }
+
 
 
                 // You can return any component that you like here!
@@ -380,17 +518,17 @@ export default class App extends Component{
             }}
           >
 
-
-           <Tab.Screen name="Node" component={NodeScreen}  />
-           <Tab.Screen name="Renter" component={RenterScreen} />
-           <Tab.Screen name="Settings" component={SettingsScreen} />
-           <Tab.Screen name="Stats" component={StatsScreen} />
+           <Tab.Screen name="Files" component={RenterScreen} />
            <Tab.Screen name="Terminal" component={TerminalScreen} />
+           <Tab.Screen name="Settings" component={SettingsScreen} />
+           <Tab.Screen name="Node" component={StatsScreen} />
+
 
          </Tab.Navigator>
        </NavigationContainer>
    </AppearanceProvider>
     );
+
   }
 }
 
@@ -407,10 +545,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
       },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    margin: 10
-  },
+      flex: 1,
+      backgroundColor: '#3C3C42',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   titleText: {
   fontSize: 20,
   color: 'white',
@@ -429,7 +568,31 @@ const styles = StyleSheet.create({
     },
   controlsText: {
   fontSize: 15,
-  color: 'white'
+  color: 'white',
   //fontWeight: "normal"
-}
+},
+tabsButton:{
+    width:"50%",
+    backgroundColor:"white",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
+  },
+
+  copyButton:{
+      width:"30%",
+      backgroundColor:"#6495ed",
+      borderRadius:15,
+      height:40,
+      alignItems:"center",
+      justifyContent:"center",
+      marginTop:1,
+      marginBottom:5
+    },
+  tabMenuText:{
+      color:"black"
+    }
 });

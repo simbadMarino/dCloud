@@ -264,7 +264,7 @@ async function getUploadStatus() {
 export default class App extends React.Component {
 
 state = {
-    hashText: 'QMhash Text',
+    hashText: '',
     fileName: "",
     uploadSts: "",
     progressBarSts: 0.0,
@@ -280,22 +280,36 @@ state = {
   componentDidMount() {
     this.timer = setInterval(() => {
     this.setState({ bttBalance: float_bttBalance / 1000000
-    });    }, 5000);
+    });    }, 10000);
 
     this.timer = setInterval(() => {
     this.setState({ btfsBalance: float_btfsBalance / 1000000
-    });    }, 5000);
+    });    }, 10000);
 
 
     getBalanceBTT();
     getTronAddress();
 
-    this.timer = setInterval(() => {
+    this.timer = setTimeout(() => {
     this.setState({ tronAddress: strTronAddress
-    });    }, 5000);
+    });    }, 500);
 
-   // this.interval = setTimeout()
-    this.interval = setInterval(getBalanceBTT,5000);
+    this.timer = setInterval(() => {
+        this.setState({ tronAddress: strTronAddress
+        });    }, 5000);
+
+    this.timer = setTimeout(() => {
+        this.setState({ bttBalance: float_bttBalance / 1000000
+        });    }, 5000);
+
+
+    this.timer = setInterval(() => {
+        this.setState({ tronAddress: strTronAddress
+        });    }, 10000);
+
+    //this.interval = setTimeout()
+    this.interval = setInterval(getBalanceBTT,10000);
+
     }
 
   componentWillUnMount() {
@@ -460,17 +474,17 @@ try {
 
          const actions = [
            {
-             text: "Upload File",
+             text: "Single File",
              icon: require("./uploadSingle.png"),
              name: "single_file",
              position: 4
            },
-          /* {
+           {
              text: "Multiple Files",
              icon: require("./uploadMultiple.png"),
              name: "multi_file",
              position: 3
-           },*/
+           },/*
            {
              text: "Deposit BTT",
              icon: require("./uploadMultiple.png"),
@@ -482,7 +496,7 @@ try {
              icon: require("./uploadMultiple.png"),
              name: "withdraw",
              position: 1
-           }
+           }*/
 
          ];
 
