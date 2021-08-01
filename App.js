@@ -305,7 +305,7 @@ function TerminalScreen() {
   );
 }
 
-function StatsScreen() {
+function WalletScreen() {
 const titleText = "Node Info";
 
 const [copiedText, setCopiedText] = useState('');
@@ -493,8 +493,8 @@ export default class App extends Component{
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
 
-                if (route.name === 'Node') {
-                  iconName = focused ? 'poll' : 'poll';
+                if (route.name === 'Wallet') {
+                  iconName = focused ? 'account-balance-wallet' : 'account-balance-wallet';
                 }
                   else if (route.name === 'Settings') {
                   iconName = focused ? 'settings' : 'settings';
@@ -519,9 +519,10 @@ export default class App extends Component{
           >
 
            <Tab.Screen name="Files" component={RenterScreen} />
+           <Tab.Screen name="Wallet" component={WalletScreen} />
            <Tab.Screen name="Terminal" component={TerminalScreen} />
            <Tab.Screen name="Settings" component={SettingsScreen} />
-           <Tab.Screen name="Node" component={StatsScreen} />
+
 
 
          </Tab.Navigator>

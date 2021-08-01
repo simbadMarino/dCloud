@@ -120,14 +120,8 @@ try{
 async function sendDevTipMainNetBTT(){
 
 try{
-
-    var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/wallet/transfer?",{
-    params: {
-    to: "TRxrmHDysqAMHNo2eEtSvcMoJpDnWLqnZ4",
-    amount: 1000000,
-    p: "password"
-    }
-    })
+ //POST
+    var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/wallet/transfer?arg=TU6fRT8ooBK9reAvuetxqpsykHekANmE2H&arg=100000&p=password" )
            .then(function (sendDevTip_resp) {
 
            // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
@@ -280,11 +274,11 @@ state = {
   componentDidMount() {
     this.timer = setInterval(() => {
     this.setState({ bttBalance: float_bttBalance / 1000000
-    });    }, 10000);
+    });    }, 2000);
 
     this.timer = setInterval(() => {
     this.setState({ btfsBalance: float_btfsBalance / 1000000
-    });    }, 10000);
+    });    }, 2000);
 
 
     getBalanceBTT();
@@ -296,7 +290,7 @@ state = {
 
     this.timer = setInterval(() => {
         this.setState({ tronAddress: strTronAddress
-        });    }, 5000);
+        });    }, 2000);
 
     this.timer = setTimeout(() => {
         this.setState({ bttBalance: float_bttBalance / 1000000
@@ -305,10 +299,10 @@ state = {
 
     this.timer = setInterval(() => {
         this.setState({ tronAddress: strTronAddress
-        });    }, 10000);
+        });    }, 2000);
 
-    //this.interval = setTimeout()
     this.interval = setInterval(getBalanceBTT,10000);
+    this.interval = setInterval(getTronAddress,5000);
 
     }
 
@@ -478,13 +472,13 @@ try {
              icon: require("./uploadSingle.png"),
              name: "single_file",
              position: 4
-           },
+           },/*
            {
-             text: "Multiple Files",
+             text: "Send tip",
              icon: require("./uploadMultiple.png"),
              name: "multi_file",
              position: 3
-           },/*
+           },
            {
              text: "Deposit BTT",
              icon: require("./uploadMultiple.png"),
