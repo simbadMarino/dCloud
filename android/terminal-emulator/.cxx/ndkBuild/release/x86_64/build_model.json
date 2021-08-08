@@ -55,7 +55,7 @@
     "buildTargetSet": []
   },
   "abi": "X86_64",
-  "abiPlatformVersion": 29,
+  "abiPlatformVersion": 24,
   "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/release/x86_64",
   "jsonFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/release/x86_64/android_gradle_build.json",
   "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/cxx/release/x86_64",

@@ -60,7 +60,7 @@
     "buildTargetSet": []
   },
   "abi": "ARMEABI_V7A",
-  "abiPlatformVersion": 29,
+  "abiPlatformVersion": 24,
   "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/release/armeabi-v7a",
   "jsonFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/release/armeabi-v7a/android_gradle_build.json",
   "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/cxx/release/armeabi-v7a",

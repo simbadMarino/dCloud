@@ -9,9 +9,9 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon, Input } from 'react-native-elements';
+import { Icon, Input, Card } from 'react-native-elements';
 import FilePicker from "./components/filePicker.js";
-import {strTronAddress} from "./components/filePicker.js";
+//import {strTronAddress} from "./components/filePicker.js";
 import LoginScreen from "./components/Login.js";
 import Terminal from "./components/terminal.js";
 import { WebView } from 'react-native-webview';
@@ -23,6 +23,8 @@ import prompt from 'react-native-prompt-android';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 
+
+// ----------------------------- START OF MODULE VARS --------------------------------------//
 var configText = "";
 var configStorageClientEnabled = "";
 var configStorageHostEnabled = "";
@@ -32,6 +34,14 @@ var systemCurrentDate = "";
 var BTFSNodeID = "";
 var walletPassword = "";
 var amountToDeposit = "";
+var float_bttBalance = 0;
+var float_btfsBalance = 0;
+var strTronAddress = "";
+
+// ----------------------------- END OF MODULE VARS --------------------------------------//
+
+
+
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -244,6 +254,76 @@ function importNodePK(){
 
 }
 
+async function getTronAddress() {
+
+try{
+        //console.log('Getting Node ID data..')
+        var response =  axios.post('http://localhost:5001/api/v1/id')
+        .then(function (response) {
+          strTronAddress = response.data.TronAddress;
+        //  alert(strTronAddress);
+        })
+    }
+
+catch (err) {
+                throw err;
+            }
+  }
+
+
+
+
+async function sendDevTipMainNetBTT(){
+
+try{
+ //POST
+    var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/wallet/transfer?arg=TU6fRT8ooBK9reAvuetxqpsykHekANmE2H&arg=100000&p=password" )
+           .then(function (sendDevTip_resp) {
+
+           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
+            //float_bttBalance = walletBalance.data.BttWalletBalance;
+            console.log(sendDevTip_resp);
+            //console.log("BTT balance: " + float_bttBalance);
+            })
+
+    }
+
+    catch (err) {
+
+                throw err;
+
+            }
+
+
+}
+
+async function getBalanceBTT(){
+
+try{
+
+    var walletBalance =  axios.post('http://localhost:5001/api/v1/wallet/balance')
+           .then(function (walletBalance) {
+
+            float_btfsBalance = walletBalance.data.BtfsWalletBalance/1000000;
+            float_bttBalance = walletBalance.data.BttWalletBalance/1000000;
+            console.log("BTFS balance: " + float_btfsBalance);
+            console.log("BTT balance: " + float_bttBalance);
+            })
+
+    }
+
+    catch (err) {
+
+                throw err;
+
+            }
+
+
+}
+
+
+//-----------------------------TAB SCREENS-------------------------------------------------//
+
 function NodeScreen() {
    const titleText = "Host View";
    let WebViewRef;
@@ -289,6 +369,7 @@ function NodeScreen() {
 function RenterScreen() {
   const titleText = "Renter View";
   getNodeID();
+  const [copiedText, setCopiedText] = useState('');
   return (
     <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42'}}>
       <FilePicker/>
@@ -314,36 +395,45 @@ const copyToClipboard = () => {
     Clipboard.setString(strTronAddress);
   };
 
-  const fetchCopiedText = async () => {
-      const text = await Clipboard.getString();
-      setCopiedText(text);
-    };
 
+
+const cardBalance = [
+              {
+                 title: 'MainNet BTT',
+                 balance: float_bttBalance
+              },
+              {
+                 title: 'BTFS BTT ',
+                 balance: float_btfsBalance
+               }
+             ]
 
   return (
     <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
 
-
+    <Card containerStyle={styles.cardRenter}>
+            <View style={styles.user} height = {30}>
+              <Text selectable style={styles.cardAddressText} >{strTronAddress}</Text>
+              <Text style={styles.cardMainNetText} >{cardBalance[0].title}</Text>
+              <Text style={styles.cardBalanceText} >{cardBalance[0].balance}</Text>
+              <Text style={styles.cardMainNetText} >{cardBalance[1].title}</Text>
+              <Text style={styles.cardBalanceText} >{cardBalance[1].balance}</Text>
+            </View>
+    </Card>
 
 
     <QRCode content= {strTronAddress}
             logoSize = {50}
-            size = {200}
-            logo={require('./components/tronlogo.png')}
+            size = {150}
+            logo={require('./components/btt_logo.png')}
 
             />
-    <Text
-    selectable = {true}
-    style={styles.controlsText}
-    >
-      {strTronAddress}
-    </Text>
 
     <TouchableOpacity style={styles.copyButton}
              onPress={copyToClipboard}
              >
                <Text style={styles.tabMenuText}>
-               Copy Addy</Text>
+               Copy Address</Text>
      </TouchableOpacity>
 
 
@@ -361,7 +451,7 @@ const copyToClipboard = () => {
 
 
 
-
+//----------------------------------END OF TAB SCREENS----------------------------------------//
 
 
 function applyRenter() {
@@ -433,34 +523,6 @@ function SettingsScreen() {
      </Text>
 
 
-
-
-
-      <Text style={styles.controlsText} >
-                {isEnabled ? 'Renter Enabled' : 'Renter Disabled'}
-                </Text>
-        <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitchRenter}
-            value={isEnabled}
-          />
-
-        <Text style={styles.controlsText} >
-              {isEnabledHost ? 'Host Enabled' : 'Host Disabled'}
-              </Text>
-        <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabledHost ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e5e"
-            onValueChange={toggleSwitchHost}
-            value={isEnabledHost}
-          />
-
-
-
-
          <TouchableOpacity style={styles.tabsButton}
                           onPress={getConfig.bind(this)}
                           >
@@ -483,6 +545,44 @@ function SettingsScreen() {
 const Tab = createBottomTabNavigator();
 
 export default class App extends Component{
+
+state = {
+
+    bttBalance: 0,
+    btfsBalance: 0,
+    tronAddress: ""
+
+}
+
+  componentDidMount() {
+
+
+
+    getBalanceBTT();
+    getTronAddress();
+/*
+    this.timer = setTimeout(() => {
+    this.setState({ tronAddress: strTronAddress
+    });    }, 500);
+
+    this.timer = setInterval(() => {
+        this.setState({ tronAddress: strTronAddress
+        });    }, 2000);
+
+   */
+
+
+    /*this.timer = setInterval(() => {
+        this.setState({ tronAddress: strTronAddress
+        });    }, 2000);*/
+
+
+    this.interval = setInterval(getBalanceBTT,10000);
+    this.interval = setInterval(getTronAddress,5000);
+
+    }
+
+
 
   render() {
 
@@ -572,6 +672,11 @@ const styles = StyleSheet.create({
   color: 'white',
   //fontWeight: "normal"
 },
+ cardAddressText: {
+    fontSize: 14,
+    color: 'white'
+    //fontWeight: "normal"
+  },
 tabsButton:{
     width:"50%",
     backgroundColor:"white",
@@ -595,5 +700,30 @@ tabsButton:{
     },
   tabMenuText:{
       color:"black"
-    }
+    },
+  cardBalanceText: {
+      fontSize: 16,
+      color: 'white',
+      fontWeight: "bold",
+      margin: 1
+      },
+
+      cardMainNetText: {
+      fontSize: 15,
+      color: '#B6B6B2',
+      fontWeight: "bold",
+      margin: 1
+      },
+
+      cardRenter: {
+      display: "flex",
+      height: 170,
+      //flexDirection: "column",
+      backgroundColor: '#525248',
+      borderColor: 'white',
+      borderRadius: 5,
+      borderTopColor: 'white',
+      borderTopWidth: 5
+      }
+
 });

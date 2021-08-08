@@ -1,16 +1,17 @@
 import React from 'react';
-//import {useState} from 'react';
+import  { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button, Image, Alert, SafeAreaView, ScrollView } from 'react-native';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 //import { Overlay } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
-import { ListItem, Icon, Card } from 'react-native-elements';
+import { ListItem, Icon, Card, Divider} from 'react-native-elements';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import { FloatingAction } from "react-native-floating-action";
 import Root from './Root';
 import Popup from './Popup';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 
 var currentUploadSessionID = "";
@@ -19,12 +20,10 @@ var currentFileQMhash = "";
 var currentFileName = "";
 var listPacksIndex = 0;
 var statusProgress = 0;
-var progressBarColor = 'green';
+var progressBarColor = '#3C3C42';
 var timeOutWatchDogCounter = 0;
 const MAX_UPLOAD_TIMEOUT = 500;
-var float_bttBalance = 0;
-var float_btfsBalance = 0;
-export var strTronAddress = "";
+
 
 
 
@@ -47,99 +46,11 @@ function stopAllIntervals(){
     currentSessionIDMessage = "";
     timeOutWatchDogCounter = 0;
     currentUploadSessionID = "";
-    currentFileQMhash = "";
+    //currentFileQMhash = "";
     currentFileName = "";
 }
 
-async function getBalanceBTT(){
 
-try{
-
-    var walletBalance =  axios.post('http://localhost:5001/api/v1/wallet/balance')
-           .then(function (walletBalance) {
-
-            float_btfsBalance = walletBalance.data.BtfsWalletBalance;
-            float_bttBalance = walletBalance.data.BttWalletBalance;
-            console.log("BTFS balance: " + float_btfsBalance);
-            console.log("BTT balance: " + float_bttBalance);
-            })
-
-    }
-
-    catch (err) {
-
-                throw err;
-
-            }
-
-
-}
-
-async function getTronAddress() {
-
-try{
-        //console.log('Getting Node ID data..')
-        var response =  axios.post('http://localhost:5001/api/v1/id')
-        .then(function (response) {
-          strTronAddress = response.data.TronAddress;
-        //  alert(strTronAddress);
-        })
-    }
-
-catch (err) {
-                throw err;
-            }
-  }
-
-
-async function depositBTT(){
-
-try{
-
-    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/wallet/deposit?arg=10000000&a=&p=1123')
-           .then(function (depositBTT_resp) {
-
-           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
-            //float_bttBalance = walletBalance.data.BttWalletBalance;
-            console.log(depositBTT_resp);
-            //console.log("BTT balance: " + float_bttBalance);
-            })
-
-    }
-
-    catch (err) {
-
-                throw err;
-
-            }
-
-
-}
-
-
-async function sendDevTipMainNetBTT(){
-
-try{
- //POST
-    var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/wallet/transfer?arg=TU6fRT8ooBK9reAvuetxqpsykHekANmE2H&arg=100000&p=password" )
-           .then(function (sendDevTip_resp) {
-
-           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
-            //float_bttBalance = walletBalance.data.BttWalletBalance;
-            console.log(sendDevTip_resp);
-            //console.log("BTT balance: " + float_bttBalance);
-            })
-
-    }
-
-    catch (err) {
-
-                throw err;
-
-            }
-
-
-}
 
 
 
@@ -194,7 +105,6 @@ async function getUploadStatus() {
             Popup.show({
                type: 'Success',
                title: 'Upload complete',
-               textBody: "https://gateway.btfs.io/btfs/" + currentFileQMhash,
                buttontext: 'Ok',
                callback: () => Popup.hide(),
 
@@ -257,54 +167,25 @@ async function getUploadStatus() {
 
 export default class App extends React.Component {
 
+
+
+//  const [copiedText, setCopiedText] = useState('');
+
+
+
 state = {
     hashText: '',
     fileName: "",
     uploadSts: "",
     progressBarSts: 0.0,
-    progressBarColor: 'green',
-    bttBalance: 0,
-    btfsBalance: 0,
-    tronAddress: ""
+    progressBarColor: '#3C3C42'
 
 
 }
 
 
-  componentDidMount() {
-    this.timer = setInterval(() => {
-    this.setState({ bttBalance: float_bttBalance / 1000000
-    });    }, 2000);
-
-    this.timer = setInterval(() => {
-    this.setState({ btfsBalance: float_btfsBalance / 1000000
-    });    }, 2000);
 
 
-    getBalanceBTT();
-    getTronAddress();
-
-    this.timer = setTimeout(() => {
-    this.setState({ tronAddress: strTronAddress
-    });    }, 500);
-
-    this.timer = setInterval(() => {
-        this.setState({ tronAddress: strTronAddress
-        });    }, 2000);
-
-    this.timer = setTimeout(() => {
-        this.setState({ bttBalance: float_bttBalance / 1000000
-        });    }, 5000);
-
-
-    this.timer = setInterval(() => {
-        this.setState({ tronAddress: strTronAddress
-        });    }, 2000);
-
-    this.interval = setInterval(getBalanceBTT,10000);
-    this.interval = setInterval(getTronAddress,5000);
-
-    }
 
   componentWillUnMount() {
     clearInterval(this.timer);  }
@@ -444,26 +325,39 @@ try {
   };
 
   render() {
+
+
+
+         const copyToClipboard = () => {
+            Clipboard.setString("https://gateway.btfs.io/btfs/" + currentFileQMhash);
+          };
+
+
         //const barWidth = Dimensions.get('screen').width - 30;
-         const list = [         //Creating the array of dictionaries
+         /*const list = [         //Creating the array of dictionaries
            {
              title: this.state.fileName,
-             icon: 'archive',
+             icon: 'sync',
+             subtitle: this.state.hashText
+           },
+           {
+            title: 'Hello',
+            icon: 'sync',
+            subtitle: "hello"
+          },
+           // more items
+         ]*/
+
+         const list = [
+           {
+             title: this.state.fileName,
+             icon: 'cloud-off',
              subtitle: this.state.hashText
            }
-           // more items
+
          ]
 
-         const cardBalance = [
-          {
-             title: 'Main BTT',
-             balance: this.state.bttBalance
-          },
-          {
-             title: 'BTFS BTT ',
-             balance: this.state.btfsBalance
-           }
-         ]
+
 
 
          const actions = [
@@ -497,80 +391,68 @@ try {
 
     return (
 
-
-     <Root>
+    <Root>
       <View style={styles.container}>
-            <Card containerStyle={styles.cardRenter}>
-                    <View style={styles.user} height = {30}>
-                      <Text selectable style={styles.controlsText} >{this.state.tronAddress}</Text>
-                      <Text style={styles.cardMainNetText} >{cardBalance[0].title}</Text>
-                      <Text style={styles.cardBalanceText} >{cardBalance[0].balance}</Text>
-                      <Text style={styles.cardMainNetText} >{cardBalance[1].title}</Text>
-                      <Text style={styles.cardBalanceText} >{cardBalance[1].balance}</Text>
-                    </View>
-            </Card>
 
-             <Text
-             selectable = {true}
-             style={styles.controlsText}
-             >
-             {currentFileQMhash}
-             </Text>
-             <Text
-             selectable = {true}
-             style={styles.controlsText}
-             >
-             {this.state.uploadSts}
-             </Text>
+                <View style={styles.user} height = {30}>
+                  <Text style={styles.fileTabTitleText}> Browse </Text>
+
+                </View>
+
+                 <Text
+                   selectable = {true}
+                   style={styles.controlsText}
+                  >
+                   {currentFileQMhash}
+                  </Text>
+                  <Text
+                   style={styles.controlsText}
+                  >
+                   {this.state.uploadSts}
+                 </Text>
+                  <ProgressBar
+                    styleAttr="Horizontal"
+                   // styleAttr="LargeInverse"
+                    animating = {true}
+                    color = {this.state.progressBarColor}
+                    indeterminate={false}
+                    progress={this.state.progressBarSts}
+                    width = {Dimensions.get('window').width }
+
+                 />
+                 <Divider
+                   orientation="horizontal"
+                   subHeader=" "
+                   subHeaderStyle={{ color: 'blue' }}
+                 />
+
+          {
+            list.map((item, i) => (
 
 
+              <ListItem.Swipeable key={i} bottomDivider
+
+                rightContent={
+                                  <TouchableOpacity style={styles.shareButton} >
+                                     <Text style={styles.listbuttonShare}
+                                     onPress={copyToClipboard}
+                                     >
+                                        Share</Text>
+                                  </TouchableOpacity>
+                             }
+              >
+
+                <Icon name={item.icon} />
+
+                <ListItem.Content>
+                  <ListItem.Title>{item.title}</ListItem.Title>
+                </ListItem.Content>
+                <ListItem.Chevron />
 
 
-
-
-
-
-            <SafeAreaView >
-            <ScrollView  paddingVertical = {20} >
-
-           {
-             list.map((item, i) => (
-
-             <TouchableOpacity
-            key={i}
-            >
-                <ListItem
-                   key={i}
-                   bottomDivider={true}
-                   margin={15}
-
-                 >
-                 <Icon name={item.icon} />
-                 <ListItem.Content selectable = {true}>
-                   <ListItem.Title>{item.title}</ListItem.Title>
-                   <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
-                   <ProgressBar
-                       styleAttr="Horizontal"
-                      // styleAttr="LargeInverse"
-                       animating = {true}
-                       color = {this.state.progressBarColor}
-                       indeterminate={false}
-                       progress={this.state.progressBarSts}
-                       width = {Dimensions.get('window').width - 100 }
-
-                    />
-                 </ListItem.Content>
-                 <ListItem.Chevron />
-               </ListItem>
-               </TouchableOpacity>
-
-             )
-
-             )
-           }
-
-           </ScrollView>
-           </SafeAreaView>
+              </ListItem.Swipeable>
+            ))
+          }
 
 
             <FloatingAction
@@ -595,8 +477,8 @@ try {
                 }}
              />
       </View>
+    </Root>
 
-      </Root>
     );
   }
 }
@@ -608,41 +490,59 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
   },
+
   scroll_container: {
   flex: 1,
   marginTop: 5,
   width: Dimensions.get('window').width
     },
-
-
   controlsText: {
     fontSize: 12,
     color: 'white'
     //fontWeight: "normal"
   },
-
-  cardBalanceText: {
-    fontSize: 26,
-    color: 'white',
-    fontWeight: "bold",
-    margin: 1
+  listbuttonOffline:{
+  color: 'white'
+  },
+   listbuttonShare:{
+    color: 'white'
     },
+  offlineButton:{
+        width:"100%",
+        backgroundColor:"green",
+        borderRadius:5,
+        height:70,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:1,
+        marginBottom:5
+      },
+  shareButton:{
+        width:"100%",
+        backgroundColor:"#1e90ff",
+        borderRadius:5,
+        height:70,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:1,
+        marginBottom:5
+      },
 
-    cardMainNetText: {
-    fontSize: 15,
-    color: '#B6B6B2',
-    fontWeight: "bold",
-    margin: 1
-    },
+  cardRenter: {
+        display: "flex",
+        height: 90,
+        //flexDirection: "column",
+        backgroundColor: '#525248',
+        margin: 0
+        },
 
-    cardRenter: {
-    display: "flex",
-    height: 170,
-    //flexDirection: "column",
-    backgroundColor: '#525248',
-    borderColor: 'black',
-    borderRadius: 5,
-    borderTopColor: 'white',
-    borderTopWidth: 5
-    },
+  fileTabTitleText: {
+
+      fontSize: 22,
+      color: 'white'
+
+
+  }
+
+
 });
