@@ -36,7 +36,7 @@ var walletPassword = "";
 var amountToDeposit = "";
 var float_bttBalance = 0;
 var float_btfsBalance = 0;
-var strTronAddress = "";
+var strTronAddress = " ";
 
 // ----------------------------- END OF MODULE VARS --------------------------------------//
 
@@ -56,19 +56,60 @@ function getNodeID() {
     })
   }
 
-function setWalletPassword(){
+
+function getPrivateKey(){
 try{
-          var passwordSetResp =  axios.post('http://localhost:5001/api/v1/wallet/password?arg='+ walletPassword)
-           .then(function (passwordSetResp) {
+          var privateKey =  axios.post('http://localhost:5001/api/v1/wallet/keys?')
+           .then(function (privateKey) {
 
            // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
             //float_bttBalance = walletBalance.data.BttWalletBalance;
-            console.log(passwordSetResp);
+            var str_PrivateKey = privateKey.data.PrivateKey;
+            console.log(str_PrivateKey);
+            alert(str_PrivateKey)
             //console.log("BTT balance: " + float_bttBalance);
             })
 }
 catch (err) {
                 throw err;
+            }
+}
+
+function getMnemonic(){
+try{
+          var mnemonic =  axios.post('http://localhost:5001/api/v1/wallet/keys?')
+           .then(function (mnemonic) {
+
+           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
+            //float_bttBalance = walletBalance.data.BttWalletBalance;
+            var str_Mnemonic = mnemonic.data.Mnemonic;
+            console.log(str_Mnemonic);
+            alert(str_Mnemonic)
+            //console.log("BTT balance: " + float_bttBalance);
+            })
+}
+catch (err) {
+                throw err;
+            }
+}
+
+
+
+
+function setWalletPassword(){
+try{
+          var passwordSetResp =  axios.post('http://localhost:5001/api/v1/wallet/password?arg='+ walletPassword)
+           .then(function (passwordSetResp) {
+
+            var str_passwordFeedback = passwordSetResp.data.Message;
+            console.log(str_passwordFeedback);
+            alert(str_passwordFeedback);
+            })
+}
+catch (err) {
+                console.log("Password is already set")
+                throw err;
+
             }
 }
 
@@ -79,10 +120,9 @@ try{
     var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/wallet/deposit?arg=' + amountToDeposit*1000000 + '&a=&p='+ walletPassword)
            .then(function (depositBTT_resp) {
 
-           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
-            //float_bttBalance = walletBalance.data.BttWalletBalance;
-            console.log(depositBTT_resp);
-            //console.log("BTT balance: " + float_bttBalance);
+            var str_depositMessage = depositBTT_resp.data.Message;
+            console.log(str_depositMessage);
+            alert(str_depositMessage);
             })
 
     }
@@ -144,28 +184,35 @@ function getConfig() {
 }
 
 function promptPassword() {
+try{
+    prompt(
+        'Set password',
+        'Input a new password below',
+        [
+         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+         {text: 'OK', onPress: password => {
+             console.log('OK Pressed, password: ' + password);
+             walletPassword = password;
+             console.log(walletPassword);
+             setWalletPassword();
 
-prompt(
-    'Set password',
-    'Input a new password below',
-    [
-     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-     {text: 'OK', onPress: password => {
-         console.log('OK Pressed, password: ' + password);
-         walletPassword = password;
-         console.log(walletPassword);
-         setWalletPassword();
+         }
+         },
+        ],
+        {
+            type: 'secure-text',
+            cancelable: false,
+            defaultValue: '',
+            placeholder: 'New password'
+        }
+    );
+}
 
-     }
-     },
-    ],
-    {
-        type: 'secure-text',
-        cancelable: false,
-        defaultValue: '',
-        placeholder: 'New password'
-    }
-);
+catch(err) {
+                     console.log("Password already set or BTFS not initialized");
+                     throw err;
+
+                 }
 
 
 }
@@ -198,7 +245,7 @@ prompt(
 
 }
 
-function promptCurrentPassword() {
+async function promptCurrentPassword() {
 
 prompt(
     'Enter password',
@@ -322,6 +369,10 @@ try{
 }
 
 
+
+
+
+
 //-----------------------------TAB SCREENS-------------------------------------------------//
 
 function NodeScreen() {
@@ -387,9 +438,21 @@ function TerminalScreen() {
 }
 
 function WalletScreen() {
-const titleText = "Node Info";
+
 
 const [copiedText, setCopiedText] = useState('');
+const [refreshing, setRefreshing] = React.useState(false);
+const [bttBalance] = useState(1);
+const cardBalance = [
+        {
+           title: 'MainNet BTT',
+           balance: float_bttBalance
+        },
+        {
+           title: 'BTFS BTT ',
+           balance: float_btfsBalance
+         }
+       ]
 
 const copyToClipboard = () => {
     Clipboard.setString(strTronAddress);
@@ -397,52 +460,64 @@ const copyToClipboard = () => {
 
 
 
-const cardBalance = [
-              {
-                 title: 'MainNet BTT',
-                 balance: float_bttBalance
-              },
-              {
-                 title: 'BTFS BTT ',
-                 balance: float_btfsBalance
-               }
-             ]
+
+
+
+
+const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
+
+
+  //  this.interval = setInterval(updateBTFSbalance,1000)
+    //this.interval = setInterval(getBalanceBTT,10000);
+   // this.interval = setInterval(getTronAddress,5000);
 
   return (
     <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
-
-    <Card containerStyle={styles.cardRenter}>
-            <View style={styles.user} height = {30}>
-              <Text selectable style={styles.cardAddressText} >{strTronAddress}</Text>
-              <Text style={styles.cardMainNetText} >{cardBalance[0].title}</Text>
-              <Text style={styles.cardBalanceText} >{cardBalance[0].balance}</Text>
-              <Text style={styles.cardMainNetText} >{cardBalance[1].title}</Text>
-              <Text style={styles.cardBalanceText} >{cardBalance[1].balance}</Text>
-            </View>
-    </Card>
-
-
-    <QRCode content= {strTronAddress}
-            logoSize = {50}
-            size = {150}
-            logo={require('./components/btt_logo.png')}
-
+    <SafeAreaView >
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              progressBackgroundColor = '#6495ed'
             />
+          }
+        >
+            <Card containerStyle={styles.cardRenter}>
+                    <View style={styles.user} height = {30}>
+                      <Text selectable style={styles.cardAddressText} >{strTronAddress}</Text>
+                      <Text style={styles.cardMainNetText} >{cardBalance[0].title}</Text>
+                      <Text style={styles.cardBalanceText} >{cardBalance[0].balance}</Text>
+                      <Text style={styles.cardMainNetText} >{cardBalance[1].title}</Text>
+                      <Text style={styles.cardBalanceText} >{cardBalance[1].balance}</Text>
+                    </View>
+            </Card>
 
-    <TouchableOpacity style={styles.copyButton}
-             onPress={copyToClipboard}
-             >
-               <Text style={styles.tabMenuText}>
-               Copy Address</Text>
-     </TouchableOpacity>
+            <QRCode content= {strTronAddress}
+                    logoSize = {50}
+                    size = {150}
+                    logo={require('./components/btt_logo.png')}
 
+                    />
+            <TouchableOpacity style={styles.copyButton}
+                     onPress={copyToClipboard}
+                     >
+                       <Text style={styles.tabMenuText}>
+                       Copy Address</Text>
+             </TouchableOpacity>
+             <TouchableOpacity style={styles.tabsButton}
+                     onPress={depositToBTFS}
+                     >
+                       <Text style={styles.tabMenuText}>
+                       Deposit BTT</Text>
+             </TouchableOpacity>
 
-     <TouchableOpacity style={styles.tabsButton}
-             onPress={depositToBTFS}
-             >
-               <Text style={styles.tabMenuText}>
-               Deposit BTT</Text>
-     </TouchableOpacity>
+        </ScrollView>
+     </SafeAreaView>
     </View>
   );
 
@@ -516,6 +591,7 @@ function SettingsScreen() {
 
 
 
+
   return (
     <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
     <Text style={styles.titleText} >
@@ -537,6 +613,20 @@ function SettingsScreen() {
                    Set Password</Text>
          </TouchableOpacity>
 
+         <TouchableOpacity style={styles.tabsButton}
+                  onPress={getPrivateKey}
+                  >
+                    <Text style={styles.tabMenuText}>
+                    Get PrivateKey</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.tabsButton}
+                    onPress={getMnemonic}
+                    >
+                      <Text style={styles.tabMenuText}>
+                      Get Mnemonic</Text>
+            </TouchableOpacity>
+
 
     </View>
   );
@@ -548,11 +638,13 @@ export default class App extends Component{
 
 state = {
 
+    tronAddress: "test",
     bttBalance: 0,
-    btfsBalance: 0,
-    tronAddress: ""
+    btfsBalance: 0
 
 }
+
+
 
   componentDidMount() {
 
@@ -560,31 +652,19 @@ state = {
 
     getBalanceBTT();
     getTronAddress();
-/*
-    this.timer = setTimeout(() => {
-    this.setState({ tronAddress: strTronAddress
-    });    }, 500);
-
-    this.timer = setInterval(() => {
-        this.setState({ tronAddress: strTronAddress
-        });    }, 2000);
-
-   */
-
-
-    /*this.timer = setInterval(() => {
-        this.setState({ tronAddress: strTronAddress
-        });    }, 2000);*/
-
 
     this.interval = setInterval(getBalanceBTT,10000);
     this.interval = setInterval(getTronAddress,5000);
+
 
     }
 
 
 
   render() {
+
+
+
 
        return (
     <AppearanceProvider>
@@ -638,13 +718,13 @@ const styles = StyleSheet.create({
   switchSts: {
       flex: 1,
       justifyContent: "center"
-    },
+    },/*
     scrollView: {
         flex: 1,
         backgroundColor: '#525248',
         alignItems: 'center',
         justifyContent: 'center',
-      },
+      },*/
   container: {
       flex: 1,
       backgroundColor: '#3C3C42',
@@ -724,6 +804,11 @@ tabsButton:{
       borderRadius: 5,
       borderTopColor: 'white',
       borderTopWidth: 5
-      }
+      },
+      scrollView: {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'space-evenly'
+        }
 
 });

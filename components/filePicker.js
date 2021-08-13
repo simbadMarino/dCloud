@@ -168,11 +168,6 @@ async function getUploadStatus() {
 export default class App extends React.Component {
 
 
-
-//  const [copiedText, setCopiedText] = useState('');
-
-
-
 state = {
     hashText: '',
     fileName: "",
@@ -219,13 +214,7 @@ state = {
         this.setState({progressBarColor: progressBarColor})
     }
 
-    /*updateBTFSbalance = () => {
-        this.setState({btfsBalance: float_btfsBalance/1000000})
-    }
 
-    updateBTTbalance = () => {
-        this.setState({bttBalance: float_bttBalance/1000000})
-    }*/
 
 
 
@@ -396,7 +385,11 @@ try {
 
                 <View style={styles.user} height = {30}>
                   <Text style={styles.fileTabTitleText}> Browse </Text>
-
+                  <Divider
+                     orientation="horizontal"
+                     subHeader=" "
+                     color = '#3C3C42'
+                   />
                 </View>
 
                  <Text
@@ -538,7 +531,7 @@ const styles = StyleSheet.create({
 
   fileTabTitleText: {
 
-      fontSize: 22,
+      fontSize: 24,
       color: 'white'
 
 
