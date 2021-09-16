@@ -45,6 +45,31 @@ Optionally, if you already have a private key with some BTT do the following ins
 
 After this please restart your dCloud app and the GUI should show you the Host UI and your current balance in the Renter tab. From here you can use your app as a full BTFS node.
 
+**HOW TO BUILD CUSTOM BOOTSTRAP PACKAGE FOR ANDROID 10 (EXPERIMENTAL procedure credit goes to: agnostic-apollo from Termux)**
+
+This method is currently under experimental usage, there is not guarantee this will work forever, so, in later releases I'll be moving towards reducing dependencies on termux.
+
+`build-bootstraps.sh` script locally cross-compile the bootstrap package debs and create bootstrap zips. It is working for a different PREFIX to be ported to the official termux app without reworing termux code.  On-device (termux in mobile) builds are not supported currently, so use PC (cross-compile in docker).
+
+Firstly, you need to pull the latest changes from [termux-packages](https://github.com/termux/termux-packages) repo, I just committed some stuff. (package source urls got outdated since old versions were removed by respective hosters)
+
+Then
+
+1. Set the TERMUX_APP_PACKAGE value in properties.sh to your app's package name.
+2. Place the [build-bootstraps.zip](https://github.com/simbadMarino/dCloud/files/7174712/build-bootstraps.zip)
+ in termux-packages/scripts directory.
+3. Run cd termux-packages
+4. Run ./scripts/run-docker.sh ./scripts/build-bootstraps.sh &> build.log to compile for all archs. You should find the bootstrap-*.zip in the termux-packages directory. If you want to compile only for a specific arch like aarch64, then run ./scripts/run-docker.sh ./scripts/build-bootstraps.sh --architectures aarch64 &> build.log. You can pass additional comma-separated list of packages that should be included in the bootstrap in addition to the default ones with the -add option.
+5. Replace/place the zips in termux-app/app/src/main/cpp.
+6. Add a return statement at start of downloadBootstrap() function in termux-app/app/build.gradle so that the custom bootstrap-*.zip files don't get replaced with termux ones.
+7. Then build an APK. 
+
+**Note:**
+It would be better if you run ./clean.sh before building for a different prefix to start fresh, or pass -f option to build-bootstraps.sh script at least once (for each arch).
+
+If you get curl: (18) transfer closed with x bytes remaining to read. while running build-bootstraps.sh when its downloading a package source, then just run the script again, it should hopefully work.
+
+If you get curl: (22) The requested URL returned error: 410 Gone or something like 404 Not Found while running build-bootstraps.sh when its downloading a package source, then you will have to update the TERMUX_PKG_VERSION, TERMUX_PKG_SRCURL, etc in the build.sh file for the respective package, and fix any *.patch files or apply additional ones if compilation fails, or open an issue in termux-packages.
 
 
 **Important Notice:**
