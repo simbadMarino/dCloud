@@ -1,0 +1,1 @@
+/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/updatedRelease/obj/local/x86

@@ -3,16 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.justshare"
     android:installLocation="internalOnly"
-    android:sharedUserId="com.justshare"
+    android:sharedUserId="${TERMUX_PACKAGE_NAME}"
     android:sharedUserLabel="@string/shared_user_label">
+    <queries>
+        <package android:name="com.justshare" />
+    </queries>
 
-    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
 
-
-    <permission android:name="com.termux.permission.RUN_COMMAND"
-        android:label="@string/run_command_permission_label"
-        android:description="@string/run_command_permission_description"
+    <permission
+        android:name="${TERMUX_PACKAGE_NAME}.permission.RUN_COMMAND"
+        android:description="@string/permission_run_command_description"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/permission_run_command_label"
         android:protectionLevel="dangerous" />
 
 
@@ -22,23 +30,34 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.DUMP" />
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:extractNativeLibs="true"
-        android:name=".MainApplication"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher"
-        android:banner="@mipmap/ic_launcher"
-        android:supportsRtl="false"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+    android:extractNativeLibs="true"
+    android:name=".MainApplication"
+    android:allowBackup="false"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:largeHeap="true"
+    android:roundIcon="@mipmap/ic_launcher"
+    android:banner="@mipmap/ic_launcher"
+    android:supportsRtl="false"
+    android:usesCleartextTraffic="true"
+    android:theme="@style/AppTheme">
+
+
+        <!--
+         This (or rather, value 2.1 or higher) is needed to make the Samsung Galaxy S8
+             mark the app with "This app is optimized to run in full screen."
+        -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="10.0" />
 
         <activity
             android:name=".MainActivity"
@@ -49,6 +68,7 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
            </activity>
@@ -63,31 +83,60 @@
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" >
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intextractNativeLibsent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
         </activity>
 
 
+
+
+
+
         <activity
-            android:name="com.termux.app.TermuxHelpActivity"
+            android:name="com.termux.app.activities.HelpActivity"
             android:exported="false"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@android:style/Theme.Material.Light.DarkActionBar"
+            android:label="@string/application_name"
             android:parentActivityName="com.termux.app.TermuxActivity"
             android:resizeableActivity="true"
-            android:label="@string/application_name" />
+            android:theme="@android:style/Theme.Material.Light.DarkActionBar" />
+
+        <activity
+            android:name="com.termux.app.activities.SettingsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_termux_settings"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+
+        <activity
+            android:name="com.termux.app.activities.ReportActivity"
+            android:theme="@style/Theme.Termux.Black"
+            android:documentLaunchMode="intoExisting"
+            />
 
 
         <activity
             android:name="com.termux.filepicker.TermuxFileReceiverActivity"
-            android:label="@string/application_name"
-            android:taskAffinity="com.termux.filereceiver"
             android:excludeFromRecents="true"
+            android:label="@string/application_name"
+            android:noHistory="true"
             android:resizeableActivity="true"
-            android:screenOrientation="sensorPortrait"
-            android:noHistory="true">
+            android:taskAffinity="${TERMUX_PACKAGE_NAME}.filereceiver">
+
             <!-- Accept multiple file types when sending. -->
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
+                <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="application/*" />
                 <data android:mimeType="audio/*" />
                 <data android:mimeType="image/*" />
@@ -98,8 +147,10 @@
             </intent-filter>
             <!-- Accept multiple file types to let Termux be usable as generic file viewer. -->
             <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="application/*" />
                 <data android:mimeType="audio/*" />
                 <data android:mimeType="image/*" />
@@ -108,11 +159,12 @@
             </intent-filter>
         </activity>
 
+
         <provider
             android:name="com.termux.filepicker.TermuxDocumentsProvider"
-            android:authorities="com.termux.documents"
-            android:grantUriPermissions="true"
+            android:authorities="${TERMUX_PACKAGE_NAME}.documents"
             android:exported="true"
+            android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
             <intent-filter>
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
@@ -126,9 +178,9 @@
         <service
             android:name="com.termux.app.RunCommandService"
             android:exported="true"
-            android:permission="com.termux.permission.RUN_COMMAND" >
+            android:permission="${TERMUX_PACKAGE_NAME}.permission.RUN_COMMAND" >
             <intent-filter>
-                <action android:name="com.termux.RUN_COMMAND" />
+                <action android:name="${TERMUX_PACKAGE_NAME}.RUN_COMMAND" />
             </intent-filter>
         </service>
 

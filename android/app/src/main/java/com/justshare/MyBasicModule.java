@@ -26,21 +26,48 @@ public class MyBasicModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void navigateToTerminal() {
+        /**Start TermuxActivity activity when pressing terminal button**/
         ReactApplicationContext context = getReactApplicationContext();
         Intent intent = new Intent(context, TermuxActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-         context.startActivity(intent);
-        //Intent i = new Intent();
-        //i.setClassName(context.getBaseContext(),"TermuxActivity");
-       // startActivity(new Intent(Term.this, TermuxActivity.class));
-       /* Intent intent = new Intent();
-        intent.setClassName("com.termux", "com.termux.app.RunCommandService");
-        intent.setAction("com.termux.RUN_COMMAND");
-        intent.putExtra("com.termux.RUN_COMMAND_PATH", "/data/data/com.justshare/files/usr/bin/btfs");
-       // intent.putExtra("com.termux.RUN_COMMAND_ARGUMENTS", new String[]{"-n", "5"});
-        intent.putExtra("com.termux.RUN_COMMAND_WORKDIR", "/data/data/com.justshare/files/home");
-        intent.putExtra("com.termux.RUN_COMMAND_BACKGROUND", true);
-        context.startService(intent);*/
+        context.startActivity(intent);
+
+
+        /*
+        Intent intentBTFS = new Intent();
+        intentBTFS.setClassName("com.justshare", "com.termux.app.RunCommandService");
+        intentBTFS.setAction("com.justshare.RUN_COMMAND");
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_PATH",      "/data/data/com.justshare/files/usr/bin/btfs");
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_BACKGROUND", true);
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_ARGUMENTS", new String[]{"daemon"});
+        context.startService(intentBTFS);*/
     }
 
-}
+    @ReactMethod
+    public void initBTFS_newWallet() {
+
+    }
+
+    @ReactMethod
+    public void initBTFS_importWallet() {
+
+    }
+
+    @ReactMethod
+    public void startBTFSDaemon() {
+        /**Run a BTFS daemon command in background**/
+        ReactApplicationContext context = getReactApplicationContext();
+        Intent intentBTFS = new Intent();
+        intentBTFS.setClassName("com.justshare", "com.termux.app.RunCommandService");
+        intentBTFS.setAction("com.justshare.RUN_COMMAND");
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_PATH",      "/data/data/com.justshare/files/usr/bin/btfs");
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_BACKGROUND", true);
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_ARGUMENTS", new String[]{"daemon"});
+        context.startService(intentBTFS);
+
+    }
+
+
+    }
+
+

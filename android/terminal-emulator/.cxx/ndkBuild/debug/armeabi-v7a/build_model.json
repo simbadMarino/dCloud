@@ -1,20 +1,50 @@
 {
+  "abi": "ARMEABI_V7A",
+  "info": {
+    "abi": "ARMEABI_V7A",
+    "bitness": 32,
+    "deprecated": false,
+    "default": true
+  },
+  "originalCxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a",
+  "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a",
+  "abiPlatformVersion": 29,
   "variant": {
+    "buildSystemArgumentList": [],
+    "cFlagsList": [
+      "-std\u003dc11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Os",
+      "-fno-stack-protector",
+      "-Wl,--gc-sections"
+    ],
+    "cppFlagsList": [],
+    "variantName": "debug",
+    "objFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local",
+    "soFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": [],
+    "implicitBuildTargetSet": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
     "module": {
-      "rootBuildGradleFolder": "/home/simbad/Documents/Git_Repos/dCloud/android",
-      "sdkFolder": "/home/simbad/Android/Sdk",
-      "isNativeCompilerSettingsCacheEnabled": false,
-      "isBuildOnlyTargetAbiEnabled": true,
+      "cxxFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx",
       "splitsAbiFilterSet": [],
       "intermediatesFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates",
       "gradleModulePathName": ":terminal-emulator",
       "moduleRootFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator",
+      "moduleBuildFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build.gradle",
       "makeFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
       "buildSystem": "NDK_BUILD",
-      "compilerSettingsCacheFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/.cxx",
-      "cxxFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx",
-      "ndkFolder": "/home/simbad/Android/Sdk/ndk/22.0.7026061",
-      "ndkVersion": "22.0.7026061",
+      "ndkFolder": "/home/simbad/Android/Sdk/ndk/21.1.6352462",
+      "ndkVersion": "21.1.6352462",
       "ndkSupportedAbiList": [
         "ARMEABI_V7A",
         "ARM64_V8A",
@@ -27,42 +57,84 @@
         "X86",
         "X86_64"
       ],
-      "cmakeToolchainFile": "."
+      "ndkDefaultStl": "SYSTEM",
+      "ndkMetaPlatforms": {
+        "min": 16,
+        "max": 29,
+        "aliases": {
+          "20": 19,
+          "25": 24,
+          "J": 16,
+          "J-MR1": 17,
+          "J-MR2": 18,
+          "K": 19,
+          "L": 21,
+          "L-MR1": 22,
+          "M": 23,
+          "N": 24,
+          "N-MR1": 24,
+          "O": 26,
+          "O-MR1": 27,
+          "P": 28,
+          "Q": 29
+        }
+      },
+      "ndkMetaAbiList": [
+        {
+          "abi": "ARMEABI_V7A",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "ARM64_V8A",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "X86",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "X86_64",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        }
+      ],
+      "originalCmakeToolchainFile": "/home/simbad/Android/Sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake",
+      "cmakeToolchainFile": "/home/simbad/Android/Sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake",
+      "stlSharedObjectMap": {
+        "LIBCXX_SHARED": {
+          "ARMEABI_V7A": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
+          "ARM64_V8A": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
+          "X86": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
+          "X86_64": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+        },
+        "LIBCXX_STATIC": {},
+        "NONE": {},
+        "SYSTEM": {}
+      },
+      "project": {
+        "rootBuildGradleFolder": "/home/simbad/Documents/Git_Repos/dCloud/android",
+        "cxxFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/.cxx",
+        "compilerSettingsCacheFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/.cxx",
+        "sdkFolder": "/home/simbad/Android/Sdk",
+        "isNativeCompilerSettingsCacheEnabled": false,
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isPrefabEnabled": false,
+        "isV2NativeModelEnabled": true
+      },
+      "nativeBuildOutputLevel": "QUIET"
     },
-    "buildSystemArgumentList": [],
-    "cFlagList": [
-      "-std\u003dc11",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-Os",
-      "-fno-stack-protector",
-      "-Wl,--gc-sections"
-    ],
-    "cppFlagsList": [],
-    "variantName": "debug",
-    "soFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib",
-    "objFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local",
-    "jsonFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug",
-    "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/cxx/debug",
-    "isDebuggableEnabled": true,
-    "validAbiList": [
-      "ARMEABI_V7A",
-      "ARM64_V8A",
-      "X86",
-      "X86_64"
-    ],
-    "buildTargetSet": []
+    "prefabDirectory": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/prefab"
   },
-  "abi": "ARMEABI_V7A",
-  "abiPlatformVersion": 24,
-  "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a",
-  "jsonFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a/android_gradle_build.json",
-  "gradleBuildOutputFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/cxx/debug/armeabi-v7a",
-  "objFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a",
-  "buildCommandFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a/build_command.txt",
-  "buildOutputFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a/build_output.txt",
-  "modelOutputFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a/build_model.json",
-  "jsonGenerationLoggingRecordFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a/json_generation_record.json",
-  "compileCommandsJsonFile": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/armeabi-v7a/compile_commands.json"
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "prefabFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/prefab/armeabi-v7a"
 }

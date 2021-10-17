@@ -50,16 +50,21 @@ tasks.withType(Test) {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
 }
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
 
 publishing {
     publications {
         bar(MavenPublication) {
             groupId 'com.termux'
             artifactId 'terminal-emulator'
-            version '0.106.1'
+            version "0.112"
+            artifact(sourceJar)
             artifact("$buildDir/outputs/aar/terminal-emulator-release.aar")
         }
     }

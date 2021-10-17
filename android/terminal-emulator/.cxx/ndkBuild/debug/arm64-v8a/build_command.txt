@@ -1,11 +1,11 @@
-Executable : /home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build
+                    Executable : /home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build
 arguments : 
 NDK_PROJECT_PATH=null
 APP_BUILD_SCRIPT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk
 APP_ABI=arm64-v8a
 NDK_ALL_ABIS=arm64-v8a
 NDK_DEBUG=1
-APP_PLATFORM=android-24
+APP_PLATFORM=android-29
 NDK_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj
 NDK_LIBS_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib
 APP_CFLAGS+=-std=c11
@@ -21,3 +21,6 @@ LOCAL_SHORT_COMMANDS=false
 -n
 jvmArgs : 
 
+
+                    Build command args: []
+                    Version: 1

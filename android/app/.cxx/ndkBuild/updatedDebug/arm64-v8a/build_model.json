@@ -1,0 +1,140 @@
+{
+  "abi": "ARM64_V8A",
+  "info": {
+    "abi": "ARM64_V8A",
+    "bitness": 64,
+    "deprecated": false,
+    "default": true
+  },
+  "originalCxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/updatedDebug/arm64-v8a",
+  "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/updatedDebug/arm64-v8a",
+  "abiPlatformVersion": 29,
+  "variant": {
+    "buildSystemArgumentList": [],
+    "cFlagsList": [
+      "-std\u003dc11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Os",
+      "-fno-stack-protector",
+      "-Wl,--gc-sections"
+    ],
+    "cppFlagsList": [],
+    "variantName": "updatedDebug",
+    "objFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/updatedDebug/obj/local",
+    "soFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/updatedDebug/lib",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": [],
+    "implicitBuildTargetSet": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
+    "module": {
+      "cxxFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx",
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app",
+      "moduleBuildFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build.gradle",
+      "makeFile": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+      "buildSystem": "NDK_BUILD",
+      "ndkFolder": "/home/simbad/Android/Sdk/ndk/21.1.6352462",
+      "ndkVersion": "21.1.6352462",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultStl": "SYSTEM",
+      "ndkMetaPlatforms": {
+        "min": 16,
+        "max": 29,
+        "aliases": {
+          "20": 19,
+          "25": 24,
+          "J": 16,
+          "J-MR1": 17,
+          "J-MR2": 18,
+          "K": 19,
+          "L": 21,
+          "L-MR1": 22,
+          "M": 23,
+          "N": 24,
+          "N-MR1": 24,
+          "O": 26,
+          "O-MR1": 27,
+          "P": 28,
+          "Q": 29
+        }
+      },
+      "ndkMetaAbiList": [
+        {
+          "abi": "ARMEABI_V7A",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "ARM64_V8A",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "X86",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "X86_64",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        }
+      ],
+      "originalCmakeToolchainFile": "/home/simbad/Android/Sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake",
+      "cmakeToolchainFile": "/home/simbad/Android/Sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake",
+      "stlSharedObjectMap": {
+        "LIBCXX_SHARED": {
+          "ARMEABI_V7A": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
+          "ARM64_V8A": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
+          "X86": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
+          "X86_64": "/home/simbad/Android/Sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+        },
+        "LIBCXX_STATIC": {},
+        "NONE": {},
+        "SYSTEM": {}
+      },
+      "project": {
+        "rootBuildGradleFolder": "/home/simbad/Documents/Git_Repos/dCloud/android",
+        "cxxFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/.cxx",
+        "compilerSettingsCacheFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/.cxx",
+        "sdkFolder": "/home/simbad/Android/Sdk",
+        "isNativeCompilerSettingsCacheEnabled": false,
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isPrefabEnabled": false,
+        "isV2NativeModelEnabled": true
+      },
+      "nativeBuildOutputLevel": "QUIET"
+    },
+    "prefabDirectory": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/updatedDebug/prefab"
+  },
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "prefabFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/updatedDebug/prefab/arm64-v8a"
+}

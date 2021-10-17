@@ -1,0 +1,1 @@
+/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local/x86

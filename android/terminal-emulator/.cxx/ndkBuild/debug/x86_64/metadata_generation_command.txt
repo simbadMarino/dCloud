@@ -1,0 +1,23 @@
+Executable : /home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build
+arguments : 
+NDK_PROJECT_PATH=null
+APP_BUILD_SCRIPT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk
+APP_ABI=x86_64
+NDK_ALL_ABIS=x86_64
+NDK_DEBUG=1
+APP_PLATFORM=android-29
+NDK_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj
+NDK_LIBS_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib
+APP_CFLAGS+=-std=c11
+APP_CFLAGS+=-Wall
+APP_CFLAGS+=-Wextra
+APP_CFLAGS+=-Werror
+APP_CFLAGS+=-Os
+APP_CFLAGS+=-fno-stack-protector
+APP_CFLAGS+=-Wl,--gc-sections
+APP_SHORT_COMMANDS=false
+LOCAL_SHORT_COMMANDS=false
+-B
+-n
+jvmArgs : 
+

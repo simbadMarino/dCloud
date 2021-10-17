@@ -1,0 +1,1 @@
+/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a

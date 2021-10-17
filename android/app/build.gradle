@@ -1,6 +1,7 @@
-apply plugin: "com.android.application"
-
-import com.android.build.OutputFile
+plugins {
+    id "com.android.application"
+}
+//import com.android.build.OutputFile
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -96,7 +97,7 @@ def enableSeparateBuildPerCPUArchitecture = true
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+//def enableProguardInReleaseBuilds = false
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -121,7 +122,21 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    flavorDimensions "version"
+    productFlavors {
+
+        updated {
+            dimension "version"
+            targetSdkVersion project.properties.updatedTargetSdkVersion.toInteger()
+        }
+
+        current {
+            dimension "version"
+            targetSdkVersion project.properties.targetSdkVersion.toInteger()
+        }
+    }
+
+    compileSdkVersion project.properties.compileSdkVersion.toInteger()
     ndkVersion project.properties.ndkVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -129,20 +144,37 @@ android {
     }
 
     dependencies {
-        implementation "androidx.annotation:annotation:1.1.0"
-        implementation "androidx.viewpager:viewpager:1.0.0"
+        implementation "androidx.annotation:annotation:1.2.0"
+        implementation "androidx.core:core:1.5.0-rc01"
         implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+        implementation "androidx.preference:preference:1.1.1"
+        implementation "androidx.viewpager:viewpager:1.0.0"
+        implementation "com.google.guava:guava:24.1-jre"
+        implementation "io.noties.markwon:core:$markwonVersion"
+        implementation "io.noties.markwon:ext-strikethrough:$markwonVersion"
+        implementation "io.noties.markwon:linkify:$markwonVersion"
+        implementation "io.noties.markwon:recycler:$markwonVersion"
+
         implementation project(":terminal-view")
+        implementation project(":termux-shared")
     }
 
     
 
     defaultConfig {
         applicationId "com.justshare"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion project.properties.minSdkVersion.toInteger()
         versionCode 1
-        versionName "0.7"
+        versionName "0.8"
+
+        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
+        manifestPlaceholders.TERMUX_APP_NAME = "justshare"
+        manifestPlaceholders.TERMUX_API_APP_NAME = "Termux:API"
+        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "Termux:Boot"
+        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "Termux:Float"
+        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "Termux:Styling"
+        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "Termux:Tasker"
+        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "Termux:Widget"
 
         externalNativeBuild {
             ndkBuild {
@@ -151,18 +183,18 @@ android {
         }
 
         ndk {
-          //  abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
 
     }
-    splits {
+    /*splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk true  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
-    }
+    }*/
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -180,7 +212,17 @@ android {
         }
     }
     buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
         debug {
+            signingConfig signingConfigs.debug
+        }
+
+        /*debug {
             signingConfig signingConfigs.debug
         }
         release {
@@ -191,11 +233,11 @@ android {
             //minifyEnabled enableProguardInReleaseBuilds
             //proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
-        }
+        }*/
     }
 
     // applicationVariants are e.g. debug, release
-    applicationVariants.all { variant ->
+   /* applicationVariants.all { variant ->
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // https://developer.android.com/studio/build/configure-apk-splits.html
@@ -207,7 +249,7 @@ android {
             }
 
         }
-    }
+    }*/
 
     externalNativeBuild {
         ndkBuild {
@@ -225,11 +267,12 @@ android {
         }
     }
 
-    
 
 }
 
 dependencies {
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.robolectric:robolectric:4.4"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -269,12 +312,69 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-def downloadBootstrap(String arch, String expectedChecksum, String qmHash) {
+task versionName {
+    doLast {
+        print android.defaultConfig.versionName
+    }
+}
+
+def expandBootstrap(File bootstrapZip, String expectedChecksum, String arch) {
+    def doneMarkerFile = new File(bootstrapZip.getAbsolutePath() + "." + expectedChecksum + ".done")
+    if (doneMarkerFile.exists()) return
+
+    def archDirName
+    if (arch == "aarch64") archDirName = "arm64-v8a";
+    if (arch == "arm") archDirName = "armeabi-v7a";
+    if (arch == "i686") archDirName = "x86";
+    if (arch == "x86_64") archDirName = "x86_64";
+
+    def outputPath = project.getRootDir().getAbsolutePath() + "/app/src/main/jniLibs/" + archDirName + "/"
+    def outputDir = new File(outputPath).getAbsoluteFile()
+    if (!outputDir.exists()) outputDir.mkdirs()
+
+    def symlinksFile = new File(outputDir, "libsymlinks.so").getAbsoluteFile()
+    if (symlinksFile.exists()) symlinksFile.delete();
+
+    def mappingsFile = new File(outputDir, "libfiles.so").getAbsoluteFile()
+    if (mappingsFile.exists()) mappingsFile.delete()
+    mappingsFile.createNewFile()
+    def mappingsFileWriter = new BufferedWriter(new FileWriter(mappingsFile))
+
+    def counter = 100
+    new java.util.zip.ZipInputStream(new FileInputStream(bootstrapZip)).withCloseable { zipInput ->
+        def zipEntry
+        while ((zipEntry = zipInput.getNextEntry()) != null) {
+            if (zipEntry.getName() == "SYMLINKS.txt") {
+                zipInput.transferTo(new FileOutputStream(symlinksFile))
+            } else if (!zipEntry.isDirectory()) {
+                def soName = "lib" + counter + ".so"
+                def targetFile = new File(outputDir, soName).getAbsoluteFile()
+
+                println "target file path is ${targetFile}"
+
+                try {
+                    zipInput.transferTo(new FileOutputStream(targetFile))
+                } catch (Exception e) {
+                    println "Error ${e}"
+                }
+
+
+                mappingsFileWriter.writeLine(soName + "←" + zipEntry.getName())
+                counter++
+            }
+        }
+    }
+
+    mappingsFileWriter.close()
+    doneMarkerFile.createNewFile()
+}
+
+def downloadBootstrap(String arch, String expectedChecksum, boolean isPackagesInApk) {
 
     def digest = java.security.MessageDigest.getInstance("SHA-256")
 
-    def localUrl = "src/main/cpp/bootstrap-" + arch + ".zip"
-    def file = new File(projectDir, localUrl)
+    def file = isPackagesInApk ? new File(project.buildDir, "./gradle/bootstrap-" + arch  + ".zip")
+            : new File(projectDir, "src/main/cpp/bootstrap-" + arch + ".zip");
     if (file.exists()) {
         def buffer = new byte[8192]
         def input = new FileInputStream(file)
@@ -284,17 +384,16 @@ def downloadBootstrap(String arch, String expectedChecksum, String qmHash) {
             digest.update(buffer, 0, readBytes)
         }
         def checksum = new BigInteger(1, digest.digest()).toString(16)
-
         if (checksum == expectedChecksum) {
+            if (isPackagesInApk) expandBootstrap(file, expectedChecksum, arch)
             return
         } else {
-            logger.quiet("Deleting old local file with wrong hash: " + localUrl)
-            logger.quiet("Deleting old local file with wrong hash: " + localUrl)
+            logger.quiet("Deleting old local file with wrong hash: " + file)
             file.delete()
         }
     }
 
-    def remoteUrl = "https://gateway.btfs.io/btfs/" + qmHash
+    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v0.7" + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
@@ -305,13 +404,15 @@ def downloadBootstrap(String arch, String expectedChecksum, String qmHash) {
     def digestStream = new java.security.DigestInputStream(connection.inputStream, digest)
     out << digestStream
     out.close()
-   // file.renameTo("bootstrap-" + arch + ".zip")      //Rename to aarch bootstrap as download filename will be the QmHash originally
+
     def checksum = new BigInteger(1, digest.digest()).toString(16)
     if (checksum != expectedChecksum) {
         file.delete()
         throw new GradleException("Wrong checksum for " + remoteUrl + ": expected: " + expectedChecksum + ", actual: " + checksum)
     }
+    if (isPackagesInApk) expandBootstrap(file, expectedChecksum, arch)
 }
+
 
 clean {
     doLast {
@@ -321,14 +422,15 @@ clean {
     }
 }
 
-task downloadBootstraps(){
-
+task downloadBootstraps() {
+    boolean isPackagesInApk = getGradle().getStartParameter().getTaskRequests().toString().contains("Updated");
     doLast {
-        downloadBootstrap("aarch64", "3729410ce8e6e29f18449661ad1cc351e1ddbf39a61dade073e629d88e675fc", "QmQU9sLRpGYEiVM8r2Y5WGJYFfSxgJ1PfDidtv9QvCXDe9")  //Valid until 120 days from July 16th
-        downloadBootstrap("x86_64", "2d844c6b0435f353cec743d3e68b8c11f0673c9ef9a6d7d7cc50777b1810f9b6", "QmbVH6HDRvX1eC88yhRS2TsGN7zN5XE6mCgB65v38NmJtD") // Valid until 120 120 days from July 16th
-        //downloadBootstrap("arm",  "", "") // Not available yet
-        downloadBootstrap("i686", "6f2ad93c30df309faef361889d0a98b48e7f8c6e13efae56dbca371eb41fa4d3", "QmZeFn7HfWjmub6obCypuneeRvhnhWhvgSEghSHRsYye6T") // Valid until 120 days from July 16th
-          }
+        //def version = "2021.04.13-r1"
+        downloadBootstrap("aarch64", "ffffbcc01e952cb5b300ed7d94eed4e7ed3e5e83e54624adf24090b9273e9ac1",  isPackagesInApk)
+        downloadBootstrap("arm",     "fcf8c994ae3e1e1eef0e710ddbe6f6e9cc88170431cef21c9cd2f673ef9173a5",  isPackagesInApk)
+        downloadBootstrap("i686",    "6b0546ef4a8ee2619d86261729231311a9c29f9405233ffcaf18e4d3f72cbeb5",  isPackagesInApk)
+        downloadBootstrap("x86_64",  "9dcd94c2bca57e25a82f933dbe0e21020e8aca9a00dee27d9041e80fc6620a13",  isPackagesInApk)
+    }
 }
 
 afterEvaluate {

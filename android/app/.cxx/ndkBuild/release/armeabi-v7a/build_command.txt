@@ -1,13 +1,13 @@
-Executable : /home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build
+                    Executable : /home/simbad/Android/Sdk/ndk/21.4.7075529/ndk-build
 arguments : 
 NDK_PROJECT_PATH=null
-APP_BUILD_SCRIPT=/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk
+APP_BUILD_SCRIPT=/home/simbad/Documents/temp/dCloud/android/app/src/main/cpp/Android.mk
 APP_ABI=armeabi-v7a
 NDK_ALL_ABIS=armeabi-v7a
 NDK_DEBUG=0
-APP_PLATFORM=android-24
-NDK_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/release/obj
-NDK_LIBS_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/release/lib
+APP_PLATFORM=android-29
+NDK_OUT=/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/release/obj
+NDK_LIBS_OUT=/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/release/lib
 APP_CFLAGS+=-std=c11
 APP_CFLAGS+=-Wall
 APP_CFLAGS+=-Wextra
@@ -21,3 +21,6 @@ LOCAL_SHORT_COMMANDS=false
 -n
 jvmArgs : 
 
+
+                    Build command args: []
+                    Version: 1

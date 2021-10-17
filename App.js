@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { Component, useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Switch,TouchableOpacity, TextInput, Image} from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Switch,TouchableOpacity, TextInput, Image, NativeModules} from 'react-native';
 //import Overlay from 'react-native-modal-overlay';
 import axios from 'axios';
 import {
@@ -181,6 +181,14 @@ function getConfig() {
 
 
   })
+}
+
+function startBTFSDaemon() {
+return(
+
+{NativeModules.Terminal.startBTFSDaemon()}
+);
+
 }
 
 function promptPassword() {
@@ -604,6 +612,13 @@ function SettingsScreen() {
                           >
                             <Text style={styles.tabMenuText}>
                             Get BTFS Data</Text>
+         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.tabsButton}
+                          onPress={startBTFSDaemon.bind(this)}
+                          >
+                            <Text style={styles.tabMenuText}>
+                            BTFS Daemon Start </Text>
          </TouchableOpacity>
 
          <TouchableOpacity style={styles.tabsButton}

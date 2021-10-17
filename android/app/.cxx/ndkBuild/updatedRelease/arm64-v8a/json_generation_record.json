@@ -1,0 +1,23 @@
+[
+  {
+    "level": "INFO",
+    "message": "Start JSON generation. Platform version: 29 min SDK version: arm64-v8a",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "updatedRelease|arm64-v8a",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON \u0027/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/updatedRelease/arm64-v8a/android_gradle_build.json\u0027 was up-to-date",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "updatedRelease|arm64-v8a",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON generation completed without problems",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "updatedRelease|arm64-v8a",
+    "diagnosticCode": "UNKNOWN"
+  }
+]

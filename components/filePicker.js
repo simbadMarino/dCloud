@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Button, Image, Alert, SafeAre
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 //import { Overlay } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
+//import RNFileSelector from 'react-native-file-selector';
 import { ListItem, Icon, Card, Divider} from 'react-native-elements';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
@@ -290,28 +291,58 @@ state = {
         }
 	}
 
-   _pickImage = async () => {
-// Pick multiple files
-try {
-  const results = await DocumentPicker.pickMultiple({
-    type: [DocumentPicker.types.images],
-  });
-  for (const res of results) {
-    console.log(
-      res.uri,
-      res.type, // mime type
-      res.name,
-      res.size
-    );
-  }
-} catch (err) {
-  if (DocumentPicker.isCancel(err)) {
-    // User cancelled the picker, exit any dialogs or menus and move on
-  } else {
-    throw err;
-  }
-}
-  };
+   _pickMultiple = async () => {
+ // Pick multiple files
+ try {
+   const results = await DocumentPicker.pickMultiple({
+     type: [DocumentPicker.types.allFiles],
+   });
+   for (const res of results) {
+     console.log(
+       res.uri,
+       res.type, // mime type
+       res.name,
+       res.size
+     );
+     currentFileName = res.name;
+
+       const formData = new FormData();
+       formData.append(res.name, {
+         uri: res.uri,
+         name: res.name ,
+         type: res.type
+       });
+     var addFileReedSolomonData = axios.post("http://localhost:5001/api/v1/add?chunker=reed-solomon", formData, {
+       headers: {
+         'Content-Type': 'multipart/form-data'
+       }
+     })
+
+     .then(function (addFileReedSolomonData) {
+             currentFileQMhash = addFileReedSolomonData.data.Hash;
+
+             //Alert.alert(currentFileQMhash);
+             console.log("File BTFS QMhash: " + currentFileQMhash);
+             console.log("QMhash obtained :), proceeding to upload file...");
+
+
+             var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash)
+             .then(function (fileUploadID){
+                //console.log(fileUploadID);
+                currentUploadSessionID = fileUploadID.data.ID;
+                console.log("Current Upload Session ID: " + currentUploadSessionID);
+              })
+       })
+
+   }
+ } catch (err) {
+   if (DocumentPicker.isCancel(err)) {
+     // User cancelled the picker, exit any dialogs or menus and move on
+   } else {
+     throw err;
+   }
+ }
+   };
 
   render() {
 
@@ -355,13 +386,13 @@ try {
              icon: require("./uploadSingle.png"),
              name: "single_file",
              position: 4
-           },/*
+           },
            {
-             text: "Send tip",
+             text: "MultiFile",
              icon: require("./uploadMultiple.png"),
              name: "multi_file",
              position: 3
-           },
+           }/*,
            {
              text: "Deposit BTT",
              icon: require("./uploadMultiple.png"),
@@ -460,7 +491,8 @@ try {
                   }
                   else if (name =='multi_file')
                   {
-                    sendDevTipMainNetBTT();
+                    this._pickMultiple();
+                    //sendDevTipMainNetBTT();
                   }
                   else if (name =='deposit')
                   {

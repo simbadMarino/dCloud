@@ -1,0 +1,1 @@
+/home/simbad/Documents/temp/dCloud/android/app/src/main/cpp/Android.mk

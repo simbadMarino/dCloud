@@ -1,14 +1,23 @@
 [
   {
     "level": "INFO",
-    "message": "Start JSON generation. Platform version: 24 min SDK version: x86_64"
+    "message": "Start JSON generation. Platform version: 29 min SDK version: x86_64",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
+    "tag": "debug|x86_64",
+    "diagnosticCode": "UNKNOWN"
   },
   {
     "level": "INFO",
-    "message": "JSON \u0027/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/x86_64/android_gradle_build.json\u0027 was up-to-date"
+    "message": "JSON \u0027/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/x86_64/android_gradle_build.json\u0027 was up-to-date",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
+    "tag": "debug|x86_64",
+    "diagnosticCode": "UNKNOWN"
   },
   {
     "level": "INFO",
-    "message": "JSON generation completed without problems"
+    "message": "JSON generation completed without problems",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
+    "tag": "debug|x86_64",
+    "diagnosticCode": "UNKNOWN"
   }
 ]

@@ -2,16 +2,71 @@
   "buildFiles": [
     "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk"
   ],
-  "cleanCommands": [
-    "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-24 NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib APP_CFLAGS+\u003d-std\u003dc11 APP_CFLAGS+\u003d-Wall APP_CFLAGS+\u003d-Wextra APP_CFLAGS+\u003d-Werror APP_CFLAGS+\u003d-Os APP_CFLAGS+\u003d-fno-stack-protector APP_CFLAGS+\u003d-Wl,--gc-sections clean"
+  "cleanCommandsComponents": [
+    [
+      "/home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build",
+      "NDK_PROJECT_PATH\u003dnull",
+      "APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
+      "APP_ABI\u003dx86",
+      "NDK_ALL_ABIS\u003dx86",
+      "NDK_DEBUG\u003d1",
+      "APP_PLATFORM\u003dandroid-29",
+      "NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj",
+      "NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib",
+      "APP_CFLAGS+\u003d-std\u003dc11",
+      "APP_CFLAGS+\u003d-Wall",
+      "APP_CFLAGS+\u003d-Wextra",
+      "APP_CFLAGS+\u003d-Werror",
+      "APP_CFLAGS+\u003d-Os",
+      "APP_CFLAGS+\u003d-fno-stack-protector",
+      "APP_CFLAGS+\u003d-Wl,--gc-sections",
+      "clean"
+    ]
   ],
-  "buildTargetsCommand": "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-24 NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib APP_CFLAGS+\u003d-std\u003dc11 APP_CFLAGS+\u003d-Wall APP_CFLAGS+\u003d-Wextra APP_CFLAGS+\u003d-Werror APP_CFLAGS+\u003d-Os APP_CFLAGS+\u003d-fno-stack-protector APP_CFLAGS+\u003d-Wl,--gc-sections {LIST_OF_TARGETS_TO_BUILD}",
+  "buildTargetsCommandComponents": [
+    "/home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build",
+    "NDK_PROJECT_PATH\u003dnull",
+    "APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
+    "APP_ABI\u003dx86",
+    "NDK_ALL_ABIS\u003dx86",
+    "NDK_DEBUG\u003d1",
+    "APP_PLATFORM\u003dandroid-29",
+    "NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj",
+    "NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib",
+    "APP_CFLAGS+\u003d-std\u003dc11",
+    "APP_CFLAGS+\u003d-Wall",
+    "APP_CFLAGS+\u003d-Wextra",
+    "APP_CFLAGS+\u003d-Werror",
+    "APP_CFLAGS+\u003d-Os",
+    "APP_CFLAGS+\u003d-fno-stack-protector",
+    "APP_CFLAGS+\u003d-Wl,--gc-sections",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
   "libraries": {
     "termux-debug-x86": {
       "artifactName": "termux",
-      "buildCommand": "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-24 NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib APP_CFLAGS+\u003d-std\u003dc11 APP_CFLAGS+\u003d-Wall APP_CFLAGS+\u003d-Wextra APP_CFLAGS+\u003d-Werror APP_CFLAGS+\u003d-Os APP_CFLAGS+\u003d-fno-stack-protector APP_CFLAGS+\u003d-Wl,--gc-sections /home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux.so",
+      "buildCommandComponents": [
+        "/home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-29",
+        "NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj",
+        "NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib",
+        "APP_CFLAGS+\u003d-std\u003dc11",
+        "APP_CFLAGS+\u003d-Wall",
+        "APP_CFLAGS+\u003d-Wextra",
+        "APP_CFLAGS+\u003d-Werror",
+        "APP_CFLAGS+\u003d-Os",
+        "APP_CFLAGS+\u003d-fno-stack-protector",
+        "APP_CFLAGS+\u003d-Wl,--gc-sections",
+        "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux.so"
+      ],
       "abi": "x86",
-      "output": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux.so"
+      "output": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux.so",
+      "runtimeFiles": []
     }
   }
 }

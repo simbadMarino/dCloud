@@ -1,28 +1,72 @@
 {
   "buildFiles": [
-    "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk"
+    "/home/simbad/Documents/temp/dCloud/android/app/src/main/cpp/Android.mk"
   ],
-  "cleanCommands": [
-    "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-24 NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/lib APP_CFLAGS+\u003d-std\u003dc11 APP_CFLAGS+\u003d-Wall APP_CFLAGS+\u003d-Wextra APP_CFLAGS+\u003d-Werror APP_CFLAGS+\u003d-Os APP_CFLAGS+\u003d-fno-stack-protector APP_CFLAGS+\u003d-Wl,--gc-sections clean"
+  "cleanCommandsComponents": [
+    [
+      "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build",
+      "NDK_PROJECT_PATH\u003dnull",
+      "APP_BUILD_SCRIPT\u003d/home/simbad/Documents/temp/dCloud/android/app/src/main/cpp/Android.mk",
+      "APP_ABI\u003dx86",
+      "NDK_ALL_ABIS\u003dx86",
+      "NDK_DEBUG\u003d1",
+      "APP_PLATFORM\u003dandroid-29",
+      "NDK_OUT\u003d/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/obj",
+      "NDK_LIBS_OUT\u003d/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/lib",
+      "APP_CFLAGS+\u003d-std\u003dc11",
+      "APP_CFLAGS+\u003d-Wall",
+      "APP_CFLAGS+\u003d-Wextra",
+      "APP_CFLAGS+\u003d-Werror",
+      "APP_CFLAGS+\u003d-Os",
+      "APP_CFLAGS+\u003d-fno-stack-protector",
+      "APP_CFLAGS+\u003d-Wl,--gc-sections",
+      "clean"
+    ]
   ],
-  "buildTargetsCommand": "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-24 NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/lib APP_CFLAGS+\u003d-std\u003dc11 APP_CFLAGS+\u003d-Wall APP_CFLAGS+\u003d-Wextra APP_CFLAGS+\u003d-Werror APP_CFLAGS+\u003d-Os APP_CFLAGS+\u003d-fno-stack-protector APP_CFLAGS+\u003d-Wl,--gc-sections {LIST_OF_TARGETS_TO_BUILD}",
+  "buildTargetsCommandComponents": [
+    "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build",
+    "NDK_PROJECT_PATH\u003dnull",
+    "APP_BUILD_SCRIPT\u003d/home/simbad/Documents/temp/dCloud/android/app/src/main/cpp/Android.mk",
+    "APP_ABI\u003dx86",
+    "NDK_ALL_ABIS\u003dx86",
+    "NDK_DEBUG\u003d1",
+    "APP_PLATFORM\u003dandroid-29",
+    "NDK_OUT\u003d/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/obj",
+    "NDK_LIBS_OUT\u003d/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/lib",
+    "APP_CFLAGS+\u003d-std\u003dc11",
+    "APP_CFLAGS+\u003d-Wall",
+    "APP_CFLAGS+\u003d-Wextra",
+    "APP_CFLAGS+\u003d-Werror",
+    "APP_CFLAGS+\u003d-Os",
+    "APP_CFLAGS+\u003d-fno-stack-protector",
+    "APP_CFLAGS+\u003d-Wl,--gc-sections",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
   "libraries": {
     "termux-bootstrap-debug-x86": {
-      "buildCommand": "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk APP_ABI\u003dx86 NDK_ALL_ABIS\u003dx86 NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-24 NDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/lib APP_CFLAGS+\u003d-std\u003dc11 APP_CFLAGS+\u003d-Wall APP_CFLAGS+\u003d-Wextra APP_CFLAGS+\u003d-Werror APP_CFLAGS+\u003d-Os APP_CFLAGS+\u003d-fno-stack-protector APP_CFLAGS+\u003d-Wl,--gc-sections /home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux-bootstrap.so",
+      "buildCommandComponents": [
+        "/home/simbad/Android/Sdk/ndk/22.0.7026061/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/home/simbad/Documents/temp/dCloud/android/app/src/main/cpp/Android.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-29",
+        "NDK_OUT\u003d/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/obj",
+        "NDK_LIBS_OUT\u003d/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/lib",
+        "APP_CFLAGS+\u003d-std\u003dc11",
+        "APP_CFLAGS+\u003d-Wall",
+        "APP_CFLAGS+\u003d-Wextra",
+        "APP_CFLAGS+\u003d-Werror",
+        "APP_CFLAGS+\u003d-Os",
+        "APP_CFLAGS+\u003d-fno-stack-protector",
+        "APP_CFLAGS+\u003d-Wl,--gc-sections",
+        "/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux-bootstrap.so"
+      ],
       "toolchain": "toolchain-x86",
       "abi": "x86",
       "artifactName": "termux-bootstrap",
-      "files": [
-        {
-          "src": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/termux-bootstrap-zip.S",
-          "flags": "-target i686-none-linux-android24 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot /home/simbad/Android/Sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -D_FORTIFY_SOURCE\u003d2 -fPIC -O0 -UNDEBUG -fno-limit-debug-info -I/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp -std\u003dc11 -Wall -Wextra -Werror -Os -fno-stack-protector -Wl,--gc-sections -DANDROID -Wformat -Werror\u003dformat-security"
-        },
-        {
-          "src": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/termux-bootstrap.c",
-          "flags": "-target i686-none-linux-android24 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot /home/simbad/Android/Sdk/ndk/22.0.7026061/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -D_FORTIFY_SOURCE\u003d2 -fPIC -O0 -UNDEBUG -fno-limit-debug-info -I/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp -std\u003dc11 -Wall -Wextra -Werror -Os -fno-stack-protector -Wl,--gc-sections -DANDROID -Wformat -Werror\u003dformat-security"
-        }
-      ],
-      "output": "/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux-bootstrap.so"
+      "output": "/home/simbad/Documents/temp/dCloud/android/app/build/intermediates/ndkBuild/debug/obj/local/x86/libtermux-bootstrap.so"
     }
   },
   "toolchains": {
