@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { Component, useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Switch,TouchableOpacity, TextInput, Image, NativeModules} from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Switch,TouchableOpacity, TextInput, Image, NativeModules, ToastAndroid, Share} from 'react-native';
 //import Overlay from 'react-native-modal-overlay';
 import axios from 'axios';
 import {
@@ -22,6 +22,7 @@ import { QRCode } from 'react-native-custom-qr-codes';
 import prompt from 'react-native-prompt-android';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
+//import Toast from "./components/Toast.js";
 
 
 // ----------------------------- START OF MODULE VARS --------------------------------------//
@@ -66,7 +67,7 @@ try{
             //float_bttBalance = walletBalance.data.BttWalletBalance;
             var str_PrivateKey = privateKey.data.PrivateKey;
             console.log(str_PrivateKey);
-            alert(str_PrivateKey)
+            Alert.alert("Backup ", str_PrivateKey);
             //console.log("BTT balance: " + float_bttBalance);
             })
 }
@@ -84,7 +85,7 @@ try{
             //float_bttBalance = walletBalance.data.BttWalletBalance;
             var str_Mnemonic = mnemonic.data.Mnemonic;
             console.log(str_Mnemonic);
-            alert(str_Mnemonic)
+            Alert.alert("Not available",str_Mnemonic)
             //console.log("BTT balance: " + float_bttBalance);
             })
 }
@@ -97,7 +98,7 @@ catch (err) {
 
 
 function setWalletPassword(){
-try{
+
           var passwordSetResp =  axios.post('http://localhost:5001/api/v1/wallet/password?arg='+ walletPassword)
            .then(function (passwordSetResp) {
 
@@ -105,13 +106,14 @@ try{
             console.log(str_passwordFeedback);
             alert(str_passwordFeedback);
             })
-}
-catch (err) {
-                console.log("Password is already set")
-                throw err;
-
+            .catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            Alert.alert("Error", "Password already set, use cli to change it if needed");
+             // ADD THIS THROW error
+              //throw error;
+            });
             }
-}
+
 
 function depositBTT(){
 
@@ -177,19 +179,33 @@ function getConfig() {
     configStorageClientEnabled = configDATA.data.Experimental.StorageClientEnabled;
     configStorageHostEnabled = configDATA.data.Experimental.StorageHostEnabled;
     configHostRepairEnabled = configDATA.data.Experimental.HostRepairEnabled;
-    alert("BTFS version: " + btfsVersion + "\n" + "System Date: " + systemCurrentDate + "\n" + "Host Storage enabled?: " + configStorageHostEnabled + "\n" + "Renter Storage enabled?: " + configStorageClientEnabled + "\n" + "Host Repair enabled?: " + configHostRepairEnabled);
+    Alert.alert("BTFS Node Info", "BTFS version: " + btfsVersion + "\n" + "System Date: " + systemCurrentDate + "\n" + "Host Storage enabled?: " + configStorageHostEnabled + "\n" + "Renter Storage enabled?: " + configStorageClientEnabled + "\n" + "Host Repair enabled?: " + configHostRepairEnabled);
 
 
   })
 }
 
-function startBTFSDaemon() {
-return(
 
-{NativeModules.Terminal.startBTFSDaemon()}
-);
 
-}
+const backUpJSON = async () => {
+              try {
+                const result = await Share.share({
+                  message:
+                    'BackUp your FileList JSON',
+                });
+                if (result.action === Share.sharedAction) {
+                  if (result.activityType) {
+                    // shared with activity type of result.activityType
+                  } else {
+                    // shared
+                  }
+                } else if (result.action === Share.dismissedAction) {
+                  // dismissed
+                }
+              } catch (error) {
+                alert(error.message);
+              }
+            };
 
 function promptPassword() {
 try{
@@ -228,8 +244,8 @@ catch(err) {
 function depositToBTFS() {
 
 prompt(
-    'Deposit BTT to BTFS',
-    'How much BTT?',
+    'Deposit BTT',
+    'From MainNet to BTFS',
     [
      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
      {text: 'OK', onPress: BTTamount => {
@@ -311,19 +327,22 @@ function importNodePK(){
 
 async function getTronAddress() {
 
-try{
+
         //console.log('Getting Node ID data..')
         var response =  axios.post('http://localhost:5001/api/v1/id')
         .then(function (response) {
           strTronAddress = response.data.TronAddress;
         //  alert(strTronAddress);
         })
-    }
-
-catch (err) {
-                throw err;
-            }
-  }
+        .catch(function(error) {
+                     console.log('There has been a problem with your fetch operation: ' + error.message);
+                                //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                                console.log("BTFS daemon not running in background...")
+                                //ToastAndroid.show("BTFS daemon not running in background...", ToastAndroid.SHORT);
+                                 // ADD THIS THROW error
+                                  //throw error;
+                     });
+}
 
 
 
@@ -354,7 +373,6 @@ try{
 
 async function getBalanceBTT(){
 
-try{
 
     var walletBalance =  axios.post('http://localhost:5001/api/v1/wallet/balance')
            .then(function (walletBalance) {
@@ -364,17 +382,16 @@ try{
             console.log("BTFS balance: " + float_btfsBalance);
             console.log("BTT balance: " + float_bttBalance);
             })
+            .catch(function(error) {
+             console.log('There has been a problem with your fetch operation: ' + error.message);
+                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                        console.log("BTFS daemon not running in background...")
+                        ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
+                         // ADD THIS THROW error
+                          //throw error;
+             });
 
     }
-
-    catch (err) {
-
-                throw err;
-
-            }
-
-
-}
 
 
 
@@ -515,7 +532,7 @@ const onRefresh = React.useCallback(() => {
                      onPress={copyToClipboard}
                      >
                        <Text style={styles.tabMenuText}>
-                       Copy Address</Text>
+                       Copy Address  </Text>
              </TouchableOpacity>
              <TouchableOpacity style={styles.tabsButton}
                      onPress={depositToBTFS}
@@ -597,6 +614,28 @@ function SettingsScreen() {
   var [value, onChangeText] = React.useState(configText);
 
 
+const storeData = async () => {
+  try {
+    await AsyncStorage.setItem('@storage_Key', "1")
+  } catch (e) {
+    console.log("error")
+  }
+}
+
+const getData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('@storage_Key')
+    if(value !== null) {
+      console.log("BTFS STS: " + value);
+    }
+    else
+    {
+        console.log("BTFS STS: " + value);
+    }
+  } catch(e) {
+    console.log("Nothing stored yet");
+  }
+}
 
 
 
@@ -614,12 +653,14 @@ function SettingsScreen() {
                             Get BTFS Data</Text>
          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.tabsButton}
-                          onPress={startBTFSDaemon.bind(this)}
-                          >
-                            <Text style={styles.tabMenuText}>
-                            BTFS Daemon Start </Text>
-         </TouchableOpacity>
+         <TouchableOpacity style={styles.tabsButton}
+                           onPress={backUpJSON.bind(this)}
+                           >
+                             <Text style={styles.tabMenuText}>
+                             BackUp Files List JSON</Text>
+          </TouchableOpacity>
+
+
 
          <TouchableOpacity style={styles.tabsButton}
                  onPress={promptPassword}
@@ -636,11 +677,13 @@ function SettingsScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.tabsButton}
-                    onPress={getMnemonic}
-                    >
-                      <Text style={styles.tabMenuText}>
-                      Get Mnemonic</Text>
-            </TouchableOpacity>
+                onPress={getMnemonic}
+                >
+                  <Text style={styles.tabMenuText}>
+                  Get Mnemonic</Text>
+          </TouchableOpacity>
+
+
 
 
     </View>
@@ -775,8 +818,8 @@ const styles = StyleSheet.create({
 tabsButton:{
     width:"50%",
     backgroundColor:"white",
-    borderRadius:25,
-    height:50,
+    borderRadius:15,
+    height:40,
     alignItems:"center",
     justifyContent:"center",
     marginTop:40,
@@ -784,7 +827,7 @@ tabsButton:{
   },
 
   copyButton:{
-      width:"30%",
+      width:"50%",
       backgroundColor:"#6495ed",
       borderRadius:15,
       height:40,
@@ -794,7 +837,8 @@ tabsButton:{
       marginBottom:5
     },
   tabMenuText:{
-      color:"black"
+      color:"black",
+      fontWeight: "bold"
     },
   cardBalanceText: {
       fontSize: 16,
