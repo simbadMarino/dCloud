@@ -187,25 +187,7 @@ function getConfig() {
 
 
 
-const backUpJSON = async () => {
-              try {
-                const result = await Share.share({
-                  message:
-                    'BackUp your FileList JSON',
-                });
-                if (result.action === Share.sharedAction) {
-                  if (result.activityType) {
-                    // shared with activity type of result.activityType
-                  } else {
-                    // shared
-                  }
-                } else if (result.action === Share.dismissedAction) {
-                  // dismissed
-                }
-              } catch (error) {
-                alert(error.message);
-              }
-            };
+
 
 function promptPassword() {
 try{
@@ -653,12 +635,7 @@ const getData = async () => {
                             Get BTFS Data</Text>
          </TouchableOpacity>
 
-         <TouchableOpacity style={styles.tabsButton}
-                           onPress={backUpJSON.bind(this)}
-                           >
-                             <Text style={styles.tabMenuText}>
-                             BackUp Files List JSON</Text>
-          </TouchableOpacity>
+
 
 
 
@@ -711,11 +688,25 @@ state = {
     getBalanceBTT();
     getTronAddress();
 
-    this.interval = setInterval(getBalanceBTT,10000);
-    this.interval = setInterval(getTronAddress,5000);
+    this.intervalBalance = setInterval(getBalanceBTT,10000);
+    this.intervalAddress = setInterval(getTronAddress,5000);
 
 
     }
+
+    componentWillUnMount() {
+        //myVar7 = setInterval(this.updateFilesList,1000);
+        if (this.intervalBalance) {     // Is our timer running
+                // Yes, clear it
+                clearTimeout(this.intervalBalance);
+                this.intervalBalance = 0;
+            }
+        if (this.intervalAddress) {     // Is our timer running
+                    // Yes, clear it
+                    clearTimeout(this.intervalAddress);
+                    this.intervalAddress = 0;
+                }
+        }
 
 
 

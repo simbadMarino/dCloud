@@ -14,7 +14,14 @@ import Root from './Root';
 import Popup from './Popup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 //import { filelist } from "./fileList.js";
+
+import {
+  SwipeableFlatList,
+  SwipeableQuickActionButton,
+  SwipeableQuickActions,
+} from 'react-native-swipe-list';
 
 //var filelist
 var currentUploadSessionID = "";
@@ -92,6 +99,28 @@ function stopAllIntervals(){
              }
            }
 
+const backUpJSON = async () => {
+              try {
+                const result = await Share.share({
+                  message:
+                    'BackUp your FileList JSON',
+                });
+                if (result.action === Share.sharedAction) {
+                  if (result.activityType) {
+                    // shared with activity type of result.activityType
+                  } else {
+                    // shared
+                  }
+                } else if (result.action === Share.dismissedAction) {
+                  // dismissed
+                }
+              } catch (error) {
+                alert(error.message);
+              }
+            };
+
+
+
   const  getFilesData = async () => {
          try {
            const value = await AsyncStorage.getItem('@filesJson')
@@ -111,117 +140,107 @@ function stopAllIntervals(){
        }
 
 
+const getMultiUploadStatus = async(item) => {
 
 
-
-async function getUploadStatus() {
-
-    timeOutWatchDogCounter ++;
-    if(timeOutWatchDogCounter >= MAX_UPLOAD_TIMEOUT)
-    {
-        statusProgress = 1.0;
-        progressBarColor = 'red';
-        //this.updateProgressBarColor;
-        //stopAllIntervals();
-        setTimeout(stopAllIntervals,2000);
-        //timeOutWatchDogCounter = 0;
-    }
-    console.log("WhatchDog Counter: " + timeOutWatchDogCounter);
+    try{
 
 
+    files_list.forEach(await function(element,item){
 
-
+    console.log("Session Status " + files_list[item].session + ": "  + files_list[item].uploadStatus);
 
     var response = "";
-  	response =  axios.post("http://localhost:5001/api/v1/storage/upload/status?arg=" + currentUploadSessionID)
-    .then(function (response) {
+      	response =  axios.post("http://localhost:5001/api/v1/storage/upload/status?arg=" + files_list[item].session)
+        .then(function (response) {
 
-          //console.log(response);
-          currentSessionIDMessage = response.data.Message;
-          if(currentSessionIDMessage == 'Searching for recommended hosts…')
-          {
-            statusProgress = 0.1;
-          }
-          if(currentSessionIDMessage == 'Hosts found! Checking wallet balance and submitting contracts to escrow.')
-          {
-            statusProgress = 0.3;
-          }
-          if(currentSessionIDMessage == 'Contracts submitted! Confirming the escrow payment.')
-          {
-            statusProgress = 0.5;
-          }
-          if(currentSessionIDMessage == 'Payment successful! Preparing meta-data and challenge questions.')
-          {
-            statusProgress = 0.6;
-          }
-          if(currentSessionIDMessage == 'Confirming successful file shard storage by hosts.')
-          {
-            statusProgress = 0.8;
-          }
-          if(currentSessionIDMessage == 'File storage successful!')
-          {
-            statusProgress = 1.0;
-            setTimeout(stopAllIntervals,6000);
-            Popup.show({
-               type: 'Success',
-               title: 'Upload complete',
-               buttontext: 'Ok',
-               callback: () => Popup.hide(),
+              //console.log(response);
+              currentSessionIDMessage = response.data.Message;
+              if(currentSessionIDMessage == 'Searching for recommended hosts…')
+              {
+                files_list[item].uploadStatus = 10;
+              }
+              if(currentSessionIDMessage == 'Hosts found! Checking wallet balance and submitting contracts to escrow.')
+              {
+                files_list[item].uploadStatus = 30;
+              }
+              if(currentSessionIDMessage == 'Contracts submitted! Confirming the escrow payment.')
+              {
+                files_list[item].uploadStatus = 50;
+              }
+              if(currentSessionIDMessage == 'Payment successful! Preparing meta-data and challenge questions.')
+              {
+                files_list[item].uploadStatus = 60;
+              }
+              if(currentSessionIDMessage == 'Confirming successful file shard storage by hosts.')
+              {
+                files_list[item].uploadStatus = 80;
+              }
+              if(currentSessionIDMessage == 'File storage successful!')
+              {
+                files_list[item].uploadStatus = 100;
+                        }
+              if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = met internal error, ERROR #42P01 relation "contract" does not exist')
+              {
+                files_list[item].uploadStatus = 0;
+                //progressBarColor = 'red'
+                //updateProgressBarColor;
+                //Alert.alert("Error", currentSessionIDMessage);
+                //setTimeout(stopAllIntervals,6000);
+              }
+              if(currentSessionIDMessage == 'GuardClient: rpc error: code = Unknown desc = Persistence manager: such file hash already exist for such renter')
+              {
+                files_list[item].uploadStatus = 100;
+                //progressBarColor = 'red'
+                //updateProgressBarColor;
+                //Alert.alert("Error", currentSessionIDMessage);
+                //setTimeout(stopAllIntervals,6000);
+              }
+              if(currentSessionIDMessage == 'GuardClient: rpc error: code = DeadlineExceeded desc = context deadline exceeded')
+              {
+                //Error
+                files_list[item].uploadStatus = 0;
+              }
+              if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = ledger error:LedgerClient: rpc error: code = Unavailable desc = Gateway Timeout: HTTP status code 504; transport: received the unexpected content-type "text/html"')
+              {
+                files_list[item].uploadStatus = 0;
+                //progressBarColor = 'red';
+                //Alert.alert("Error", currentSessionIDMessage);
+                //setTimeout(stopAllIntervals,6000);
+              }
+              if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = ledger error:rpc error: code = Unavailable desc = Gateway Timeout: HTTP status code 504; transport: received the unexpected content-type "text/html"')
+              {
+                files_list[item].uploadStatus = 0;
+                //progressBarColor = 'red';
+                //Alert.alert("Error", currentSessionIDMessage);
+                //setTimeout(stopAllIntervals,6000);
+              }
+              if(currentSessionIDMessage == 'GuardClient: rpc error: code = Unavailable desc = transport is closing')
+              {
+                files_list[item].uploadStatus = 0;
+                //progressBarColor = 'red';
+                //Alert.alert("Error", currentSessionIDMessage);
+                //setTimeout(stopAllIntervals,6000);
+              }
+              if(currentSessionIDMessage == 'context deadline exceeded')
+              {
+                files_list[item].uploadStatus = 0;
+                //progressBarColor = 'red'
+                //updateProgressBarColor
+                //Alert.alert("Error", currentSessionIDMessage);
+                //stopAllIntervals();
+                //setTimeout(stopAllIntervals,6000);
+              }
 
-             })
-          }
-          if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = met internal error, ERROR #42P01 relation "contract" does not exist')
-          {
-            statusProgress = 1.0;
-            progressBarColor = 'red'
-            //updateProgressBarColor;
-            Alert.alert("Error", currentSessionIDMessage);
-            setTimeout(stopAllIntervals,6000);
-          }
-          if(currentSessionIDMessage == 'GuardClient: rpc error: code = Unknown desc = Persistence manager: such file hash already exist for such renter')
-          {
-            statusProgress = 1.0;
-            progressBarColor = 'red'
-            //updateProgressBarColor;
-            Alert.alert("Error", currentSessionIDMessage);
-            setTimeout(stopAllIntervals,6000);
-          }
-          if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = ledger error:LedgerClient: rpc error: code = Unavailable desc = Gateway Timeout: HTTP status code 504; transport: received the unexpected content-type "text/html"')
-          {
-            statusProgress = 1.0;
-            progressBarColor = 'red';
-            Alert.alert("Error", currentSessionIDMessage);
-            setTimeout(stopAllIntervals,6000);
-          }
-          if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = ledger error:rpc error: code = Unavailable desc = Gateway Timeout: HTTP status code 504; transport: received the unexpected content-type "text/html"')
-          {
-            statusProgress = 1.0;
-            progressBarColor = 'red';
-            Alert.alert("Error", currentSessionIDMessage);
-            setTimeout(stopAllIntervals,6000);
-          }
-          if(currentSessionIDMessage == 'GuardClient: rpc error: code = Unavailable desc = transport is closing')
-          {
-            statusProgress = 1.0;
-            progressBarColor = 'red';
-            Alert.alert("Error", currentSessionIDMessage);
-            setTimeout(stopAllIntervals,6000);
-          }
-          if(currentSessionIDMessage == 'context deadline exceeded')
-          {
-            statusProgress = 1.0;
-            progressBarColor = 'red'
-            //updateProgressBarColor
-            Alert.alert("Error", currentSessionIDMessage);
-            //stopAllIntervals();
-            setTimeout(stopAllIntervals,6000);
-          }
+            //  console.log("|"+"Upload Message: " + currentSessionIDMessage + "|" + "Session ID:  " + currentUploadSessionID + "|" + "QmHash: " + currentFileQMhash + "|");
+             // Alert.alert("BTFS", "|"+"Upload Message: " + currentSessionIDMessage + "|" + "Session ID:  " + currentUploadSessionID + "|" + "QmHash: " + currentFileQMhash + "|");
+        })
+    });
 
-        //  console.log("|"+"Upload Message: " + currentSessionIDMessage + "|" + "Session ID:  " + currentUploadSessionID + "|" + "QmHash: " + currentFileQMhash + "|");
-         // Alert.alert("BTFS", "|"+"Upload Message: " + currentSessionIDMessage + "|" + "Session ID:  " + currentUploadSessionID + "|" + "QmHash: " + currentFileQMhash + "|");
-
-
-    })
+    }
+    catch (e) {
+                   console.log("error")
+                 }
   }
 
 
@@ -262,14 +281,23 @@ state = {
 
 
   componentWillUnMount() {
-    clearInterval(this.timer);
     //myVar7 = setInterval(this.updateFilesList,1000);
+    if (this.interval) {     // Is our timer running
+            // Yes, clear it
+            clearTimeout(this.interval);
+            this.interval = 0;
+        }
+    if (this.interval2) {     // Is our timer running
+                // Yes, clear it
+                clearTimeout(this.interval2);
+                this.interval2 = 0;
+            }
     }
 
   componentDidMount() {
 
   this.interval = setInterval(this.updateFilesList,2000);
-
+  this.interval2 = setInterval(getMultiUploadStatus,5000);
   }
 
 
@@ -285,8 +313,8 @@ state = {
 
 
      updateFilesList = () => {
-     console.log("updating fileList...")
-     console.log(files_list);
+     //console.log("updating fileList...")
+     //console.log(files_list);
      storeFilesData(files_list)
      this.setState({stateFilesList: files_list});
                  }
@@ -390,6 +418,7 @@ state = {
  try {
 
     //myVar7 = setInterval(this.updateFilesList,1000);
+   currentSessionIDMessage = "";
    results_multi = await DocumentPicker.pickMultiple({
      type: [DocumentPicker.types.allFiles],
    });
@@ -398,34 +427,21 @@ state = {
 
    results_multi.forEach(await function (res,i){
 
-
-        /*console.log(
-          res.uri,
-          res.type, // mime type
-          res.name,
-          res.size
-        );*/
           currentFileName = res.name;
-
           const formData = new FormData();
-
           formData.append(res.name, {
             uri: res.uri,
             name: res.name ,
             type: res.type
           });
 
-
         var addFileReedSolomonData = axios.post("http://localhost:5001/api/v1/add?chunker=reed-solomon", formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-
         .then(function (addFileReedSolomonData) {
                 currentFileQMhash = addFileReedSolomonData.data.Hash;
-
-                //Alert.alert(currentFileQMhash);
                 console.log("File BTFS QMhash: " + currentFileQMhash);
                 console.log("QMhash obtained :), proceeding to upload file...");
 
@@ -435,7 +451,8 @@ state = {
                      icon: 'check-circle',
                      subtitle: res.size/1000 + " KB",
                      qmhash: currentFileQMhash,
-                     session: ''
+                     session: '',
+                     uploadStatus: 0
                   });
 
                 var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash)
@@ -454,8 +471,12 @@ state = {
                                          session: currentUploadSessionID
                                       });*/
                     console.log(files_list);
+                    //myVar4 = setInterval(getMultiUploadStatus,4200);
                  })
           })
+
+          //getMultiUploadStatus();
+          //myVar4 = setInterval(this.updateUploadSts,4200);
 
    });
 
@@ -591,32 +612,31 @@ files_list.splice(item,1);
 
           {this.state.stateFilesList.map((item, i) => (
 
-                           <Swipeable
-                                rightContent={rightContent}
-                                rightActionActivationDistance = {250}
-                                onRightActionRelease={() => deleteCurrentItem(i)}
+            <Swipeable
+               rightContent={rightContent}
+               rightActionActivationDistance = {250}
+               onRightActionRelease={() => deleteCurrentItem(i)}
+               >
 
-                           >
-
-                         <ListItem key={i} topDivider={true}  containerStyle={{backgroundColor:"#3C3C42"}}
-                               onLongPress={() => copyToClipboardLong(i)}
-                                onPress={() => openURL(i)}
-
-
-                         >
-
-                           <Icon name={item.icon} />
-
-                           <ListItem.Content >
-                             <ListItem.Title style={{color:'white'}}>{item.title}</ListItem.Title>
-                             <ListItem.Subtitle style={{color:'white'}}>{item.subtitle}</ListItem.Subtitle>
-                             <ListItem.Subtitle style={{color:'white'}}>{item.qmhash}</ListItem.Subtitle>
-                           </ListItem.Content>
+                                    <ListItem key={i} topDivider={true}  containerStyle={{backgroundColor:"#3C3C42"}}
+                                          onLongPress={() => copyToClipboardLong(i)}
+                                           onPress={() => openURL(i)}
 
 
+                                    >
 
-                         </ListItem>
-                        </Swipeable>
+                                      <Text style={styles.uploadStsText}>{item.uploadStatus + "%"}</Text>
+
+                                      <ListItem.Content >
+                                        <ListItem.Title style={{color:'white'}}>{item.title}</ListItem.Title>
+                                        <ListItem.Subtitle style={{color:'white'}}>{item.subtitle}</ListItem.Subtitle>
+                                        <ListItem.Subtitle style={{color:'white'}}>{item.qmhash}</ListItem.Subtitle>
+                                      </ListItem.Content>
+
+
+
+                                    </ListItem>
+                                   </Swipeable>
                        ))
           }
 
@@ -673,6 +693,12 @@ const styles = StyleSheet.create({
     backgroundColor:"red",
     height: 80
   },
+uploadStsText: {
+  fontSize: 18,
+  color: 'white',
+  alignItems:"center",
+  justifyContent:"center"
+},
   listbuttonOffline:{
   color: 'white'
   },
