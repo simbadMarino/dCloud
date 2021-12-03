@@ -50,7 +50,7 @@ After this please restart your dCloud app and the GUI should show you the Host U
 
 **HOW TO BUILD CUSTOM BOOTSTRAP PACKAGE FOR ANDROID 10 (EXPERIMENTAL procedure credit goes to: agnostic-apollo from Termux)**
 
-This method is currently under experimental usage, there is not guarantee this will work forever, so, in later releases I'll be moving towards reducing dependencies on termux.
+This method is currently under experimental usage, there is not guarantee this will work forever.
 
 `build-bootstraps.sh` script locally cross-compile the bootstrap package debs and create bootstrap zips. It is working for a different PREFIX to be ported to the official termux app without reworing termux code.  On-device (termux in mobile) builds are not supported currently, so use PC (cross-compile in docker).
 
