@@ -255,7 +255,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         if (mTermuxService.isTermuxSessionsEmpty()) {
             if (mIsVisible) {
-                TermuxInstaller.setupBootstrapIfNeeded(TermuxActivity.this, () -> {
+
                     if (mTermuxService == null) return; // Activity might have been destroyed.
                     try {
                         Bundle bundle = getIntent().getExtras();
@@ -267,7 +267,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                     } catch (WindowManager.BadTokenException e) {
                         // Activity finished - ignore.
                     }
-                });
+
             } else {
                 // The service connected while not in foreground - just bail out.
                 finishActivityIfNotFinishing();

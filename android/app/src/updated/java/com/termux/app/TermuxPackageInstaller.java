@@ -47,6 +47,7 @@ public class TermuxPackageInstaller extends BroadcastReceiver {
 
     static void installPackage(Context context, ApplicationInfo info) throws Exception {
         File filesMappingFile = new File(info.nativeLibraryDir, "libfiles.so");
+        Log.e("termux",filesMappingFile.getName());
         if (!filesMappingFile.exists()) {
             Log.e("termux", "No file mapping at " + filesMappingFile.getAbsolutePath());
             return;
