@@ -23,6 +23,13 @@ a) Compiling from Android Studio by cloning this repo and performing the followi
   4. Run or create the APK and test either on your phone or emulator
   5. Enjoy :)
 
+**ReactNative assets update for release bundles:**
+
+If you are experiencing issues on your builds with assets not reflecting when building your release APK or .aab bundle files execute the following command in under the dCLoud root folder:  
+`npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/`
+
+
+
 *Notes about boostrap packages and architectures: 
   If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.
 
