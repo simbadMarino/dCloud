@@ -23,6 +23,13 @@ a) Compiling from Android Studio by cloning this repo and performing the followi
   4. Run or create the APK and test either on your phone or emulator
   5. Enjoy :)
 
+**ReactNative assets update for release bundles:**
+
+If you are experiencing issues on your builds with assets not reflecting when building your release APK or .aab bundle files execute the following command in under the dCLoud root folder:  
+`npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/`
+
+
+
 *Notes about boostrap packages and architectures: 
   If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.
 
@@ -50,7 +57,7 @@ After this please restart your dCloud app and the GUI should show you the Host U
 
 **HOW TO BUILD CUSTOM BOOTSTRAP PACKAGE FOR ANDROID 10 (EXPERIMENTAL procedure credit goes to: agnostic-apollo from Termux)**
 
-This method is currently under experimental usage, there is not guarantee this will work forever, so, in later releases I'll be moving towards reducing dependencies on termux.
+This method is currently under experimental usage, there is not guarantee this will work forever.
 
 `build-bootstraps.sh` script locally cross-compile the bootstrap package debs and create bootstrap zips. It is working for a different PREFIX to be ported to the official termux app without reworing termux code.  On-device (termux in mobile) builds are not supported currently, so use PC (cross-compile in docker).
 
