@@ -85,3 +85,32 @@ If you get curl: (22) The requested URL returned error: 410 Gone or something li
 **Important Notice:**
 Please note that current effort will be towards making a nice Renter UI and some issues with the host node could appear and won't be prioritized for fixing or developing additional features.
 
+
+**DONATIONS**
+
+Why should you donate to dCLoud?
+
+More donation = more money
+
+More money allows me buy more coffee
+
+More coffee makes me write more code
+
+More code means more features
+
+More features make you more productive
+
+More productive so you earn more money
+
+More money you earn more donation to me
+
+More Muhahaha… 
+
+
+TRON Address: TXQJCQnUNW73vzd4koeZKdzChfKWv8J9G5
+
+![image](https://user-images.githubusercontent.com/11146636/144756464-e08f0037-0745-4c98-8836-e6347db6314c.png)
+
+
+
+(Funny donation notes credits: notepad++ devs)
