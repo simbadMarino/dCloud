@@ -393,7 +393,7 @@ def downloadBootstrap(String arch, String expectedChecksum, boolean isPackagesIn
         }
     }
 
-    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v0.7" + "/bootstrap-" + arch + ".zip"
+    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1_BTFS_binaries" + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
@@ -426,10 +426,10 @@ task downloadBootstraps() {
     boolean isPackagesInApk = getGradle().getStartParameter().getTaskRequests().toString().contains("Updated");
     doLast {
         //def version = "2021.04.13-r1"
-        downloadBootstrap("aarch64", "ffffbcc01e952cb5b300ed7d94eed4e7ed3e5e83e54624adf24090b9273e9ac1",  isPackagesInApk)
-        downloadBootstrap("arm",     "fcf8c994ae3e1e1eef0e710ddbe6f6e9cc88170431cef21c9cd2f673ef9173a5",  isPackagesInApk)
-        downloadBootstrap("i686",    "6b0546ef4a8ee2619d86261729231311a9c29f9405233ffcaf18e4d3f72cbeb5",  isPackagesInApk)
-        downloadBootstrap("x86_64",  "9dcd94c2bca57e25a82f933dbe0e21020e8aca9a00dee27d9041e80fc6620a13",  isPackagesInApk)
+        downloadBootstrap("aarch64", "5d87ebac5289f58e96eff4375d5e796780d1df28adece2256c607bd4d160ec7c",  isPackagesInApk)
+        downloadBootstrap("arm",     "9b5df57af350c58b8b4d80a0ca3757fefafea84f22c74143e3da4cbe88c32517",  isPackagesInApk)
+        downloadBootstrap("i686",    "93ef566eb7e9f2f5d9f3f91b02f0a7072ee62b680e7ca1af1fa6322000911700",  isPackagesInApk)
+        downloadBootstrap("x86_64",  "a57a498ccdbf1c10c61f8e2737e88ac88a8e814880977a3f481a2c826dd00e30",  isPackagesInApk)
     }
 }
 
