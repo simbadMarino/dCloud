@@ -10,11 +10,13 @@ import { ListItem, Icon, Card, Divider} from 'react-native-elements';
 import axios from 'axios';
 import { Dimensions } from 'react-native';
 import { FloatingAction } from "react-native-floating-action";
+import uploadImage from './uploadSingle.png';
 import Root from './Root';
 import Popup from './Popup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
 //import { filelist } from "./fileList.js";
 
 import {
@@ -564,7 +566,7 @@ state = {
            },*/
            {
              text: "Upload Files",
-             icon: require("./uploadSingle.png"),
+             icon: require('../assets/uploadSingle.png'),
              name: "multi_file",
              position: 1
            }/*,

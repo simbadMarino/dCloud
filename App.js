@@ -67,7 +67,7 @@ try{
             //float_bttBalance = walletBalance.data.BttWalletBalance;
             var str_PrivateKey = privateKey.data.PrivateKey;
             console.log(str_PrivateKey);
-            Alert.alert("Backup ", str_PrivateKey);
+            Alert.alert("PK Backup ", str_PrivateKey);
             //console.log("BTT balance: " + float_bttBalance);
             })
 }
@@ -85,7 +85,7 @@ try{
             //float_bttBalance = walletBalance.data.BttWalletBalance;
             var str_Mnemonic = mnemonic.data.Mnemonic;
             console.log(str_Mnemonic);
-            Alert.alert("Not available",str_Mnemonic)
+            Alert.alert("Seed Backup",str_Mnemonic)
             //console.log("BTT balance: " + float_bttBalance);
             })
 }
@@ -505,11 +505,11 @@ const onRefresh = React.useCallback(() => {
             </Card>
 
             <QRCode content= {strTronAddress}
-                    logoSize = {50}
-                    size = {150}
-                    logo={require('./components/btt_logo.png')}
+             logoSize = {50}
+            size = {150}
+            logo={require('./assets/btt_logo.png')}
+            />
 
-                    />
             <TouchableOpacity style={styles.copyButton}
                      onPress={copyToClipboard}
                      >
