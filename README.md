@@ -14,7 +14,7 @@ Currently dCloud is only available for Android due to limitations on how iOS man
 
 As a Google Play / F-Droid version is not ready yet you will need to install dCloud using 
 
-a) Compiling from Android Studio by cloning this repo and performing the following actions:
+**a) Compiling from Android Studio by cloning this repo and performing the following actions:**
 
   1. Perform a `yarn install` in the dCloud root folder to install ALL react-native dependencies ( "react": "16.13.1","react-native": "0.63.4" versions were tested and currently working, any other version might have some unknown issues)
   2. Open the android project using Android Studio and select updatedDebug or updatedRelease![image](https://user-images.githubusercontent.com/11146636/137638913-77649e84-cfca-4cd0-aa4a-214ac6114263.png)
@@ -25,26 +25,43 @@ a) Compiling from Android Studio by cloning this repo and performing the followi
 
 **ReactNative assets update for release bundles:**
 
-If you are experiencing issues on your builds with assets not reflecting when building your release APK or .aab bundle files execute the following command in under the dCLoud root folder:  
-`npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/`
+Assets:
+
+If you are contributing on the Reac-Native UI please make sure all your assets (pictures, gifs, etc) are located at ~root/assets folder before building the release APK
 
 
+Bootstrap Packages: 
 
-*Notes about boostrap packages and architectures: 
-  If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.
+  If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.*
+  
+dCloud Terminal:
 
-b) Downloading latest apk:
-  Option 1: Contact me on telegram and I can forward you the APK installer
-  Option 2: Download the APK directly from the btfs gateway (file is splitted in 2 files):
-            File 1: Pending
-            File2: Pending
+  *If the dCloud terminal is not loaded properly it might be related to jniLibs not properly installed, make sure you don't have an ABI filer activated in the abi filter:* https://github.com/simbadMarino/dCloud/blob/a975e0d35f2830ccad5c73fcf878bf164cfb46c1/android/app/build.gradle#L187
+
+**b) USING A RELEASE FROM GITHUB**
+
+  Please refer to the Releases section (https://github.com/simbadMarino/dCloud/releases) to get the latest APK file format, please note this is a "FAT" installer because it contains all architectures support as well as BTFS1 and BTFS2 binaries which consumes a large percentage of the overall app size. 
             
-
-Once the installation is successful you need to open the terminal GUI and initialize the btfs services by sending the following commands:
+**BTFS 1:**
+Once the installation is successful you need to perform the following. Open the terminal GUI and initialize the btfs services by sending the following commands:
 
   1. `btfs init`
-  2. `btfs wallet password "YOUR_PASSWORD_HERE_NO_SPECIAL_CHARACTERS_ALLOWED"`
   3. `btfs daemon`
+  4. Go back to dCloud Main Screen by pushing the "Back" button on your phone and select the Settings tab.
+  5. Set a password as observed in the animation below to configure the deposits to In-App balance & token transfers.
+  6. Close and Open the main dCloud Screen to make sure all screens refresh data coming from the BTFS1 backend app. (This step won't be needed in future improved UI releases)
+
+Steps to storage files on BTFS1 :
+
+In order to upload files to BTFS1 you need to transfer OLDBTT tokens to your TRON Wallet Address first, make sure to have some OLDBTT available in another wallet.
+  
+
+  1. 
+  3. `btfs daemon`
+
+
+
+Note: Currently only BTFS 1 is able to interact with the storage User Interface, BTFS2 is not yet integrated, if you want to experiment with BTFS2 make sure to BACKUP your Mnemonic/Private Key and CIDs of your already uploaded files. If something goes wrong the dCloud team will not be able to retrieve your private key/mnemonic neither your uploaded files.
 
 Optionally, if you already have a private key with some BTT do the following instead:
 
