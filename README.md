@@ -51,23 +51,41 @@ Once the installation is successful you need to perform the following. Open the 
   5. Set a password as observed in the animation below to configure the deposits to In-App balance & token transfers.
   6. Close and Open the main dCloud Screen to make sure all screens refresh data coming from the BTFS1 backend app. (This step won't be needed in future improved UI releases)
 
+![BTFS_init](https://user-images.githubusercontent.com/11146636/151487794-63778ee3-ed5a-497c-ab28-09a3f3e2d227.gif)
+
+
 Steps to storage files on BTFS1 :
 
-In order to upload files to BTFS1 you need to transfer OLDBTT tokens to your TRON Wallet Address first, make sure to have some OLDBTT available in another wallet.
+In order to upload files to BTFS1 you need to transfer OLDBTT tokens to your TRON Wallet Address first, make sure to have some OLDBTT available in another wallet to do it.
   
 
-  1. 
-  3. `btfs daemon`
+  1. Send some OLDBTT to the address in the Wallet tab.
+  3. Deposit the desired amount to In-App balance (remember there is currently a constrain with transfers from In-App to OLDBTT, I advice not to deposit big amounts)
+  4. Wait around 2 minutes 
+  5. Switch to Files tab
+  6. Select the desired file and wait for the upload to finish.
+
+![deposit_BTFS](https://user-images.githubusercontent.com/11146636/151491882-ee693fa6-ba9c-47e3-99d4-f66da8af037a.gif)
+![BTFS_deposit_loading](https://user-images.githubusercontent.com/11146636/151491913-be4468bd-839b-42aa-8106-a9c521e9cd27.gif)
+![dCloud_uploadAndErase](https://user-images.githubusercontent.com/11146636/151491938-b93066f4-d834-48f0-a1bf-8b58d54bbe54.gif)
 
 
+*Troubleshooting*
 
-Note: Currently only BTFS 1 is able to interact with the storage User Interface, BTFS2 is not yet integrated, if you want to experiment with BTFS2 make sure to BACKUP your Mnemonic/Private Key and CIDs of your already uploaded files. If something goes wrong the dCloud team will not be able to retrieve your private key/mnemonic neither your uploaded files.
+- If the upload keeps failing it is possible your Internet Service Provider(ISP) is blocking P2P uploads, use a VPN to overcome this situation or change your ISP.
+- If balance erros appear during the upload you can verify on the terminal window to check if TronGrid is down, if that's the case you'll need to wait for some time and then try again.
 
 Optionally, if you already have a private key with some BTT do the following instead:
 
   1. `btfs init -i "PASTE_YOUR_PRIVATE_KEY_HERE"`
   2. `btfs wallet password "YOUR_PASSWORD_HERE_NO_SPECIAL_CHARACTERS_ALLOWED"`
   3. `btfs daemon`
+
+
+
+Note: Currently only BTFS 1 is able to interact with the storage User Interface, BTFS2 is not yet integrated, if you want to experiment with BTFS2 make sure to BACKUP your Mnemonic/Private Key and CIDs of your already uploaded files. If something goes wrong the dCloud team will not be able to retrieve your private key/mnemonic neither your uploaded files.
+
+
 
 
 After this please restart your dCloud app and the GUI should show you the Host UI and your current balance in the Renter tab. From here you can use your app as a full BTFS node.
