@@ -147,9 +147,9 @@ const getMultiUploadStatus = async(item) => {
 
     try{
 
-
+    //console.log("Updating Upload Sts");
     files_list.forEach(await function(element,item){
-
+    //console.log(files_list);
     console.log("Session Status " + files_list[item].session + ": "  + files_list[item].uploadStatus);
 
     var response = "";
@@ -157,86 +157,50 @@ const getMultiUploadStatus = async(item) => {
         .then(function (response) {
 
               //console.log(response);
-              currentSessionIDMessage = response.data.Message;
-              if(currentSessionIDMessage == 'Searching for recommended hosts…')
+              currentSessionIDMessage = response.data.Status;
+              if(currentSessionIDMessage == 'init')
               {
                 files_list[item].uploadStatus = 10;
               }
-              if(currentSessionIDMessage == 'Hosts found! Checking wallet balance and submitting contracts to escrow.')
+              if(currentSessionIDMessage == 'submit')
               {
-                files_list[item].uploadStatus = 30;
+                files_list[item].uploadStatus = 20;
               }
-              if(currentSessionIDMessage == 'Contracts submitted! Confirming the escrow payment.')
+              if(currentSessionIDMessage == 'guard')
+              {
+                files_list[item].uploadStatus = 35;
+              }
+              if(currentSessionIDMessage == 'guard:file-meta-signed')
+              {
+                files_list[item].uploadStatus = 40;
+              }
+              if(currentSessionIDMessage == 'guard:questions-signed')
               {
                 files_list[item].uploadStatus = 50;
               }
-              if(currentSessionIDMessage == 'Payment successful! Preparing meta-data and challenge questions.')
+              if(currentSessionIDMessage == 'wait-upload')
               {
                 files_list[item].uploadStatus = 60;
               }
-              if(currentSessionIDMessage == 'Confirming successful file shard storage by hosts.')
+              if(currentSessionIDMessage == 'wait-upload:req-signed')
               {
-                files_list[item].uploadStatus = 80;
+                files_list[item].uploadStatus = 65;
               }
-              if(currentSessionIDMessage == 'File storage successful!')
+              if(currentSessionIDMessage == 'pay')
               {
-                files_list[item].uploadStatus = 100;
-                        }
-              if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = met internal error, ERROR #42P01 relation "contract" does not exist')
-              {
-                files_list[item].uploadStatus = 0;
-                //progressBarColor = 'red'
-                //updateProgressBarColor;
-                //Alert.alert("Error", currentSessionIDMessage);
-                //setTimeout(stopAllIntervals,6000);
+                files_list[item].uploadStatus = 95;
               }
-              if(currentSessionIDMessage == 'GuardClient: rpc error: code = Unknown desc = Persistence manager: such file hash already exist for such renter')
-              {
-                files_list[item].uploadStatus = 100;
-                //progressBarColor = 'red'
-                //updateProgressBarColor;
-                //Alert.alert("Error", currentSessionIDMessage);
-                //setTimeout(stopAllIntervals,6000);
-              }
-              if(currentSessionIDMessage == 'GuardClient: rpc error: code = DeadlineExceeded desc = context deadline exceeded')
+              if(currentSessionIDMessage == 'error')
               {
                 //Error
-                files_list[item].uploadStatus = 0;
-              }
-              if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = ledger error:LedgerClient: rpc error: code = Unavailable desc = Gateway Timeout: HTTP status code 504; transport: received the unexpected content-type "text/html"')
-              {
-                files_list[item].uploadStatus = 0;
-                //progressBarColor = 'red';
-                //Alert.alert("Error", currentSessionIDMessage);
-                //setTimeout(stopAllIntervals,6000);
-              }
-              if(currentSessionIDMessage == 'EscrowClient: rpc error: code = Unknown desc = ledger error:rpc error: code = Unavailable desc = Gateway Timeout: HTTP status code 504; transport: received the unexpected content-type "text/html"')
-              {
-                files_list[item].uploadStatus = 0;
-                //progressBarColor = 'red';
-                //Alert.alert("Error", currentSessionIDMessage);
-                //setTimeout(stopAllIntervals,6000);
-              }
-              if(currentSessionIDMessage == 'GuardClient: rpc error: code = Unavailable desc = transport is closing')
-              {
-                files_list[item].uploadStatus = 0;
-                //progressBarColor = 'red';
-                //Alert.alert("Error", currentSessionIDMessage);
-                //setTimeout(stopAllIntervals,6000);
-              }
-              if(currentSessionIDMessage == 'context deadline exceeded')
-              {
-                files_list[item].uploadStatus = 0;
-                //progressBarColor = 'red'
-                //updateProgressBarColor
-                //Alert.alert("Error", currentSessionIDMessage);
-                //stopAllIntervals();
-                //setTimeout(stopAllIntervals,6000);
-              }
+                files_list[item].uploadStatus = "err";
 
-            //  console.log("|"+"Upload Message: " + currentSessionIDMessage + "|" + "Session ID:  " + currentUploadSessionID + "|" + "QmHash: " + currentFileQMhash + "|");
-             // Alert.alert("BTFS", "|"+"Upload Message: " + currentSessionIDMessage + "|" + "Session ID:  " + currentUploadSessionID + "|" + "QmHash: " + currentFileQMhash + "|");
-        })
+              }
+              if(currentSessionIDMessage == 'complete')
+              {
+                files_list[item].uploadStatus = 100;
+              }
+          })
     });
 
     }
@@ -249,7 +213,7 @@ const getMultiUploadStatus = async(item) => {
   const  openURL = async (item) => {
              try {
 
-               await Linking.openURL("https://gateway.btfs.io/btfs/" + files_list[item].qmhash);
+               await Linking.openURL("https://gateway-test.btfs.io/btfs/" + files_list[item].qmhash);
              } catch (e) {
                console.log("error")
              }
@@ -279,10 +243,7 @@ state = {
 }
 
 
-
-
-
-  componentWillUnMount() {
+  UNSAFE_componentWillUnMount() {
     //myVar7 = setInterval(this.updateFilesList,1000);
     if (this.interval) {     // Is our timer running
             // Yes, clear it
@@ -299,7 +260,7 @@ state = {
   componentDidMount() {
 
   this.interval = setInterval(this.updateFilesList,2000);
-  this.interval2 = setInterval(getMultiUploadStatus,5000);
+  this.interval2 = setInterval(getMultiUploadStatus,3000);
   }
 
 
@@ -343,75 +304,9 @@ state = {
 
 
 
-  _pickDocument = async () => {
+  _pickBTFSCID = async () => {
 
-
-	    // Pick a single file
-        try {
-
-        //Reset global vars...
-
-
-            currentSessionIDMessage = "";
-           // list[listPacksIndex][0].title = this.state.fileName ;
-          const res = await DocumentPicker.pick({
-            type: [DocumentPicker.types.allFiles],
-          });
-          console.log(
-            res.uri,
-            res.type, // mime type
-            res.name,
-            res.size
-          );
-          currentFileName = res.name;
-
-          const formData = new FormData();
-          formData.append(res.name, {
-            uri: res.uri,
-            name: res.name ,
-            type: res.type
-          });
-          var addFileReedSolomonData = axios.post("http://localhost:5001/api/v1/add?chunker=reed-solomon", formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-          })
-
-          .then(function (addFileReedSolomonData) {
-                currentFileQMhash = addFileReedSolomonData.data.Hash;
-
-                //Alert.alert(currentFileQMhash);
-                console.log("File BTFS QMhash: " + currentFileQMhash);
-                console.log("QMhash obtained :), proceeding to upload file...");
-
-
-                var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash)
-                .then(function (fileUploadID){
-                   //console.log(fileUploadID);
-                   currentUploadSessionID = fileUploadID.data.ID;
-                   console.log("Current Upload Session ID: " + currentUploadSessionID);
-                 })
-          })
-            progressBarColor = 'green'
-            myVar1 = setTimeout(this.updateQMhash, 500);
-            myVar2 = setTimeout(this.updateFileName, 700);
-            myVar3 = setInterval(getUploadStatus, 4000);
-            myVar4 = setInterval(this.updateUploadSts,4200);
-            myVar5 = setInterval(this.updateProgressBarSts,5000);
-            myVar6 = setInterval(this.updateProgressBarColor,5000);
-           // myVar7 = setInterval(this.updateFilesList,1000);
-            //myVar7 = setTimeout(getBalanceBTT,3000);
-
-
-        }
-
-         catch (err) {
-          if (DocumentPicker.isCancel(err)) {
-            // User cancelled the picker, exit any dialogs or menus and move on
-          } else {
-            throw err;
-          }
-        }
+    Alert.alert("To do", "CID importing is on the way, stay tuned!")
 	}
 
    _pickMultiple = async () => {
@@ -437,13 +332,14 @@ state = {
             type: res.type
           });
 
-        var addFileReedSolomonData = axios.post("http://localhost:5001/api/v1/add?chunker=reed-solomon", formData, {
+        var addFileData = axios.post("http://localhost:5001/api/v1/add?", formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        .then(function (addFileReedSolomonData) {
-                currentFileQMhash = addFileReedSolomonData.data.Hash;
+        .then(function (addFileData) {
+                //console.log(addFileData);
+                currentFileQMhash = addFileData.data.Hash;
                 console.log("File BTFS QMhash: " + currentFileQMhash);
                 console.log("QMhash obtained :), proceeding to upload file...");
 
@@ -464,16 +360,8 @@ state = {
                    let arraylen = files_list.length;
                    console.log("arraylen: "+ arraylen + ", i: " + i);
                    console.log("Current Upload Session ID: " + currentUploadSessionID);
-                    files_list[arraylen-1].session = currentUploadSessionID;
-                    /*files_list.push(  {
-                                         title: res.name,
-                                         icon: 'check-circle',
-                                         subtitle: res.size/1000 + " KB",
-                                         qmhash: currentFileQMhash ,
-                                         session: currentUploadSessionID
-                                      });*/
-                    console.log(files_list);
-                    //myVar4 = setInterval(getMultiUploadStatus,4200);
+                   files_list[arraylen-1].session = currentUploadSessionID;
+                   console.log(files_list);
                  })
           })
 
@@ -497,16 +385,12 @@ state = {
 
   render() {
 
-
-
-
-
          const copyToClipboard = () => {
-            Clipboard.setString("https://gateway.btfs.io/btfs/" + currentFileQMhash);
+            Clipboard.setString("https://gateway-test.btfs.io/btfs/" + currentFileQMhash);
           };
 
           const copyToClipboardLong = (i) => {
-                      Clipboard.setString("https://gateway.btfs.io/btfs/" + files_list[i].qmhash);
+                      Clipboard.setString("https://gateway-test.btfs.io/btfs/" + files_list[i].qmhash);
                       console.log("Long ṕress done on item : " + files_list[i].qmhash);
                       ToastAndroid.show("Link Copied to Clipboard", ToastAndroid.SHORT);
                     };
@@ -530,40 +414,14 @@ state = {
               }
             };
 
-        //const barWidth = Dimensions.get('screen').width - 30;
-         /*const list = [         //Creating the array of dictionaries
-           {
-             title: this.state.fileName,
-             icon: 'sync',
-             subtitle: this.state.hashText
-           },
-           {
-            title: 'Hello',
-            icon: 'sync',
-            subtitle: "hello"
-          },
-           // more items
-         ]*/
-
-         /*const list = [
-           {
-             title: this.state.fileName,
-             icon: 'cloud-off',
-             subtitle: this.state.hashText
-           }
-
-         ]*/
-
-
-
 
          const actions = [
-           /*{
-             text: "Single File",
-             icon: require("./uploadSingle.png"),
+           {
+             text: "Import CID",
+             icon: require('../assets/dwldCID.png'),
              name: "single_file",
              position: 2
-           },*/
+           },
            {
              text: "Upload Files",
              icon: require('../assets/uploadSingle.png'),
@@ -603,7 +461,7 @@ files_list.splice(item,1);
     <Root>
       <View style={styles.container}>
 
-                <View style={styles.user} height = {70} backgroundColor = "#292929">
+                <View style={styles.user} height = {50} backgroundColor = "#292929">
                   <Text style={styles.fileTabTitleText}> dBrowse </Text>
 
                 </View>
@@ -613,33 +471,27 @@ files_list.splice(item,1);
                           <ScrollView>
 
           {this.state.stateFilesList.map((item, i) => (
-
             <Swipeable
                rightContent={rightContent}
                rightActionActivationDistance = {250}
                onRightActionRelease={() => deleteCurrentItem(i)}
                >
+                    <ListItem key={i} topDivider={true}  containerStyle={{backgroundColor:"#3C3C42"}}
+                          onLongPress={() => copyToClipboardLong(i)}
+                           onPress={() => openURL(i)}
+                    >
 
-                                    <ListItem key={i} topDivider={true}  containerStyle={{backgroundColor:"#3C3C42"}}
-                                          onLongPress={() => copyToClipboardLong(i)}
-                                           onPress={() => openURL(i)}
+                      <Text style={styles.uploadStsText}>{item.uploadStatus + "%"}</Text>
 
+                      <ListItem.Content >
+                        <ListItem.Title style={{color:'white'}}>{item.title}</ListItem.Title>
+                        <ListItem.Subtitle style={{color:'white'}}>{item.subtitle}</ListItem.Subtitle>
+                        <ListItem.Subtitle style={{color:'white'}}>{item.qmhash}</ListItem.Subtitle>
+                      </ListItem.Content>
 
-                                    >
-
-                                      <Text style={styles.uploadStsText}>{item.uploadStatus + "%"}</Text>
-
-                                      <ListItem.Content >
-                                        <ListItem.Title style={{color:'white'}}>{item.title}</ListItem.Title>
-                                        <ListItem.Subtitle style={{color:'white'}}>{item.subtitle}</ListItem.Subtitle>
-                                        <ListItem.Subtitle style={{color:'white'}}>{item.qmhash}</ListItem.Subtitle>
-                                      </ListItem.Content>
-
-
-
-                                    </ListItem>
-                                   </Swipeable>
-                       ))
+                    </ListItem>
+                   </Swipeable>
+               ))
           }
 
           </ScrollView>
@@ -653,7 +505,7 @@ files_list.splice(item,1);
                   if(name == 'single_file')
                   {
                     console.log("Opening Single file prompt..");
-                    this._pickDocument();
+                    this._pickBTFSCID();
 
                   }
                   else if (name =='multi_file')

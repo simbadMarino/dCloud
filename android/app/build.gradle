@@ -165,8 +165,8 @@ android {
     defaultConfig {
         applicationId "com.justshare"
         minSdkVersion project.properties.minSdkVersion.toInteger()
-        versionCode 11
-        versionName "1.0.1"
+        versionCode 12
+        versionName "1.1.0"
 
         manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
         manifestPlaceholders.TERMUX_APP_NAME = "justshare"
@@ -394,7 +394,7 @@ def downloadBootstrap(String arch, String expectedChecksum, boolean isPackagesIn
         }
     }
 
-    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1_BTFS_binaries" + "/bootstrap-" + arch + ".zip"
+    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1.0.1_BTFS_Binaries" + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
@@ -427,10 +427,10 @@ task downloadBootstraps() {
     boolean isPackagesInApk = getGradle().getStartParameter().getTaskRequests().toString().contains("Updated");
     doLast {
         //def version = "2021.04.13-r1"
-        downloadBootstrap("aarch64", "5d87ebac5289f58e96eff4375d5e796780d1df28adece2256c607bd4d160ec7c",  isPackagesInApk)
-        downloadBootstrap("arm",     "9b5df57af350c58b8b4d80a0ca3757fefafea84f22c74143e3da4cbe88c32517",  isPackagesInApk)
-        downloadBootstrap("i686",    "93ef566eb7e9f2f5d9f3f91b02f0a7072ee62b680e7ca1af1fa6322000911700",  isPackagesInApk)
-        downloadBootstrap("x86_64",  "a57a498ccdbf1c10c61f8e2737e88ac88a8e814880977a3f481a2c826dd00e30",  isPackagesInApk)
+        downloadBootstrap("aarch64", "5da819cdd787e505df725700a3564dc7cc791f6aa1e6f61afe0ad3d24f5c36b0",  isPackagesInApk)
+        downloadBootstrap("arm",     "d69675de52043c43affc02970564156c434878a2348d15959d50037d06be0c28",  isPackagesInApk)
+        downloadBootstrap("i686",    "4f53f6a21c4ac182a9c21f3b323e92e6d05e936fd154b7750aed06b280a1625",  isPackagesInApk)
+        downloadBootstrap("x86_64",  "4c1febd194b4c743c006cdfeb30ecde7b8105294f853b067a9634a8fd5eb1e4e",  isPackagesInApk)
     }
 }
 

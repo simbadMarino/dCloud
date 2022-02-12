@@ -11,7 +11,6 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon, Input, Card } from 'react-native-elements';
 import FilePicker from "./components/filePicker.js";
-//import {strTronAddress} from "./components/filePicker.js";
 import LoginScreen from "./components/Login.js";
 import Terminal from "./components/terminal.js";
 import { WebView } from 'react-native-webview';
@@ -36,8 +35,10 @@ var BTFSNodeID = "";
 var walletPassword = "";
 var amountToDeposit = "";
 var float_bttBalance = 0;
-var float_btfsBalance = 0;
-var strTronAddress = " ";
+var float_WBTT_Balance = 0;
+var float_Vault_WBTT_Balance = 0;
+var strBTTCAddress = " ";
+var strVaultAddress = " ";
 
 // ----------------------------- END OF MODULE VARS --------------------------------------//
 
@@ -60,15 +61,11 @@ function getNodeID() {
 
 function getPrivateKey(){
 try{
-          var privateKey =  axios.post('http://localhost:5001/api/v1/wallet/keys?')
+          var privateKey =  axios.post('http://localhost:5001/api/v1/cheque/chaininfo')
            .then(function (privateKey) {
-
-           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
-            //float_bttBalance = walletBalance.data.BttWalletBalance;
-            var str_PrivateKey = privateKey.data.PrivateKey;
+            var str_PrivateKey = privateKey.data.wallet_import_prv_key;
             console.log(str_PrivateKey);
             Alert.alert("PK Backup ", str_PrivateKey);
-            //console.log("BTT balance: " + float_bttBalance);
             })
 }
 catch (err) {
@@ -119,12 +116,11 @@ function depositBTT(){
 
 try{
 
-    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/wallet/deposit?arg=' + amountToDeposit*1000000 + '&a=&p='+ walletPassword)
+    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/vault/deposit?arg=' + amountToDeposit*1000000000000000000 )
            .then(function (depositBTT_resp) {
-
-            var str_depositMessage = depositBTT_resp.data.Message;
+            var str_depositMessage = depositBTT_resp.data.hash;
             console.log(str_depositMessage);
-            alert(str_depositMessage);
+            Alert.alert("Deposit Hash", str_depositMessage);
             })
 
     }
@@ -159,21 +155,12 @@ function getRepoData(){
 
 }
 
-function addFileReedSolomon(){
-    var repoData = axios.post("http://localhost:5001/api/v1/stats/repo?size-only=true")
-    .then(function (repoData) {
-          console.log(repoData.data)
-          alert((repoData.data.StorageMax)/1000000000 + " GB");
-        })
-
-}
-
 
 function getConfig() {
 
   var configDATA = axios.post("http://localhost:5001/api/v1/config/show")
   .then(function (configDATA) {
-    //console.log(configDATA.headers.Wallet);
+    console.log(configDATA);
     btfsVersion = configDATA.headers.server;
     systemCurrentDate = configDATA.headers.date;
     configStorageClientEnabled = configDATA.data.Experimental.StorageClientEnabled;
@@ -189,52 +176,19 @@ function getConfig() {
 
 
 
-function promptPassword() {
-try{
-    prompt(
-        'Set password',
-        'Input a new password below',
-        [
-         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-         {text: 'OK', onPress: password => {
-             console.log('OK Pressed, password: ' + password);
-             walletPassword = password;
-             console.log(walletPassword);
-             setWalletPassword();
-
-         }
-         },
-        ],
-        {
-            type: 'secure-text',
-            cancelable: false,
-            defaultValue: '',
-            placeholder: 'New password'
-        }
-    );
-}
-
-catch(err) {
-                     console.log("Password already set or BTFS not initialized");
-                     throw err;
-
-                 }
-
-
-}
 
 function depositToBTFS() {
 
 prompt(
-    'Deposit BTT',
-    'From MainNet to BTFS',
+    'Deposit WBTT',
+    'From BTTC to Vault',
     [
      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-     {text: 'OK', onPress: BTTamount => {
-         console.log('OK Pressed, BTT amount: ' + BTTamount);
-         amountToDeposit = BTTamount;
+     {text: 'OK', onPress: WBTTamount => {
+         console.log('OK Pressed, WBTT amount: ' + WBTTamount);
+         amountToDeposit = WBTTamount;
          console.log(amountToDeposit);
-         promptCurrentPassword();
+         depositBTT();
      }
      },
     ],
@@ -251,32 +205,7 @@ prompt(
 
 }
 
-async function promptCurrentPassword() {
 
-prompt(
-    'Enter password',
-    'for security...',
-    [
-     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-     {text: 'OK', onPress: password => {
-         console.log('OK Pressed, password: ' + password);
-         walletPassword = password;
-         console.log(walletPassword);
-         depositBTT();
-
-     }
-     },
-    ],
-    {
-        type: 'secure-text',
-        cancelable: false,
-        defaultValue: '',
-        placeholder: 'Password'
-    }
-);
-
-
-}
 
 
 
@@ -311,10 +240,11 @@ async function getTronAddress() {
 
 
         //console.log('Getting Node ID data..')
-        var response =  axios.post('http://localhost:5001/api/v1/id')
+        var response =  axios.post('http://localhost:5001/api/v1/cheque/chaininfo')
         .then(function (response) {
-          strTronAddress = response.data.TronAddress;
-        //  alert(strTronAddress);
+          strBTTCAddress = response.data.node_addr;
+          strVaultAddress = response.data.vault_addr;
+          console.log(strBTTCAddress);
         })
         .catch(function(error) {
                      console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -356,12 +286,10 @@ try{
 async function getBalanceBTT(){
 
 
-    var walletBalance =  axios.post('http://localhost:5001/api/v1/wallet/balance')
+    var walletBalance =  axios.post('http://localhost:5001/api/v1/cheque/bttbalance?arg=' + strBTTCAddress )
            .then(function (walletBalance) {
-
-            float_btfsBalance = walletBalance.data.BtfsWalletBalance/1000000;
-            float_bttBalance = walletBalance.data.BttWalletBalance/1000000;
-            console.log("BTFS balance: " + float_btfsBalance);
+            //console.log(walletBalance.data.balance);
+            float_bttBalance = walletBalance.data.balance/1000000000000000000;
             console.log("BTT balance: " + float_bttBalance);
             })
             .catch(function(error) {
@@ -375,8 +303,45 @@ async function getBalanceBTT(){
 
     }
 
+async function getBalanceWBTT(){
 
 
+    var walletBalance =  axios.post('http://localhost:5001/api/v1/vault/wbttbalance?arg=' + strBTTCAddress )
+           .then(function (walletBalance) {
+            //console.log(walletBalance.data.balance);
+            float_WBTT_Balance = walletBalance.data.balance/1000000000000000000;
+            console.log("WBTT balance: " + float_WBTT_Balance);
+            })
+            .catch(function(error) {
+             console.log('There has been a problem with your fetch operation: ' + error.message);
+                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                        //console.log("BTFS daemon not running in background...")
+                        //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
+                         // ADD THIS THROW error
+                          //throw error;
+             });
+
+    }
+
+async function getBalanceVaultWBTT(){
+
+
+    var walletBalance =  axios.post('http://localhost:5001/api/v1/vault/wbttbalance?arg=' + strVaultAddress )
+           .then(function (walletBalance) {
+            //console.log(walletBalance.data.balance);
+            float_Vault_WBTT_Balance = walletBalance.data.balance/1000000000000000000;
+            console.log("Vault WBTT balance: " + float_Vault_WBTT_Balance);
+            })
+            .catch(function(error) {
+             console.log('There has been a problem with your fetch operation: ' + error.message);
+                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                        //console.log("BTFS daemon not running in background...")
+                        //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
+                         // ADD THIS THROW error
+                          //throw error;
+             });
+
+    }
 
 
 
@@ -452,17 +417,21 @@ const [refreshing, setRefreshing] = React.useState(false);
 const [bttBalance] = useState(1);
 const cardBalance = [
         {
-           title: 'MainNet BTT',
+           title: 'BTT',
            balance: float_bttBalance
         },
         {
-           title: 'BTFS BTT ',
-           balance: float_btfsBalance
-         }
+           title: 'WBTT',
+           balance: float_WBTT_Balance
+         },
+          {
+             title: 'WBTT',
+             balance: float_Vault_WBTT_Balance
+           }
        ]
 
 const copyToClipboard = () => {
-    Clipboard.setString(strTronAddress);
+    Clipboard.setString(strBTTCAddress);
   };
 
 
@@ -495,16 +464,21 @@ const onRefresh = React.useCallback(() => {
           }
         >
             <Card containerStyle={styles.cardRenter}>
-                    <View style={styles.user} height = {30}>
-                      <Text selectable style={styles.cardAddressText} >{strTronAddress}</Text>
-                      <Text style={styles.cardMainNetText} >{cardBalance[0].title}</Text>
-                      <Text style={styles.cardBalanceText} >{cardBalance[0].balance}</Text>
-                      <Text style={styles.cardMainNetText} >{cardBalance[1].title}</Text>
-                      <Text style={styles.cardBalanceText} >{cardBalance[1].balance}</Text>
+                    <View style={styles.user} height = {40}>
+                      <Text selectable style={styles.cardAddrTitleText} >BTTC Address</Text>
+                      <Text selectable style={styles.cardAddressText} >{strBTTCAddress}</Text>
+                      <Text selectable style={styles.cardMainNetText} >Balance:</Text>
+                      <Text style={styles.cardBalanceText} >{cardBalance[0].balance} {cardBalance[0].title}</Text>
+                      <Text style={styles.cardBalanceText} >{cardBalance[1].balance} {cardBalance[1].title}</Text>
+                      <Text selectable style={styles.cardAddrTitleText} >Vault Address</Text>
+                      <Text selectable style={styles.cardAddressText} >{strVaultAddress}</Text>
+                      <Text selectable style={styles.cardMainNetText} >Balance:</Text>
+                       <Text style={styles.cardBalanceText} >{cardBalance[2].balance} {cardBalance[2].title}</Text>
+
                     </View>
             </Card>
 
-            <QRCode content= {strTronAddress}
+            <QRCode content= {strBTTCAddress}
              logoSize = {50}
             size = {150}
             logo={require('./assets/btt_logo.png')}
@@ -514,13 +488,13 @@ const onRefresh = React.useCallback(() => {
                      onPress={copyToClipboard}
                      >
                        <Text style={styles.tabMenuText}>
-                       Copy Address  </Text>
+                       Copy BTTC Address  </Text>
              </TouchableOpacity>
              <TouchableOpacity style={styles.tabsButton}
                      onPress={depositToBTFS}
                      >
                        <Text style={styles.tabMenuText}>
-                       Deposit BTT</Text>
+                       Deposit WBTT to Vault</Text>
              </TouchableOpacity>
 
         </ScrollView>
@@ -560,37 +534,29 @@ function applyHost() {
   })
   }
 
+function dWebScreen() {
+
+  const titleText = "BTFS Web Browser (Coming Soon)";
+  var [value, onChangeText] = React.useState(configText);
+
+
+  return (
+    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
+    <Text style={styles.cardBalanceText} >
+       {titleText}
+     </Text>
+
+
+    </View>
+  );
+}
+
 
 
 function SettingsScreen() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [isEnabledHost, setIsEnabledHost] = useState(false);
-  const [isEnabledBTFS, setIsEnabledBTFS] = useState(false);
-
-
-  const toggleSwitchRenter = () => {
-  if(isEnabled == false){   //BTFS Storage Rental activated?
-    applyRenter();
-  }
-  else{
-  //BTFS do not have a way to deactivate renter yet
-  }
-  setIsEnabled(previousState => !previousState);
-
-  }
 
 
 
-  const toggleSwitchHost = () => {
-  if(isEnabledHost == false){   //BTFS Storage Rental activated?
-    applyHost();
-  }
-  else{
-  //BTFS do not have a way to deactivate host yet
-  }
-  setIsEnabledHost(previousState => !previousState);
-
-  }
   const titleText = "BTFS node Configuration";
   const nodeModeText = "Node Mode";
   var [value, onChangeText] = React.useState(configText);
@@ -636,16 +602,6 @@ const getData = async () => {
          </TouchableOpacity>
 
 
-
-
-
-         <TouchableOpacity style={styles.tabsButton}
-                 onPress={promptPassword}
-                 >
-                   <Text style={styles.tabMenuText}>
-                   Set Password</Text>
-         </TouchableOpacity>
-
          <TouchableOpacity style={styles.tabsButton}
                   onPress={getPrivateKey}
                   >
@@ -653,12 +609,6 @@ const getData = async () => {
                     Get PrivateKey</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.tabsButton}
-                onPress={getMnemonic}
-                >
-                  <Text style={styles.tabMenuText}>
-                  Get Mnemonic</Text>
-          </TouchableOpacity>
 
 
 
@@ -684,11 +634,14 @@ state = {
   componentDidMount() {
 
 
-
-    getBalanceBTT();
     getTronAddress();
+    getBalanceBTT();
+    getBalanceWBTT();
+    getBalanceVaultWBTT();
 
     this.intervalBalance = setInterval(getBalanceBTT,10000);
+    this.intervalWBTTBalance = setInterval(getBalanceWBTT,10000);
+    this.intervalVaultWBTTBalance = setInterval(getBalanceVaultWBTT,10000);
     this.intervalAddress = setInterval(getTronAddress,5000);
 
 
@@ -732,7 +685,10 @@ state = {
                   iconName = focused ? 'storage' : 'storage';
                 }
                   else if (route.name === 'Terminal') {
-                  iconName = focused ? 'screen-share' : 'screen-share';
+                  iconName = focused ? 'code' : 'code';
+                }
+                else if (route.name === 'dWeb') {
+                  iconName = focused ? 'cloud' : 'cloud';
                 }
 
 
@@ -750,7 +706,9 @@ state = {
            <Tab.Screen name="Files" component={RenterScreen} />
            <Tab.Screen name="Wallet" component={WalletScreen} />
            <Tab.Screen name="Terminal" component={TerminalScreen} />
+           <Tab.Screen name="dWeb" component={dWebScreen} />
            <Tab.Screen name="Settings" component={SettingsScreen} />
+
 
 
 
@@ -802,7 +760,7 @@ const styles = StyleSheet.create({
   //fontWeight: "normal"
 },
  cardAddressText: {
-    fontSize: 14,
+    fontSize: 12,
     color: 'white'
     //fontWeight: "normal"
   },
@@ -831,12 +789,17 @@ tabsButton:{
       color:"black",
       fontWeight: "bold"
     },
-  cardBalanceText: {
+  cardAddrTitleText: {
       fontSize: 16,
       color: 'white',
       fontWeight: "bold",
       margin: 1
       },
+   cardBalanceText: {
+        fontSize: 15,
+        color: 'white',
+        margin: 1
+        },
 
       cardMainNetText: {
       fontSize: 15,
@@ -847,12 +810,12 @@ tabsButton:{
 
       cardRenter: {
       display: "flex",
-      height: 170,
+      height: 220,
       //flexDirection: "column",
-      backgroundColor: '#525248',
-      borderColor: 'white',
+      backgroundColor: '#2f2c2c',
+      borderColor: 'gray',
       borderRadius: 5,
-      borderTopColor: 'white',
+      borderTopColor: 'gray',
       borderTopWidth: 5
       },
       scrollView: {
