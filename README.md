@@ -1,5 +1,5 @@
 # dCloud
-dCloud is a Full node app for descentralized storage solution
+dCloud is a Web3 Cloud Storage Mobile App
 
 The starting goal of dCloud is to create a seamless and masses ready app for Descentralized Cloud Storage(DCS) solutions. As a starting point and due to the possibility of having a light Full Node BTFS was picked up as the dCloud DCS.
 
