@@ -21,6 +21,8 @@ import { QRCode } from 'react-native-custom-qr-codes';
 import prompt from 'react-native-prompt-android';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { RootSiblingParent } from 'react-native-root-siblings';
+import Toast from 'react-native-root-toast';
 //import Toast from "./components/Toast.js";
 
 
@@ -296,7 +298,9 @@ async function getBalanceBTT(){
              console.log('There has been a problem with your fetch operation: ' + error.message);
                         //Alert.alert("Error", "Password already set, use cli to change it if needed");
                         console.log("BTFS daemon not running in background...")
-                        ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
+                // Add a Toast on screen.
+                Toast.show('dCloud failed to connect to BTFS...', {duration: Toast.durations.LONG,});
+                        //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
                          // ADD THIS THROW error
                           //throw error;
              });
@@ -666,55 +670,61 @@ state = {
   render() {
 
 
-
+      
 
        return (
-    <AppearanceProvider>
-        <NavigationContainer theme={DarkTheme}>
-         <Tab.Navigator screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
+        
+               
+                  
+               <RootSiblingParent>
+                <AppearanceProvider>
+             
+                    <NavigationContainer theme={DarkTheme}>
+                     <Tab.Navigator screenOptions={({ route }) => ({
+                          tabBarIcon: ({ focused, color, size }) => {
+                            let iconName;
 
-                if (route.name === 'Wallet') {
-                  iconName = focused ? 'account-balance-wallet' : 'account-balance-wallet';
-                }
-                  else if (route.name === 'Settings') {
-                  iconName = focused ? 'settings' : 'settings';
-                }
-                  else if (route.name === 'Files') {
-                  iconName = focused ? 'storage' : 'storage';
-                }
-                  else if (route.name === 'Terminal') {
-                  iconName = focused ? 'code' : 'code';
-                }
-                else if (route.name === 'dWeb') {
-                  iconName = focused ? 'cloud' : 'cloud';
-                }
-
-
-
-                // You can return any component that you like here!
-                return <Icon name={iconName} size={size} color={color} />;
-              },
-            })}
-            tabBarOptions={{
-              activeTintColor: 'white',
-              inactiveTintColor: 'gray',
-            }}
-          >
-
-           <Tab.Screen name="Files" component={RenterScreen} />
-           <Tab.Screen name="Wallet" component={WalletScreen} />
-           <Tab.Screen name="Terminal" component={TerminalScreen} />
-           <Tab.Screen name="dWeb" component={dWebScreen} />
-           <Tab.Screen name="Settings" component={SettingsScreen} />
+                            if (route.name === 'Wallet') {
+                              iconName = focused ? 'account-balance-wallet' : 'account-balance-wallet';
+                            }
+                              else if (route.name === 'Settings') {
+                              iconName = focused ? 'settings' : 'settings';
+                            }
+                              else if (route.name === 'Files') {
+                              iconName = focused ? 'storage' : 'storage';
+                            }
+                              else if (route.name === 'Terminal') {
+                              iconName = focused ? 'code' : 'code';
+                            }
+                            else if (route.name === 'dWeb') {
+                              iconName = focused ? 'cloud' : 'cloud';
+                            }
 
 
 
+                            // You can return any component that you like here!
+                            return <Icon name={iconName} size={size} color={color} />;
+                          },
+                        })}
+                        tabBarOptions={{
+                          activeTintColor: 'white',
+                          inactiveTintColor: 'gray',
+                        }}
+                      >
 
-         </Tab.Navigator>
-       </NavigationContainer>
-   </AppearanceProvider>
+                       <Tab.Screen name="Files" component={RenterScreen} />
+                       <Tab.Screen name="Wallet" component={WalletScreen} />
+                       <Tab.Screen name="Terminal" component={TerminalScreen} />
+                       <Tab.Screen name="dWeb" component={dWebScreen} />
+                       <Tab.Screen name="Settings" component={SettingsScreen} />
+
+                     </Tab.Navigator>
+                   </NavigationContainer>
+          
+                </AppearanceProvider>
+               </RootSiblingParent>
+
+               
     );
 
   }
