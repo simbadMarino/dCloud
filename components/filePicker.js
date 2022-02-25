@@ -213,7 +213,7 @@ const getMultiUploadStatus = async(item) => {
   const  openURL = async (item) => {
              try {
 
-               await Linking.openURL("https://gateway-test.btfs.io/btfs/" + files_list[item].qmhash);
+               await Linking.openURL("https://gateway.btfs.io/btfs/" + files_list[item].qmhash);
              } catch (e) {
                console.log("error")
              }
@@ -386,11 +386,11 @@ state = {
   render() {
 
          const copyToClipboard = () => {
-            Clipboard.setString("https://gateway-test.btfs.io/btfs/" + currentFileQMhash);
+            Clipboard.setString("https://gateway.btfs.io/btfs/" + currentFileQMhash);
           };
 
           const copyToClipboardLong = (i) => {
-                      Clipboard.setString("https://gateway-test.btfs.io/btfs/" + files_list[i].qmhash);
+                      Clipboard.setString("https://gateway.btfs.io/btfs/" + files_list[i].qmhash);
                       console.log("Long ṕress done on item : " + files_list[i].qmhash);
                       ToastAndroid.show("Link Copied to Clipboard", ToastAndroid.SHORT);
                     };

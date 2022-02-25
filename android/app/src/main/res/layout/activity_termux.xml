@@ -56,7 +56,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/action_toggle_soft_keyboard" />
+                    android:background="#A19999"
+                    android:text="@string/action_toggle_soft_keyboard"
+                    android:textColor="#2C6DA6" />
 
                 <Button
                     android:id="@+id/new_session_button"
@@ -64,7 +66,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/action_new_session" />
+                    android:background="#A19999"
+                    android:text="@string/action_new_session"
+                    android:textColor="#2C6DA6" />
             </LinearLayout>
         </LinearLayout>
 

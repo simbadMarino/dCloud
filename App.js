@@ -122,8 +122,15 @@ try{
            .then(function (depositBTT_resp) {
             var str_depositMessage = depositBTT_resp.data.hash;
             console.log(str_depositMessage);
-            Alert.alert("Deposit Hash", str_depositMessage);
+            Alert.alert("Deposit Success!, Hash", str_depositMessage);
             })
+
+            .catch(function(error) {
+             console.log('There has been a problem with your fetch operation: ' + error.message);
+                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                        console.log("Call response: " + JSON.stringify(depositBTT_resp));
+                        Alert.alert("Deposit Error", "Max WBTT deposit balance exceeded, try depositing less WBTT (No more than 1000)");
+             });
 
     }
 
@@ -135,6 +142,39 @@ try{
 
 
 }
+
+
+function withdrawBTT(WBTTamount){
+
+try{
+
+    var withdrawBTT_resp =  axios.post('http://localhost:5001/api/v1/vault/withdraw?arg=' + WBTTamount*1000000000000000000 )
+           .then(function (withdrawBTT_resp) {
+            var str_withdrawMessage = withdrawBTT_resp.data.hash;
+            console.log(withdrawBTT_resp);
+            console.log(str_withdrawMessage);
+            Alert.alert("Withdrawal Success!, Hash", str_withdrawMessage);
+            })
+
+            .catch(function(error) {
+             console.log('There has been a problem with your fetch operation: ' + error.message);
+                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                        console.log("Call response: " + JSON.stringify(withdrawBTT_resp.data));
+                        Alert.alert("Withdraw Error", "Please make sure to leave at least some WBTT in vault");
+
+             });
+
+    }
+
+    catch (err) {
+
+                throw err;
+
+            }
+
+
+}
+
 
 function getCommands() {
 
@@ -207,6 +247,33 @@ prompt(
 
 }
 
+function withdrawToBTTC() {
+
+prompt(
+    'Withdraw WBTT',
+    'From Vault to BTTC Adress',
+    [
+     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+     {text: 'OK', onPress: WBTTamount => {
+         console.log('OK Pressed, WBTT amount: ' + WBTTamount);
+         console.log(WBTTamount);
+         withdrawBTT(WBTTamount);
+     }
+     },
+    ],
+    {
+        type: 'number',
+        cancelable: false,
+        defaultValue: '',
+        placeholder: 'Deposit Amount'
+    }
+);
+
+
+
+
+}
+
 
 
 
@@ -246,7 +313,7 @@ async function getTronAddress() {
         .then(function (response) {
           strBTTCAddress = response.data.node_addr;
           strVaultAddress = response.data.vault_addr;
-          console.log(strBTTCAddress);
+          //console.log(strBTTCAddress);
         })
         .catch(function(error) {
                      console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -292,6 +359,7 @@ async function getBalanceBTT(){
            .then(function (walletBalance) {
             //console.log(walletBalance.data.balance);
             float_bttBalance = walletBalance.data.balance/1000000000000000000;
+            float_bttBalance = float_bttBalance.toFixed(2);
             console.log("BTT balance: " + float_bttBalance);
             })
             .catch(function(error) {
@@ -299,7 +367,7 @@ async function getBalanceBTT(){
                         //Alert.alert("Error", "Password already set, use cli to change it if needed");
                         console.log("BTFS daemon not running in background...")
                 // Add a Toast on screen.
-                Toast.show('dCloud failed to connect to BTFS...', {duration: Toast.durations.LONG,});
+                Toast.show('dCloud failed to connect to BTFS... Please make sure daemon is running from the terminal', {duration: Toast.durations.LONG,});
                         //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
                          // ADD THIS THROW error
                           //throw error;
@@ -314,15 +382,11 @@ async function getBalanceWBTT(){
            .then(function (walletBalance) {
             //console.log(walletBalance.data.balance);
             float_WBTT_Balance = walletBalance.data.balance/1000000000000000000;
+            float_WBTT_Balance = float_WBTT_Balance.toFixed(2);
             console.log("WBTT balance: " + float_WBTT_Balance);
             })
             .catch(function(error) {
              console.log('There has been a problem with your fetch operation: ' + error.message);
-                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                        //console.log("BTFS daemon not running in background...")
-                        //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
-                         // ADD THIS THROW error
-                          //throw error;
              });
 
     }
@@ -330,19 +394,15 @@ async function getBalanceWBTT(){
 async function getBalanceVaultWBTT(){
 
 
-    var walletBalance =  axios.post('http://localhost:5001/api/v1/vault/wbttbalance?arg=' + strVaultAddress )
+    var walletBalance =  axios.post('http://localhost:5001/api/v1/vault/balance')
            .then(function (walletBalance) {
             //console.log(walletBalance.data.balance);
             float_Vault_WBTT_Balance = walletBalance.data.balance/1000000000000000000;
+            float_Vault_WBTT_Balance = float_Vault_WBTT_Balance.toFixed(2);
             console.log("Vault WBTT balance: " + float_Vault_WBTT_Balance);
             })
             .catch(function(error) {
              console.log('There has been a problem with your fetch operation: ' + error.message);
-                        //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                        //console.log("BTFS daemon not running in background...")
-                        //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
-                         // ADD THIS THROW error
-                          //throw error;
              });
 
     }
@@ -499,6 +559,12 @@ const onRefresh = React.useCallback(() => {
                      >
                        <Text style={styles.tabMenuText}>
                        Deposit WBTT to Vault</Text>
+             </TouchableOpacity>
+             <TouchableOpacity style={styles.tabsButton}
+                    onPress={withdrawToBTTC}
+                    >
+                        <Text style={styles.tabMenuText}>
+                        Withdraw WBTT</Text>
              </TouchableOpacity>
 
         </ScrollView>
@@ -662,6 +728,16 @@ state = {
                     // Yes, clear it
                     clearTimeout(this.intervalAddress);
                     this.intervalAddress = 0;
+                }
+        if (this.intervalWBTTBalance) {     // Is our timer running
+                    // Yes, clear it
+                    clearTimeout(this.intervalWBTTBalance);
+                    this.intervalWBTTBalance = 0;
+                }
+        if (this.intervalVaultWBTTBalance) {     // Is our timer running
+                    // Yes, clear it
+                    clearTimeout(this.intervalVaultWBTTBalance);
+                    this.intervalVaultWBTTBalance = 0;
                 }
         }
 

@@ -27,9 +27,10 @@
             android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="#4D5DB8"
             android:choiceMode="singleChoice"
-            android:dividerHeight="0dp"
             android:descendantFocusability="blocksDescendants"
+            android:dividerHeight="0dp"
             android:orientation="vertical">
 
             <ListView
@@ -46,6 +47,7 @@
                 style="?android:attr/buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#4D5DB8"
                 android:orientation="horizontal">
 
                 <Button
@@ -53,9 +55,12 @@
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
                     android:layout_weight="1"
-                    android:text="@string/action_toggle_soft_keyboard" />
+                    android:background="#4D5DB8"
+                    android:text="@string/action_toggle_soft_keyboard"
+                    android:textColor="#FFFFFF"
+                    android:textColorHighlight="#A5A0A0"
+                    android:textColorHint="#A5A0A0" />
 
                 <Button
                     android:id="@+id/new_session_button"
@@ -63,8 +68,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FFFFFF"
-                    android:text="@string/action_new_session" />
+                    android:background="#4D5DB8"
+                    android:text="@string/action_new_session"
+                    android:textColor="#FFFFFF"
+                    android:textColorHighlight="#A5A0A0"
+                    android:textColorHint="#A5A0A0" />
             </LinearLayout>
         </LinearLayout>
 

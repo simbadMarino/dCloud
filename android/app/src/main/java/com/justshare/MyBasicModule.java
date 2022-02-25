@@ -33,13 +33,13 @@ public class MyBasicModule extends ReactContextBaseJavaModule {
         context.startActivity(intent);
 
 
-        /*
-        Intent intentBTFS = new Intent();
+
+        /*Intent intentBTFS = new Intent();
         intentBTFS.setClassName("com.justshare", "com.termux.app.RunCommandService");
         intentBTFS.setAction("com.justshare.RUN_COMMAND");
         intentBTFS.putExtra("com.justshare.RUN_COMMAND_PATH",      "/data/data/com.justshare/files/usr/bin/btfs");
-        intentBTFS.putExtra("com.justshare.RUN_COMMAND_BACKGROUND", true);
-        intentBTFS.putExtra("com.justshare.RUN_COMMAND_ARGUMENTS", new String[]{"daemon"});
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_BACKGROUND", false);
+        intentBTFS.putExtra("com.justshare.RUN_COMMAND_ARGUMENTS", new String[]{"daemon --chain-id 199"});
         context.startService(intentBTFS);*/
     }
 

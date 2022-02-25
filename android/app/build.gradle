@@ -165,8 +165,8 @@ android {
     defaultConfig {
         applicationId "com.justshare"
         minSdkVersion project.properties.minSdkVersion.toInteger()
-        versionCode 12
-        versionName "1.1.0"
+        versionCode 13
+        versionName "1.2.0"
 
         manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
         manifestPlaceholders.TERMUX_APP_NAME = "justshare"
@@ -394,7 +394,7 @@ def downloadBootstrap(String arch, String expectedChecksum, boolean isPackagesIn
         }
     }
 
-    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1.0.1_BTFS_Binaries" + "/bootstrap-" + arch + ".zip"
+    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1.1.0_BTFS_Binaries" + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
@@ -427,10 +427,10 @@ task downloadBootstraps() {
     boolean isPackagesInApk = getGradle().getStartParameter().getTaskRequests().toString().contains("Updated");
     doLast {
         //def version = "2021.04.13-r1"
-        downloadBootstrap("aarch64", "5da819cdd787e505df725700a3564dc7cc791f6aa1e6f61afe0ad3d24f5c36b0",  isPackagesInApk)
-        downloadBootstrap("arm",     "d69675de52043c43affc02970564156c434878a2348d15959d50037d06be0c28",  isPackagesInApk)
-        downloadBootstrap("i686",    "4f53f6a21c4ac182a9c21f3b323e92e6d05e936fd154b7750aed06b280a1625",  isPackagesInApk)
-        downloadBootstrap("x86_64",  "4c1febd194b4c743c006cdfeb30ecde7b8105294f853b067a9634a8fd5eb1e4e",  isPackagesInApk)
+        downloadBootstrap("aarch64", "56367005b73fd764700d690c86858621465b29b2c37076558e7781169cd076d5",  isPackagesInApk)
+        downloadBootstrap("arm",     "15a7ff99c331a59c04304062b3903b967663afe5941408474af6e043c0d57b88",  isPackagesInApk)
+        downloadBootstrap("i686",    "7e773ea94c2d9570f2d16257f85da5d1cca781cd084a7b712c0fce80539fe3d6",  isPackagesInApk)
+        downloadBootstrap("x86_64",  "9b12cc3b39f1b57f1ada7487f4869a66a87bffb9d78a1aa4c7cae1a5cad788c2",  isPackagesInApk)
     }
 }
 
