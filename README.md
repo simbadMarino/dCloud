@@ -10,6 +10,7 @@ dCloud is basically an Integration of [Termux](https://github.com/termux) + BTFS
 
 **Getting started**
 
+
 Currently dCloud is only available for Android due to limitations on how iOS manages binary files, however further investigation/implementation is planned to release an iOS version.
 
 As a Google Play / F-Droid version is not ready yet you will need to install dCloud using 
@@ -23,35 +24,10 @@ As a Google Play / F-Droid version is not ready yet you will need to install dCl
   4. Run or create the APK and test either on your phone or emulator
   5. Enjoy :)
 
-**ReactNative assets update for release bundles:**
-
-Assets:
-
-If you are contributing on the Reac-Native UI please make sure all your assets (pictures, gifs, etc) are located at ~root/assets folder before building the release APK
-
-
-Bootstrap Packages: 
-
-  If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.*
-  
-dCloud Terminal:
-
-  *If the dCloud terminal is not loaded properly it might be related to jniLibs not properly installed, make sure you don't have an ABI filer activated in the abi filter:* https://github.com/simbadMarino/dCloud/blob/a975e0d35f2830ccad5c73fcf878bf164cfb46c1/android/app/build.gradle#L187
-
 **b) USING A RELEASE FROM GITHUB**
 
-  Please refer to the Releases section (https://github.com/simbadMarino/dCloud/releases) to get the latest APK file format, please note this is a "FAT" installer because it contains all architectures support as well as BTFS1 and BTFS2 binaries which consumes a large percentage of the overall app size. 
-            
-**BTFS 1:**
-Once the installation is successful you need to perform the following. Open the terminal GUI and initialize the btfs services by sending the following commands:
-
-  1. `btfs init`
-  3. `btfs daemon`
-  4. Go back to dCloud Main Screen by pushing the "Back" button on your phone and select the Settings tab.
-  5. Set a password as observed in the animation below to configure the deposits to In-App balance & token transfers.
-  6. Close and Open the main dCloud Screen to make sure all screens refresh data coming from the BTFS1 backend app. (This step won't be needed in future improved UI releases)
-
-![BTFS_init](https://user-images.githubusercontent.com/11146636/151487794-63778ee3-ed5a-497c-ab28-09a3f3e2d227.gif)
+  Please refer to the Releases section (https://github.com/simbadMarino/dCloud/releases) to get the latest APK file format, please note this is a "FAT" installer because it contains all architectures(i686,x86_64,aarch64,arm) BTFS binaries which consumes a large percentage of the overall app size. 
+       
 
 Steps to use use BTFS in dCloud:
 
@@ -69,12 +45,34 @@ WARNING: If something goes wrong the dCloud team will not be able to retrieve yo
   
  Note 1:  Follow the official guidelines (https://docs.btfs.io/v2.0/docs/introduction-setup20) to explore the use cases of BTFS 2.1 in your mobile device.
 
+If you are looking for some video tutorials please take a look at the following videos from our Youtube channel:
+
+
+https://www.youtube.com/watch?v=y_hqOV1IySw&t=130s
+
+https://www.youtube.com/watch?v=kNigl3dMPaM&t=254s
 
 
 
 
 
+## CODE CONTRIBUTORS NOTES
 
+
+**REACTNATIVE ASSETS UPDATE FOR RELEASE BUNDLES:**
+
+Assets:
+
+If you are contributing on the Reac-Native UI please make sure all your assets (pictures, gifs, etc) are located at ~root/assets folder before building the release APK
+
+
+Bootstrap Packages: 
+
+  If bootstrap installation keeps failing with "not executable : `32-bit ELF file` or similar errors in terminal tab please try installing the specific APK per architecture or comment non applicable bootstrap packages from `termux-bootstrap-zip.S` file if you are installing from source code.*
+  
+dCloud Terminal:
+
+  *If the dCloud terminal is not loaded properly it might be related to jniLibs not properly installed, make sure you don't have an ABI filer activated in the abi filter:* https://github.com/simbadMarino/dCloud/blob/a975e0d35f2830ccad5c73fcf878bf164cfb46c1/android/app/build.gradle#L187
 
 
 
@@ -108,31 +106,21 @@ If you get curl: (22) The requested URL returned error: 410 Gone or something li
 Please note that current effort will be towards making a nice Renter UI and some issues with the host node could appear and won't be prioritized for fixing or developing additional features.
 
 
-**DONATIONS**
+## Donations
 
-Why should you donate to dCLoud?
-
-More donation = more money
-
-More money allows me buy more coffee
-
-More coffee makes me write more code
-
-More code means more features
-
-More features make you more productive
-
-More productive so you earn more money
-
-More money you earn more donation to me
-
-More Muhahaha… 
+dCloud is currently mantained by volunteers, a couple of crypto to buy some coffe is well received =)
 
 
 TRON Address: TXQJCQnUNW73vzd4koeZKdzChfKWv8J9G5
 
-![image](https://user-images.githubusercontent.com/11146636/144756464-e08f0037-0745-4c98-8836-e6347db6314c.png)
+<img src="https://user-images.githubusercontent.com/11146636/144756464-e08f0037-0745-4c98-8836-e6347db6314c.png" width="150" height="150">
 
 
 
-(Funny donation notes credits: notepad++ devs)
+
+## Strategic Partners
+
+<a href="https://kraftly.io" target="_blank">
+<img src="https://user-images.githubusercontent.com/11146636/157590553-afdb4507-65a1-4336-820a-ad9f024d42c5.png" width="100" height="100">
+</a>
+
