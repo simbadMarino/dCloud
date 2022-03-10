@@ -53,57 +53,22 @@ Once the installation is successful you need to perform the following. Open the 
 
 ![BTFS_init](https://user-images.githubusercontent.com/11146636/151487794-63778ee3-ed5a-497c-ab28-09a3f3e2d227.gif)
 
+Steps to use use BTFS in dCloud:
 
-Steps to storage files on BTFS1 :
+WARNING: If something goes wrong the dCloud team will not be able to retrieve your private key/mnemonic neither your uploaded files. 
 
-In order to upload files to BTFS1 you need to transfer OLDBTT tokens to your TRON Wallet Address first, make sure to have some OLDBTT available in another wallet to do it.
+  1. Open the terminal window within dCloud
+  2. Run the following commands 
+  3. `btfs init` 
+  4. `btfs config profile apply storage-host`
+  5. `btfs daemon --chain-id 199`
+  6. Copy your BTTC Address
+  7. Fill your BTFS Wallet with BTT
+  8. Once your node detects enough balance is available in your wallet it will start daemon.
+  9. Get WBTT into your wallet by sending the desired amount of BTT to the following contract address: `0x23181F21DEa5936e24163FFABa4Ea3B316B57f3C` (Only used for renting purposes)
   
+ Note 1:  Follow the official guidelines (https://docs.btfs.io/v2.0/docs/introduction-setup20) to explore the use cases of BTFS 2.1 in your mobile device.
 
-  1. Send some OLDBTT to the address in the Wallet tab.
-  3. Deposit the desired amount to In-App balance (remember there is currently a constrain with transfers from In-App to OLDBTT, I advice not to deposit big amounts)
-  4. Wait around 2 minutes 
-  5. Switch to Files tab
-  6. Select the desired file and wait for the upload to finish.
-
-After this please restart your dCloud app and the GUI should show you the Host UI and your current balance in the Renter tab. From here you can use your app as a full BTFS node.
-
-Above steps are ilustrated in the following videos:
-
-https://user-images.githubusercontent.com/11146636/151635921-921235fa-4cf6-4897-8b70-6670563d2983.mp4
-
-
-https://user-images.githubusercontent.com/11146636/151636837-2d5acae1-2373-4d85-83ae-d52f5327bbbd.mp4
-
-
-
-https://user-images.githubusercontent.com/11146636/151637957-4f082c4e-c7cd-4c67-a309-53ce81888a35.mp4
-
-
-
-
-*Troubleshooting*
-
-- If the upload keeps failing it is possible your Internet Service Provider(ISP) is blocking P2P uploads, use a VPN to overcome this situation or change your ISP.
-- If balance erros appear during the upload you can verify on the terminal window to check if TronGrid is down, if that's the case you'll need to wait for some time and then try again.
-
-Optionally, if you already have a private key with some BTT do the following instead to import it:
-
-  1. `btfs init -i "PASTE_YOUR_PRIVATE_KEY_HERE"`
-  2. `btfs wallet password "YOUR_PASSWORD_HERE_NO_SPECIAL_CHARACTERS_ALLOWED"`
-  3. `btfs daemon`
-
-
-Steps to use use BTFS2:
-
-WARNING: Currently only BTFS 1 is able to interact with the storage User Interface, BTFS2 is not yet integrated, if you want to experiment with BTFS2 make sure to BACKUP your Mnemonic/Private Key and CIDs of your already uploaded files. If something goes wrong the dCloud team will not be able to retrieve your private key/mnemonic neither your uploaded files. Also consider BTFS binaries use the same PATH for the repo and other configurations might be interfering. It is recommended not to use both BTFS versions at the same time, if you know what your doing proceed with caution.
-
-  1. Open the terminal windoe within dCloud
-  2. Run the following command to initialize BTFS 2.0 `btfs2 init` it will automatically select the test network.
-  3. `btfs2 daemon`
-  4. Fill your BTFS node wallet with test tokens requesting them at: https://testfaucet.bt.io/#/
-  5. Once your node detects enough balance is available in your wallet it will start daemon.
-  6. Follow the official guidelines (https://docs.btfs.io/v2.0/docs/introduction-setup20) to explore the use cases of BTFS 2.0 in your mobile device. So far I tested the storage side and its working as expected
-  7. The Renter feature of BTFS requires WBTT(BTTC) besides BTT(BTTC) which you can request as specified in: https://github.com/bittorrent/go-btfs/issues/43#issuecomment-1018025697
 
 
 
