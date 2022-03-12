@@ -5,7 +5,7 @@ APP_BUILD_SCRIPT=/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cp
 APP_ABI=armeabi-v7a
 NDK_ALL_ABIS=armeabi-v7a
 NDK_DEBUG=0
-APP_PLATFORM=android-29
+APP_PLATFORM=android-24
 NDK_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/updatedRelease/obj
 NDK_LIBS_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/updatedRelease/lib
 APP_CFLAGS+=-std=c11

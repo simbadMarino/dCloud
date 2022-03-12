@@ -8,7 +8,7 @@
   },
   "originalCxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86",
   "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86",
-  "abiPlatformVersion": 29,
+  "abiPlatformVersion": 24,
   "variant": {
     "buildSystemArgumentList": [],
     "cFlagsList": [

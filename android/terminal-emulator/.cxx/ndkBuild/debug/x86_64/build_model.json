@@ -8,7 +8,7 @@
   },
   "originalCxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/x86_64",
   "cxxBuildFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/.cxx/ndkBuild/debug/x86_64",
-  "abiPlatformVersion": 29,
+  "abiPlatformVersion": 24,
   "variant": {
     "buildSystemArgumentList": [],
     "cFlagsList": [
@@ -26,6 +26,9 @@
     "soFolder": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/debug/lib",
     "isDebuggableEnabled": true,
     "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
       "X86_64"
     ],
     "buildTargetSet": [],
@@ -122,7 +125,6 @@
         "sdkFolder": "/home/simbad/Android/Sdk",
         "isNativeCompilerSettingsCacheEnabled": false,
         "isBuildOnlyTargetAbiEnabled": true,
-        "ideBuildTargetAbi": "x86_64,x86",
         "isCmakeBuildCohabitationEnabled": false,
         "isPrefabEnabled": false,
         "isV2NativeModelEnabled": true

@@ -5,7 +5,7 @@ APP_BUILD_SCRIPT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulat
 APP_ABI=x86
 NDK_ALL_ABIS=x86
 NDK_DEBUG=0
-APP_PLATFORM=android-29
+APP_PLATFORM=android-24
 NDK_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/release/obj
 NDK_LIBS_OUT=/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/build/intermediates/ndkBuild/release/lib
 APP_CFLAGS+=-std=c11

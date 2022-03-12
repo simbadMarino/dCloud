@@ -1,7 +1,7 @@
 [
   {
     "level": "INFO",
-    "message": "Start JSON generation. Platform version: 29 min SDK version: x86_64",
+    "message": "Start JSON generation. Platform version: 24 min SDK version: x86_64",
     "file": "/home/simbad/Documents/Git_Repos/dCloud/android/terminal-emulator/src/main/jni/Android.mk",
     "tag": "release|x86_64",
     "diagnosticCode": "UNKNOWN"

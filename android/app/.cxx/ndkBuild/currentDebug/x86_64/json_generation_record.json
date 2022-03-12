@@ -1,14 +1,70 @@
 [
   {
     "level": "INFO",
-    "message": "Start JSON generation. Platform version: 29 min SDK version: x86_64",
+    "message": "Start JSON generation. Platform version: 24 min SDK version: x86_64",
     "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
     "tag": "currentDebug|x86_64",
     "diagnosticCode": "UNKNOWN"
   },
   {
     "level": "INFO",
-    "message": "JSON \u0027/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86_64/android_gradle_build.json\u0027 was up-to-date",
+    "message": "rebuilding JSON /home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86_64/android_gradle_build.json due to:",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "- command changed from previous, will remove stale json folder",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "removing stale contents from \u0027/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86_64\u0027",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "created folder \u0027/home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86_64\u0027",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "executing ndkBuild Executable : /home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk\nAPP_ABI\u003dx86_64\nNDK_ALL_ABIS\u003dx86_64\nNDK_DEBUG\u003d1\nAPP_PLATFORM\u003dandroid-24\nNDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/currentDebug/obj\nNDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/currentDebug/lib\nAPP_CFLAGS+\u003d-std\u003dc11\nAPP_CFLAGS+\u003d-Wall\nAPP_CFLAGS+\u003d-Wextra\nAPP_CFLAGS+\u003d-Werror\nAPP_CFLAGS+\u003d-Os\nAPP_CFLAGS+\u003d-fno-stack-protector\nAPP_CFLAGS+\u003d-Wl,--gc-sections\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "Executable : /home/simbad/Android/Sdk/ndk/21.1.6352462/ndk-build\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk\nAPP_ABI\u003dx86_64\nNDK_ALL_ABIS\u003dx86_64\nNDK_DEBUG\u003d1\nAPP_PLATFORM\u003dandroid-24\nNDK_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/currentDebug/obj\nNDK_LIBS_OUT\u003d/home/simbad/Documents/Git_Repos/dCloud/android/app/build/intermediates/ndkBuild/currentDebug/lib\nAPP_CFLAGS+\u003d-std\u003dc11\nAPP_CFLAGS+\u003d-Wall\nAPP_CFLAGS+\u003d-Wextra\nAPP_CFLAGS+\u003d-Werror\nAPP_CFLAGS+\u003d-Os\nAPP_CFLAGS+\u003d-fno-stack-protector\nAPP_CFLAGS+\u003d-Wl,--gc-sections\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "parse and convert ndk-build output to build configuration JSON",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "done executing ndkBuild",
+    "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
+    "tag": "currentDebug|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "write command file /home/simbad/Documents/Git_Repos/dCloud/android/app/.cxx/ndkBuild/currentDebug/x86_64/build_command.txt",
     "file": "/home/simbad/Documents/Git_Repos/dCloud/android/app/src/main/cpp/Android.mk",
     "tag": "currentDebug|x86_64",
     "diagnosticCode": "UNKNOWN"
