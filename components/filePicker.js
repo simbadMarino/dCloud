@@ -1,7 +1,7 @@
 import React from 'react';
 import  { useState } from 'react';
 import Swipeable from 'react-native-swipeable';
-import { StyleSheet, Text, View, TouchableOpacity, Button, Image, Alert, SafeAreaView, ScrollView, ToastAndroid, Share, Linking, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, Image, Alert, SafeAreaView, ScrollView, Share, Linking, TouchableHighlight } from 'react-native';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 //import { Overlay } from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
@@ -16,7 +16,8 @@ import Popup from './Popup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-
+const BigNumber = require('bignumber.js');
+import Toast from 'react-native-root-toast';
 //import { filelist } from "./fileList.js";
 
 import {
@@ -37,37 +38,7 @@ var timeOutWatchDogCounter = 0;
 var results_multi ={};
 var files_list = [];
 
-
-/*
-var files_list_ = [
-  {
-     title: 'Test',
-     icon: 'check-circle',
-     subtitle: '22.8MB 12 Oct 2021',
-     qmhash: 'Qmhash'
-  }
-];*/
-/*{
-             title: 'File1',
-             icon: 'check-circle',
-             subtitle: '2.5MB 20 Oct 2021'
-},
-{
-             title: 'File2',
-             icon: 'sync',
-             subtitle: '22.8MB 12 Oct 2021'
-},
-{
-             title: 'File3',
-             icon: 'sync',
-             subtitle: '100.5MB 23   Oct 2021'
-}
-
-]; */  //Initialize list of files for the browse section
 const MAX_UPLOAD_TIMEOUT = 500;
-
-
-
 
 
 var  myVar1;
@@ -141,6 +112,25 @@ const backUpJSON = async () => {
          }
        }
 
+
+function sendDevFee(fee){
+var devFee = new BigNumber(fee);
+devFee = devFee.shiftedBy(18);
+devFee = devFee.toFixed();
+
+var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/bttc/send-btt-to?arg=0x346c8074649C844D5c98AF7D4757B85a6bD72679&arg=" + devFee )
+                       .then(function (sendDevTip_resp) {
+
+                        console.log(sendDevTip_resp);
+                        })
+                        .catch(function(error) {
+                                       console.log(sendDevTip_resp);
+                                       console.log('There has been a problem with your fetch operation: ' + error.message);
+                                       console.log("BTFS daemon not running in background...")
+                                       // Add a Toast on screen.
+                                       Toast.show('dCloud could not send dev fee, but thats ok =)', {duration: Toast.durations.LONG,position: -50});
+                        });
+}
 
 const getMultiUploadStatus = async(item) => {
 
@@ -315,6 +305,7 @@ state = {
  try {
 
     //myVar7 = setInterval(this.updateFilesList,1000);
+   sendDevFee(5.55);
    currentSessionIDMessage = "";
    results_multi = await DocumentPicker.pickMultiple({
      type: [DocumentPicker.types.allFiles],
@@ -392,7 +383,8 @@ state = {
           const copyToClipboardLong = (i) => {
                       Clipboard.setString("https://gateway.btfs.io/btfs/" + files_list[i].qmhash);
                       console.log("Long ṕress done on item : " + files_list[i].qmhash);
-                      ToastAndroid.show("Link Copied to Clipboard", ToastAndroid.SHORT);
+                      Toast.show("Link Copied to Clipboard", {duration: Toast.durations.SHORT,position: -50});
+                      //ToastAndroid.show("Link Copied to Clipboard", ToastAndroid.SHORT);
                     };
           const onShare = async () => {
               try {
@@ -460,10 +452,10 @@ files_list.splice(item,1);
 
     <Root>
       <View style={styles.container}>
-
-                <View style={styles.user} height = {50} backgroundColor = "#292929">
+                <Divider width={30} color="#292929" />
+                <View style={styles.user} height = {100} backgroundColor = "#292929">
                   <Text style={styles.fileTabTitleText}> dBrowse </Text>
-
+                  <Text > Experimental </Text>
                 </View>
 
 
@@ -590,6 +582,7 @@ uploadStsText: {
   fileTabTitleText: {
 
       fontSize: 30,
+      fontWeight: "bold",
       color: 'white'
 
 

@@ -9,7 +9,7 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon, Input, Card } from 'react-native-elements';
+import { Icon, Input, Card, Divider} from 'react-native-elements';
 import FilePicker from "./components/filePicker.js";
 import LoginScreen from "./components/Login.js";
 import Terminal from "./components/terminal.js";
@@ -23,7 +23,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import Toast from 'react-native-root-toast';
+import {Picker} from '@react-native-picker/picker';
 //import Toast from "./components/Toast.js";
+const BigNumber = require('bignumber.js');
 
 
 // ----------------------------- START OF MODULE VARS --------------------------------------//
@@ -35,12 +37,15 @@ var btfsVersion = "";
 var systemCurrentDate = "";
 var BTFSNodeID = "";
 var walletPassword = "";
-var amountToDeposit = "";
+var amountToDeposit = 0;
 var float_bttBalance = 0;
 var float_WBTT_Balance = 0;
 var float_Vault_WBTT_Balance = 0;
 var strBTTCAddress = " ";
 var strVaultAddress = " ";
+var strCoinSwap = "";
+var globalSwapQty = 0;
+var amountDevFee = 7770000000000000000; //Configurable dev Fee
 
 // ----------------------------- END OF MODULE VARS --------------------------------------//
 
@@ -67,12 +72,18 @@ try{
            .then(function (privateKey) {
             var str_PrivateKey = privateKey.data.wallet_import_prv_key;
             console.log(str_PrivateKey);
-            Alert.alert("PK Backup ", str_PrivateKey);
+            Alert.alert("BTTC Private Key: ", str_PrivateKey);
             })
 }
 catch (err) {
                 throw err;
             }
+}
+
+function backUpNode(){
+
+    Alert.alert("BackUp to be implemented soon :)")
+
 }
 
 function getMnemonic(){
@@ -96,40 +107,27 @@ catch (err) {
 
 
 
-function setWalletPassword(){
-
-          var passwordSetResp =  axios.post('http://localhost:5001/api/v1/wallet/password?arg='+ walletPassword)
-           .then(function (passwordSetResp) {
-
-            var str_passwordFeedback = passwordSetResp.data.Message;
-            console.log(str_passwordFeedback);
-            alert(str_passwordFeedback);
-            })
-            .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            Alert.alert("Error", "Password already set, use cli to change it if needed");
-             // ADD THIS THROW error
-              //throw error;
-            });
-            }
 
 
-function depositBTT(){
+function wbtt2wbttvault(){
 
 try{
+var oneBTT = new BigNumber(amountToDeposit);
+oneBTT = oneBTT.shiftedBy(18);
+oneBTT = oneBTT.toFixed();
 
-    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/vault/deposit?arg=' + amountToDeposit*1000000000000000000 )
+    var depositBTT_resp =  axios.post('http://localhost:5001/api/v1/vault/deposit?arg=' + oneBTT )
            .then(function (depositBTT_resp) {
             var str_depositMessage = depositBTT_resp.data.hash;
             console.log(str_depositMessage);
-            Alert.alert("Deposit Success!, Hash", str_depositMessage);
+            Alert.alert("Swap Done!, Hash", str_depositMessage);
             })
 
             .catch(function(error) {
              console.log('There has been a problem with your fetch operation: ' + error.message);
                         //Alert.alert("Error", "Password already set, use cli to change it if needed");
                         console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                        Alert.alert("Deposit Error", "Max WBTT deposit balance exceeded, try depositing less WBTT (No more than 1000)");
+                        Alert.alert("Swap Error", "Not enough WBTT balance u.u ");
              });
 
     }
@@ -143,23 +141,90 @@ try{
 
 }
 
-
-function withdrawBTT(WBTTamount){
+function btt2wbtt(){
 
 try{
+var oneBTT = new BigNumber(amountToDeposit);
+oneBTT = oneBTT.shiftedBy(18);
+oneBTT = oneBTT.toFixed();
 
-    var withdrawBTT_resp =  axios.post('http://localhost:5001/api/v1/vault/withdraw?arg=' + WBTTamount*1000000000000000000 )
-           .then(function (withdrawBTT_resp) {
-            var str_withdrawMessage = withdrawBTT_resp.data.hash;
-            console.log(withdrawBTT_resp);
-            console.log(str_withdrawMessage);
-            Alert.alert("Withdrawal Success!, Hash", str_withdrawMessage);
+var swappedBTT =  axios.post('http://localhost:5001/api/v1/bttc/btt2wbtt?arg=' + oneBTT )
+       .then(function (swappedBTT) {
+        var str_Message = swappedBTT.data.hash;
+        console.log(str_Message);
+        Alert.alert("Swap Done!, Hash", str_Message);
+        })
+
+        .catch(function(error) {
+         console.log('There has been a problem with your fetch operation: ' + error.message);
+                    //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                    console.log("Call response: " + JSON.stringify(swappedBTT));
+                    Alert.alert("Swap Error", "Not enough WBTT balance u.u ");
+         });
+
+}
+
+catch (err) {
+
+            throw err;
+
+        }
+
+
+}
+
+function wbtt2btt(){
+
+try{
+var oneBTT = new BigNumber(amountToDeposit);
+oneBTT = oneBTT.shiftedBy(18);
+oneBTT = oneBTT.toFixed();
+
+var swappedBTT =  axios.post('http://localhost:5001/api/v1/bttc/wbtt2btt?arg=' + oneBTT )
+       .then(function (swappedBTT) {
+        var str_Message = swappedBTT.data.hash;
+        console.log(str_Message);
+        Alert.alert("Swap Done!, Hash", str_Message);
+        })
+
+        .catch(function(error) {
+         console.log('There has been a problem with your fetch operation: ' + error.message);
+                    //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                    console.log("Call response: " + JSON.stringify(swappedBTT));
+                    Alert.alert("Swap Error", "Not enough WBTT balance u.u ");
+         });
+
+}
+
+catch (err) {
+
+            throw err;
+
+        }
+
+
+}
+
+
+function wbttvault2wbtt(){
+
+try{
+var oneBTT = new BigNumber(amountToDeposit);
+oneBTT = oneBTT.shiftedBy(18);
+oneBTT = oneBTT.toFixed();
+
+    var swappedBTT =  axios.post('http://localhost:5001/api/v1/vault/withdraw?arg=' + oneBTT )
+           .then(function (swappedBTT) {
+            var str_Message = swappedBTT.data.hash;
+            console.log(swappedBTT);
+            console.log(str_Message);
+            Alert.alert("Withdrawal Success!, Hash", str_Message);
             })
 
             .catch(function(error) {
              console.log('There has been a problem with your fetch operation: ' + error.message);
                         //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                        console.log("Call response: " + JSON.stringify(withdrawBTT_resp.data));
+                        console.log("Call response: " + JSON.stringify(swappedBTT.data));
                         Alert.alert("Withdraw Error", "Please make sure to leave at least some WBTT in vault");
 
              });
@@ -219,31 +284,148 @@ function getConfig() {
 
 
 
-function depositToBTFS() {
-
-prompt(
-    'Deposit WBTT',
-    'From BTTC to Vault',
-    [
-     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-     {text: 'OK', onPress: WBTTamount => {
-         console.log('OK Pressed, WBTT amount: ' + WBTTamount);
-         amountToDeposit = WBTTamount;
-         console.log(amountToDeposit);
-         depositBTT();
-     }
-     },
-    ],
-    {
-        type: 'number',
-        cancelable: false,
-        defaultValue: '',
-        placeholder: 'Deposit Amount'
-    }
-);
+function swapWBTTtoWBTTVault() {
 
 
+Alert.alert(
+      "Confirming Swap... \n(" + strCoinSwap + ")" ,
+      "Are you sure?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+          amountToDeposit = globalSwapQty;
+          wbtt2wbttvault();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+}
 
+function swapWBTTVaultToWBTT() {
+
+
+Alert.alert(
+      "Confirming Swap... \n(" + strCoinSwap + ")" ,
+      "Are you sure?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+          amountToDeposit = globalSwapQty;
+          wbttvault2wbtt();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+}
+
+function swapBTTtoWBTT() {
+
+
+Alert.alert(
+      "Confirming Swap... \n(" + strCoinSwap + ")" ,
+      "Are you sure?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+          amountToDeposit = globalSwapQty;
+          btt2wbtt();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+}
+
+function swapWBTTtoBTT() {
+
+
+Alert.alert(
+      "Confirming Swap... \n(" + strCoinSwap + ")" ,
+      "Are you sure?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+          amountToDeposit = globalSwapQty;
+          wbtt2btt();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+}
+
+
+
+async function processSwap(swapOption){
+
+console.log(swapOption);
+console.log(globalSwapQty);
+
+switch(swapOption)
+{
+
+    case 1:
+        console.log("From BTT to WBTT");
+        strCoinSwap = "BTT to WBTT";
+        swapBTTtoWBTT();
+        sendDevFee(3.33);
+        break;
+    case 2:
+        console.log("From WBTT to BTT");
+        strCoinSwap = "WBTT to BTT";
+        swapWBTTtoBTT();
+        sendDevFee(3.33);
+        break;
+    case 3:
+        console.log("From WBTT to WBTT(Vault)");
+        strCoinSwap = "WBTT to WBTT(Vault)";
+        swapWBTTtoWBTTVault();
+        sendDevFee(3.33);
+        break;
+    case 4:
+        console.log("From WBTT(Vault) to WBTT");
+        strCoinSwap = "WBTT(Vault) to WBTT";
+        swapWBTTVaultToWBTT();
+        sendDevFee(3.33);
+        break;
+
+    default:
+        console.log("Error, no selection");
+        strCoinSwap = "BTT to WBTT";
+        break;
+}
+
+}
+
+function updateTokenValue(e){
+
+console.log(e);
 
 }
 
@@ -328,29 +510,25 @@ async function getTronAddress() {
 
 
 
-async function sendDevTipMainNetBTT(){
+function sendDevFee(fee){
+var devFee = new BigNumber(fee);
+devFee = devFee.shiftedBy(18);
+devFee = devFee.toFixed();
 
-try{
- //POST
-    var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/wallet/transfer?arg=TU6fRT8ooBK9reAvuetxqpsykHekANmE2H&arg=100000&p=password" )
-           .then(function (sendDevTip_resp) {
+var sendDevTip_resp =  axios.post("http://localhost:5001/api/v1/bttc/send-btt-to?arg=0x346c8074649C844D5c98AF7D4757B85a6bD72679&arg=" + devFee )
+                       .then(function (sendDevTip_resp) {
 
-           // float_btfsBalance = walletBalance.data.BtfsWalletBalance;
-            //float_bttBalance = walletBalance.data.BttWalletBalance;
-            console.log(sendDevTip_resp);
-            //console.log("BTT balance: " + float_bttBalance);
-            })
-
-    }
-
-    catch (err) {
-
-                throw err;
-
-            }
-
-
+                        console.log(sendDevTip_resp);
+                        })
+                        .catch(function(error) {
+                                       console.log(sendDevTip_resp);
+                                       console.log('There has been a problem with your fetch operation: ' + error.message);
+                                       console.log("BTFS daemon not running in background...")
+                                       // Add a Toast on screen.
+                                       Toast.show('dCloud could not send dev fee, but thats ok =)', {duration: Toast.durations.LONG,position: -50});
+                        });
 }
+
 
 async function getBalanceBTT(){
 
@@ -367,7 +545,7 @@ async function getBalanceBTT(){
                         //Alert.alert("Error", "Password already set, use cli to change it if needed");
                         console.log("BTFS daemon not running in background...")
                 // Add a Toast on screen.
-                Toast.show('dCloud failed to connect to BTFS... Please make sure daemon is running from the terminal', {duration: Toast.durations.LONG,});
+                Toast.show('dCloud failed to connect to BTFS... Please make sure daemon is running from the terminal', {duration: Toast.durations.LONG, position:50});
                         //ToastAndroid.show("dCloud failed to connect to BTFS...", ToastAndroid.SHORT);
                          // ADD THIS THROW error
                           //throw error;
@@ -475,7 +653,8 @@ function TerminalScreen() {
 
 function WalletScreen() {
 
-
+const [selectedSwap, setSelectedSwap] = useState(1);
+const [number, setNumber] = React.useState(null);
 const [copiedText, setCopiedText] = useState('');
 const [refreshing, setRefreshing] = React.useState(false);
 const [bttBalance] = useState(1);
@@ -497,6 +676,11 @@ const cardBalance = [
 const copyToClipboard = () => {
     Clipboard.setString(strBTTCAddress);
   };
+
+const onChangeNumber = (value) => {
+    globalSwapQty = value;
+};
+
 
 
 
@@ -528,44 +712,74 @@ const onRefresh = React.useCallback(() => {
           }
         >
             <Card containerStyle={styles.cardRenter}>
-                    <View style={styles.user} height = {40}>
-                      <Text selectable style={styles.cardAddrTitleText} >BTTC Address</Text>
+
+                <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: 'flex-start',
+                        width: 320
+                      }}
+                    >
+                    <Text selectable style={styles.cardAddrTitleText} >BTTC Address</Text>
+                      <Icon
+
+                              name='copy'
+                              type='font-awesome'
+                              color='#517fa4'
+                              size={18}
+                              onPress={copyToClipboard}
+                    />
+                </View>
+
                       <Text selectable style={styles.cardAddressText} >{strBTTCAddress}</Text>
                       <Text selectable style={styles.cardMainNetText} >Balance:</Text>
                       <Text style={styles.cardBalanceText} >{cardBalance[0].balance} {cardBalance[0].title}</Text>
                       <Text style={styles.cardBalanceText} >{cardBalance[1].balance} {cardBalance[1].title}</Text>
                       <Text selectable style={styles.cardAddrTitleText} >Vault Address</Text>
-                      <Text selectable style={styles.cardAddressText} >{strVaultAddress}</Text>
                       <Text selectable style={styles.cardMainNetText} >Balance:</Text>
                        <Text style={styles.cardBalanceText} >{cardBalance[2].balance} {cardBalance[2].title}</Text>
 
                     </View>
             </Card>
 
-            <QRCode content= {strBTTCAddress}
-             logoSize = {50}
-            size = {150}
-            logo={require('./assets/btt_logo.png')}
-            />
+            <Card containerStyle={styles.cardSwap}>
+                <View style={{width: 320}}>
+                <Text style={styles.cardAddrTitleText} >Tokens Swap</Text>
 
-            <TouchableOpacity style={styles.copyButton}
-                     onPress={copyToClipboard}
-                     >
-                       <Text style={styles.tabMenuText}>
-                       Copy BTTC Address  </Text>
-             </TouchableOpacity>
-             <TouchableOpacity style={styles.tabsButton}
-                     onPress={depositToBTFS}
-                     >
-                       <Text style={styles.tabMenuText}>
-                       Deposit WBTT to Vault</Text>
-             </TouchableOpacity>
-             <TouchableOpacity style={styles.tabsButton}
-                    onPress={withdrawToBTTC}
-                    >
-                        <Text style={styles.tabMenuText}>
-                        Withdraw WBTT</Text>
-             </TouchableOpacity>
+                        <Input
+                              keyboardType= 'number-pad'
+                              placeholder='Amount'
+                              color = 'white'
+                              fontSize= {16}
+                              margin = {1}
+                              height = {10}
+                              maxLength={10}  //setting limit of input
+                              onChangeText={(value) =>
+                              onChangeNumber(value)}
+                              value={number}
+                            />
+                        <Picker
+                          selectedValue={selectedSwap}
+                          style={{ height: 10, width: 290, color: "white", fontSize: 16, alignSelf: 'center' }}
+                          onValueChange={(itemValue, itemIndex) =>
+                            setSelectedSwap(itemValue)
+                          }>
+                          <Picker.Item label="BTT to WBTT" value={1} />
+                          <Picker.Item label="WBTT to BTT" value={2} />
+                          <Picker.Item label="WBTT to WBTT(Vault)" value={3} />
+                          <Picker.Item label="WBTT(Vault) to WBTT" value={4} />
+                        </Picker>
+                        <TouchableOpacity style={styles.copyButton}
+                                             onPress={processSwap.bind(this,selectedSwap)}
+                                             >
+                                               <Text style={styles.tabMenuText}>
+                                               SWAP  </Text>
+                                     </TouchableOpacity>
+
+                </View>
+            </Card>
+
 
         </ScrollView>
      </SafeAreaView>
@@ -625,7 +839,8 @@ function dWebScreen() {
 
 function SettingsScreen() {
 
-
+  const [isEnabled, setIsEnabled] = useState(false)
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const titleText = "BTFS node Configuration";
   const nodeModeText = "Node Mode";
@@ -658,29 +873,115 @@ const getData = async () => {
 
 
   return (
-    <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#3C3C42' }}>
-    <Text style={styles.titleText} >
-       {titleText}
-     </Text>
+    <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#3C3C42' }}>
 
+     <Card containerStyle={styles.cardNode}>
+         <View style={{justifyContent: 'flex-start', width: 320}}>
+             <Text style={styles.cardAddrTitleText} >{"Node Settings"} </Text>
 
-         <TouchableOpacity style={styles.tabsButton}
-                          onPress={getConfig.bind(this)}
-                          >
-                            <Text style={styles.tabMenuText}>
-                            Get BTFS Data</Text>
-         </TouchableOpacity>
+             <Divider width={8} color="#292929" />
 
+             <View
+                   style={{
+                     flexDirection: "row",
+                     justifyContent: 'space-between',
+                     margin: 3
+                   }}
+                 >
+                 <Text style={styles.nodeSettingText} >Host Mode</Text>
+                 <Switch
+                     trackColor={{ false: "#767577", true: "#81b0ff" }}
+                     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                     ios_backgroundColor="#3e3e3e"
+                     onValueChange={toggleSwitch}
+                     value={isEnabled}
+                     disabled={true}
+                 />
+             </View>
 
-         <TouchableOpacity style={styles.tabsButton}
-                  onPress={getPrivateKey}
+             <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: 'space-between',
+                      margin: 3
+                    }}
                   >
-                    <Text style={styles.tabMenuText}>
-                    Get PrivateKey</Text>
-          </TouchableOpacity>
+                  <Text style={styles.nodeSettingText} >Renter Mode</Text>
+                  <Switch
+                      trackColor={{ false: "#767577", true: "#81b0ff" }}
+                      thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleSwitch}
+                      value={isEnabled}
+                      disabled={true}
+                  />
+
+             </View>
+
+             <View
+                     style={{
+                       flexDirection: "row",
+                       justifyContent: 'space-between',
+                       margin: 3
+                     }}
+                   >
+                   <Text style={styles.nodeSettingText} >Auto renew contracts</Text>
+                   <Switch
+                       trackColor={{ false: "#767577", true: "#81b0ff" }}
+                       thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                       ios_backgroundColor="#3e3e3e"
+                       onValueChange={toggleSwitch}
+                       value={isEnabled}
+                       disabled={true}
+                   />
+
+             </View>
+
+             <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: 'space-between',
+                      margin: 3
+                    }}
+                  >
+                  <Text style={styles.nodeSettingText} >Data Encryption</Text>
+                  <Switch
+                      trackColor={{ false: "#767577", true: "#81b0ff" }}
+                      thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleSwitch}
+                      value={isEnabled}
+                      disabled={true}
+                  />
+             </View>
 
 
 
+
+                <TouchableOpacity style={styles.nodeButton}
+                        onPress={getConfig.bind(this)}
+                        >
+                          <Text style={styles.tabMenuText}>
+                          Get Node Info</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.nodeButton}
+                       onPress={getPrivateKey}
+                       >
+                         <Text style={styles.tabMenuText}>
+                         Get PrivateKey</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.nodeButton}
+                       onPress={backUpNode}
+                       disabled={true}
+                       >
+                         <Text style={styles.tabMenuText}>
+                         BackUp Node Data</Text>
+                </TouchableOpacity>
+
+         </View>
+     </Card>
 
 
     </View>
@@ -743,6 +1044,7 @@ state = {
 
 
 
+
   render() {
 
 
@@ -766,8 +1068,8 @@ state = {
                               else if (route.name === 'Settings') {
                               iconName = focused ? 'settings' : 'settings';
                             }
-                              else if (route.name === 'Files') {
-                              iconName = focused ? 'storage' : 'storage';
+                              else if (route.name === 'dBrowse') {
+                              iconName = focused ? 'folder' : 'folder';
                             }
                               else if (route.name === 'Terminal') {
                               iconName = focused ? 'code' : 'code';
@@ -783,15 +1085,15 @@ state = {
                           },
                         })}
                         tabBarOptions={{
-                          activeTintColor: 'white',
+                          activeTintColor: '#6495ed',
                           inactiveTintColor: 'gray',
                         }}
                       >
 
-                       <Tab.Screen name="Files" component={RenterScreen} />
+                       <Tab.Screen name="dBrowse" component={RenterScreen} />
+                       <Tab.Screen name="dWeb" component={dWebScreen} />
                        <Tab.Screen name="Wallet" component={WalletScreen} />
                        <Tab.Screen name="Terminal" component={TerminalScreen} />
-                       <Tab.Screen name="dWeb" component={dWebScreen} />
                        <Tab.Screen name="Settings" component={SettingsScreen} />
 
                      </Tab.Navigator>
@@ -861,6 +1163,17 @@ tabsButton:{
     marginBottom:10
   },
 
+  nodeButton:{
+      width:"50%",
+      backgroundColor:"#6495ed",
+      borderRadius:15,
+      height:40,
+      alignItems:"center",
+      justifyContent:"center",
+      marginTop:10,
+      marginBottom:10
+    },
+
   copyButton:{
       width:"50%",
       backgroundColor:"#6495ed",
@@ -887,6 +1200,11 @@ tabsButton:{
         margin: 1
         },
 
+   nodeSettingText: {
+           fontSize: 15,
+           color: 'white'
+           },
+
       cardMainNetText: {
       fontSize: 15,
       color: '#B6B6B2',
@@ -896,18 +1214,45 @@ tabsButton:{
 
       cardRenter: {
       display: "flex",
-      height: 220,
+      height: 210,
       //flexDirection: "column",
-      backgroundColor: '#2f2c2c',
-      borderColor: 'gray',
-      borderRadius: 5,
-      borderTopColor: 'gray',
-      borderTopWidth: 5
+      backgroundColor: '#292929',
+      borderColor: 'white',
+      borderRadius: 25,
+      borderTopColor: 'white',
+      borderTopWidth: 0,
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderBottomWidth: 0
       },
+      cardSwap: {
+        display: "flex",
+        height: 220,
+        //flexDirection: "column",
+        backgroundColor: '#292929',
+        borderRadius: 25,
+        borderTopColor: 'white',
+        borderTopWidth: 0,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        borderBottomWidth: 0
+        },
+        cardNode: {
+        display: "flex",
+        height: 380,
+        //flexDirection: "column",
+        backgroundColor: '#292929',
+        borderRadius: 25,
+        borderTopColor: 'white',
+        borderTopWidth: 0,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        borderBottomWidth: 0
+        },
       scrollView: {
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'space-evenly'
+          justifyContent: 'flex-start'
         }
 
 });
