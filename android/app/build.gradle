@@ -165,8 +165,8 @@ android {
     defaultConfig {
         applicationId "com.justshare"
         minSdkVersion project.properties.minSdkVersion.toInteger()
-        versionCode 15
-        versionName "1.3.1"
+        versionCode 16
+        versionName "1.3.2"
 
         manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
         manifestPlaceholders.TERMUX_APP_NAME = "justshare"
@@ -394,7 +394,7 @@ def downloadBootstrap(String arch, String expectedChecksum, boolean isPackagesIn
         }
     }
 
-    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1.2.0_BTFS_Binaries" + "/bootstrap-" + arch + ".zip"
+    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1.2.1_BTFS_Binaries" + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
@@ -426,10 +426,10 @@ clean {
 task downloadBootstraps() {
     boolean isPackagesInApk = getGradle().getStartParameter().getTaskRequests().toString().contains("Updated");
     doLast {
-        downloadBootstrap("aarch64", "8026aef049d8a805d9d3d2648f9a2089d7d9cabd1dec2fb747b6c4bc5471c9",  isPackagesInApk)
-        downloadBootstrap("arm",     "64229aa83d153424742f260ccb72c1d674dc082651114fef2301ddcc6b13900b",  isPackagesInApk)
-        downloadBootstrap("i686",    "4e893ce323bd7e24c1b0009e18d7388f7aa433b13eb4693134cb6aa190e8d4d0",  isPackagesInApk)
-        downloadBootstrap("x86_64",  "2f1a4936b5ddfe3e9776f7e39e569defedb8bc7698e5c5c6fb87f3c5b8312aa3",  isPackagesInApk)
+        downloadBootstrap("aarch64", "c743f769f88fa40ab51f448c4f00de06b60553543c50159b2bae1affd9b87ad6",  isPackagesInApk)
+        downloadBootstrap("arm",     "cd32d9df3efc25e7a3c785080ff67c3d858802817b9d2f953d2f2bd11c63f4a9",  isPackagesInApk)
+        downloadBootstrap("i686",    "8028aa63a59ca8f26acfdd563a3c11bff4ef54ac4fed832b232225b650fca40e",  isPackagesInApk)
+        downloadBootstrap("x86_64",  "e688664d55885f233e03c44be1aec43f9228267942a601e36288cbb221aa276b",  isPackagesInApk)
     }
 }
 
