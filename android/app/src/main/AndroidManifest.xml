@@ -189,11 +189,13 @@
         <receiver android:name="com.termux.app.TermuxOpenReceiver" />
 
 
-        <provider android:authorities="com.termux.files"
-            android:readPermission="android.permission.permRead"
+        <provider
+            android:name="com.termux.app.TermuxOpenReceiver$ContentProvider"
+            android:authorities="com.termux.files"
             android:exported="true"
             android:grantUriPermissions="true"
-            android:name="com.termux.app.TermuxOpenReceiver$ContentProvider" />
+            android:permission="com.termux.permission.RUN_COMMAND"
+             />
 
 
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />

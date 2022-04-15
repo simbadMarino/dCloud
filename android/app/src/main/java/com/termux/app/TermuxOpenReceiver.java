@@ -186,7 +186,7 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
             } catch (IOException e) {
                 throw new IllegalArgumentException(e);
             }
-            return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+            return ParcelFileDescriptor.open(file, ParcelFileDescriptor.parseMode(mode));
         }
     }
 
