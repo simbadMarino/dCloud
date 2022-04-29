@@ -1,0 +1,23 @@
+[
+  {
+    "level": "INFO",
+    "message": "Start JSON generation. Platform version: 24 min SDK version: x86_64",
+    "file": "/Users/simbadmarino/Documents/GithubRepos/dCloud++/android/terminal-emulator/src/main/jni/Android.mk",
+    "tag": "release|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON \u0027/Users/simbadmarino/Documents/GithubRepos/dCloud++/android/terminal-emulator/.cxx/ndkBuild/release/x86_64/android_gradle_build.json\u0027 was up-to-date",
+    "file": "/Users/simbadmarino/Documents/GithubRepos/dCloud++/android/terminal-emulator/src/main/jni/Android.mk",
+    "tag": "release|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON generation completed without problems",
+    "file": "/Users/simbadmarino/Documents/GithubRepos/dCloud++/android/terminal-emulator/src/main/jni/Android.mk",
+    "tag": "release|x86_64",
+    "diagnosticCode": "UNKNOWN"
+  }
+]

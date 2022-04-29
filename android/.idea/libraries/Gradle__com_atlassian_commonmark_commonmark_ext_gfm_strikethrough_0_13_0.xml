@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.13.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.atlassian.commonmark/commonmark-ext-gfm-strikethrough/0.13.0/60c7582b118a9c47e859544df04da88cf1282eaf/commonmark-ext-gfm-strikethrough-0.13.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.atlassian.commonmark/commonmark-ext-gfm-strikethrough/0.13.0/507b0cd2b2972f1a84273439394e6624a6f7d7f4/commonmark-ext-gfm-strikethrough-0.13.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.atlassian.commonmark/commonmark-ext-gfm-strikethrough/0.13.0/c8a6f91017f1a6855759dca666c22b0708e4ce48/commonmark-ext-gfm-strikethrough-0.13.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

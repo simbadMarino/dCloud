@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: io.noties.markwon:recycler:4.6.2@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/5ce46f8b4ff5a756c9d01d146b7595e3/transformed/recycler-4.6.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5ce46f8b4ff5a756c9d01d146b7595e3/transformed/recycler-4.6.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5ce46f8b4ff5a756c9d01d146b7595e3/transformed/recycler-4.6.2/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.noties.markwon/recycler/4.6.2/3809a6b71390acacc1acea0dea55c6d4536a22f7/recycler-4.6.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.noties.markwon/recycler/4.6.2/a1c2abcbc1f5879382a201ba94e9c1bf544e9e3/recycler-4.6.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

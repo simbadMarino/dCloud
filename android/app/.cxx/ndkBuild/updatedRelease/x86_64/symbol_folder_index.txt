@@ -1,0 +1,1 @@
+/Users/simbadmarino/Documents/GithubRepos/dCloud++/android/app/build/intermediates/ndkBuild/updatedRelease/obj/local/x86_64
