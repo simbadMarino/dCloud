@@ -212,7 +212,7 @@ public final class TermuxConstants {
      */
 
     /** Termux app name */
-    public static final String TERMUX_APP_NAME = "dCloud"; // Default: "Termux"
+    public static final String TERMUX_APP_NAME = "Termux"; // Default: "Termux"
     /** Termux package name */
     public static final String TERMUX_PACKAGE_NAME = "com.justshare"; // Default: "com.termux"
     /** Termux Github repo name */
@@ -228,7 +228,7 @@ public final class TermuxConstants {
 
 
     /** Termux API app name */
-    public static final String TERMUX_API_APP_NAME = "dCloud:API"; // Default: "dCloud:API"
+    public static final String TERMUX_API_APP_NAME = "Termux:API"; // Default: "Termux:API"
     /** Termux API app package name */
     public static final String TERMUX_API_PACKAGE_NAME = TERMUX_PACKAGE_NAME + ".api"; // Default: "com.termux.api"
     /** Termux API Github repo name */
@@ -242,7 +242,7 @@ public final class TermuxConstants {
 
 
     /** Termux Boot app name */
-    public static final String TERMUX_BOOT_APP_NAME = "dCloud:Boot"; // Default: "dCloud:Boot"
+    public static final String TERMUX_BOOT_APP_NAME = "Termux:Boot"; // Default: "Termux:Boot"
     /** Termux Boot app package name */
     public static final String TERMUX_BOOT_PACKAGE_NAME = TERMUX_PACKAGE_NAME + ".boot"; // Default: "com.termux.boot"
     /** Termux Boot Github repo name */
@@ -256,7 +256,7 @@ public final class TermuxConstants {
 
 
     /** Termux Float app name */
-    public static final String TERMUX_FLOAT_APP_NAME = "dCloud:Float"; // Default: "dCloud:Float"
+    public static final String TERMUX_FLOAT_APP_NAME = "Termux:Float"; // Default: "dCloud:Float"
     /** Termux Float app package name */
     public static final String TERMUX_FLOAT_PACKAGE_NAME = TERMUX_PACKAGE_NAME + ".window"; // Default: "com.termux.window"
     /** Termux Float Github repo name */
@@ -270,7 +270,7 @@ public final class TermuxConstants {
 
 
     /** Termux Styling app name */
-    public static final String TERMUX_STYLING_APP_NAME = "dCloud:Styling"; // Default: "dCloud:Styling"
+    public static final String TERMUX_STYLING_APP_NAME = "Termux:Styling"; // Default: "dCloud:Styling"
     /** Termux Styling app package name */
     public static final String TERMUX_STYLING_PACKAGE_NAME = TERMUX_PACKAGE_NAME + ".styling"; // Default: "com.termux.styling"
     /** Termux Styling Github repo name */
@@ -284,7 +284,7 @@ public final class TermuxConstants {
 
 
     /** Termux Tasker app name */
-    public static final String TERMUX_TASKER_APP_NAME = "dCloud:Tasker"; // Default: "dCloud:Tasker"
+    public static final String TERMUX_TASKER_APP_NAME = "Termux:Tasker"; // Default: "dCloud:Tasker"
     /** Termux Tasker app package name */
     public static final String TERMUX_TASKER_PACKAGE_NAME = TERMUX_PACKAGE_NAME + ".tasker"; // Default: "com.termux.tasker"
     /** Termux Tasker Github repo name */
@@ -298,7 +298,7 @@ public final class TermuxConstants {
 
 
     /** Termux Widget app name */
-    public static final String TERMUX_WIDGET_APP_NAME = "dCloud:Widget"; // Default: "dCloud:Widget"
+    public static final String TERMUX_WIDGET_APP_NAME = "Termux:Widget"; // Default: "dCloud:Widget"
     /** Termux Widget app package name */
     public static final String TERMUX_WIDGET_PACKAGE_NAME = TERMUX_PACKAGE_NAME + ".widget"; // Default: "com.termux.widget"
     /** Termux Widget Github repo name */

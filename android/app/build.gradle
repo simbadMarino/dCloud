@@ -169,14 +169,14 @@ android {
         versionCode 17
         versionName "1.4.0"
 
-        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.justshare"
-        manifestPlaceholders.TERMUX_APP_NAME = "dCloud"
-        manifestPlaceholders.TERMUX_API_APP_NAME = "dCloud:API"
-        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "dCloud:Boot"
-        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "dCloud:Float"
-        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "dCloud:Styling"
-        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "dCloud:Tasker"
-        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "dCloud:Widget"
+        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
+        manifestPlaceholders.TERMUX_APP_NAME = "justshare"
+        manifestPlaceholders.TERMUX_API_APP_NAME = "Termux:API"
+        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "Termux:Boot"
+        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "Termux:Float"
+        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "Termux:Styling"
+        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "Termux:Tasker"
+        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "Termux:Widget"
 
         externalNativeBuild {
             ndkBuild {
@@ -215,8 +215,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 

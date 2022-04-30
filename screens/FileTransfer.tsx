@@ -282,7 +282,7 @@ const FileTransfer: React.FC = () => {
                             style={{
                               flexDirection: "row",
                               justifyContent: 'flex-start',
-                              width: 340
+                              width: 290
                             }}
                           >
                           <Text selectable style={styles.cardAddrTitleText} >BTTC Address</Text>
@@ -309,7 +309,6 @@ const FileTransfer: React.FC = () => {
 
           <Divider width={20} />
                      <Card containerStyle={styles.cardSwap}>
-                                     <View style={{width: 340}}>
                                      <Text style={styles.cardAddrTitleText} >dCloud Swap</Text>
 
                                              <Input
@@ -342,7 +341,7 @@ const FileTransfer: React.FC = () => {
                                                                     SWAP  </Text>
                                                           </TouchableOpacity>
 
-                                     </View>
+
                                  </Card>
                   
 

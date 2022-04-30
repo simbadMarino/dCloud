@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!DOCTYPE resources [
-    <!ENTITY TERMUX_PACKAGE_NAME "com.justshare">
-    <!ENTITY TERMUX_APP_NAME "dCloud">
-    <!ENTITY TERMUX_API_APP_NAME "dCloud:API">
-    <!ENTITY TERMUX_BOOT_APP_NAME "dCloud:Boot">
-    <!ENTITY TERMUX_FLOAT_APP_NAME "dCloud:Float">
-    <!ENTITY TERMUX_STYLING_APP_NAME "dCloud:Styling">
-    <!ENTITY TERMUX_TASKER_APP_NAME "dCloud:Tasker">
-    <!ENTITY TERMUX_WIDGET_APP_NAME "dCloud:Widget">
+    <!ENTITY TERMUX_PACKAGE_NAME "com.termux">
+    <!ENTITY TERMUX_APP_NAME "Termux">
+    <!ENTITY TERMUX_API_APP_NAME "Termux:API">
+    <!ENTITY TERMUX_BOOT_APP_NAME "Termux:Boot">
+    <!ENTITY TERMUX_FLOAT_APP_NAME "Termux:Float">
+    <!ENTITY TERMUX_STYLING_APP_NAME "Termux:Styling">
+    <!ENTITY TERMUX_TASKER_APP_NAME "Termux:Tasker">
+    <!ENTITY TERMUX_WIDGET_APP_NAME "Termux:Widget">
     ]>
 
 <resources>

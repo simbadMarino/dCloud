@@ -1,4 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.justshare">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.justshare"
+    android:installLocation="internalOnly"
+    android:sharedUserId="${TERMUX_PACKAGE_NAME}"
+    android:sharedUserLabel="@string/shared_user_label">
   <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -16,7 +20,7 @@
   <uses-permission android:name="android.permission.DUMP" />
   <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
   <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
 
@@ -26,6 +30,10 @@
       <category android:name="android.intent.category.BROWSABLE"/>
       <data android:scheme="https"/>
     </intent>
+  </queries>
+
+  <queries>
+        <package android:name="com.justshare" />
   </queries>
 
   <uses-feature
@@ -109,6 +117,27 @@
         android:name="com.termux.app.TermuxService"
         android:exported="false" />
 
+    <activity
+        android:name="com.termux.app.activities.HelpActivity"
+        android:exported="false"
+        android:label="@string/application_name"
+        android:parentActivityName="com.termux.app.TermuxActivity"
+        android:resizeableActivity="true"
+        android:theme="@android:style/Theme.Material.Light.DarkActionBar" />
+
+    <activity
+        android:name="com.termux.app.activities.SettingsActivity"
+        android:exported="true"
+        android:label="@string/title_activity_termux_settings"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+
+    <activity
+        android:name="com.termux.app.activities.ReportActivity"
+        android:theme="@style/Theme.Termux.Black"
+        android:documentLaunchMode="intoExisting"
+        />
+
     <service
         android:name="com.termux.app.RunCommandService"
         android:exported="true"
@@ -119,9 +148,18 @@
     </service>
 
     <receiver android:name="com.termux.app.TermuxOpenReceiver" />
-
+    <provider
+        android:name="com.termux.app.TermuxOpenReceiver$ContentProvider"
+        android:authorities="com.termux.files"
+        android:exported="true"
+        android:grantUriPermissions="true"
+        android:permission="com.termux.permission.RUN_COMMAND"
+        />
 
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
     <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" android:theme="@style/Base.Theme.AppCompat"/>
+    <meta-data android:name="com.sec.android.support.multiwindow" android:value="true" />
+    <meta-data android:name="com.samsung.android.multidisplay.keep_process_alive" android:value="true"/>
+
   </application>
 </manifest>
