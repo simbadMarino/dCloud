@@ -64,6 +64,7 @@ export default function Main() {
   useEffect(() => {
     const setColorScheme = async () => {
       const storedScheme = await AsyncStorage.getItem('colorScheme');
+      console.log(storedScheme);
       if (!storedScheme) {
         await AsyncStorage.setItem('colorScheme', colorScheme);
         dispatch(colorScheme === 'dark' ? setDarkTheme() : setLightTheme());
@@ -73,6 +74,8 @@ export default function Main() {
     };
     setColorScheme();
   }, []);
+
+  
 
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,

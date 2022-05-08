@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect, useRef }from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Settings from '../screens/Settings/Settings';
 import SetPassCodeScreen from '../screens/Settings/SetPassCodeScreen';
 
+
 const SettingsStack = createStackNavigator();
 
 export const SettingsStackNavigator: React.FC = () => {
+
+
+
   return (
     <SettingsStack.Navigator
       initialRouteName="SettingsMain"
