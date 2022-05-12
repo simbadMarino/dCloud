@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  ImageBackground,
 } from "react-native";
 
 import * as FileSystem from "expo-file-system";
@@ -18,11 +19,11 @@ import Constants from "expo-constants";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 import { base64reg, SIZE } from "../utils/Constants";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import { Icon, Input, Card, Divider } from "react-native-elements";
 import BigNumber from "bignumber.js";
-import { Picker } from "@react-native-picker/picker";
+//import { Picker } from "@react-native-picker/picker";
 import Clipboard from "@react-native-clipboard/clipboard";
 
 import { setSnack } from '../features/files/snackbarSlice';
@@ -31,11 +32,20 @@ import NumericInput from 'react-native-numeric-input'
 
 import Client10 from '../utils/APIClient10.js'
 
-import axios from 'axios';
+import RNPickerSelect from 'react-native-picker-select';
 
 var strCoinSwap = "";
 
+const bttSWAP = [
+  { label: 'BTT to WBTT', value: '1' },
+  { label: 'WBTT to BTT', value: '2' },
+  { label: 'WBTT to WBTT(Vault)', value: '3' },
+  { label: 'WBTT(Vault) to WBTT', value: '4' },
+];
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 
 const FileTransfer: React.FC = () => {
@@ -48,7 +58,7 @@ const FileTransfer: React.FC = () => {
   //const [strBTTCAddress, setstrBTTCAddress] = useState('0x0000000000000000');
   const [bttBalance, setbttBalance] = useState('--');
   const [wbttBalance, setwbttBalance] = useState('--');
-  const [vaultBalance, setvaultBalance] = useState(0);
+  const [vaultBalance, setvaultBalance] = useState('--');
   const [refreshing, setRefreshing] = useState(false);
   const [amountToSwap, set_amountToSwap] = useState('');
   const [selectedSwap, setSelectedSwap] = useState(1);
@@ -63,28 +73,6 @@ const FileTransfer: React.FC = () => {
     dispatch(setSnack({ message: 'Address Copied to Clipboard' }));
   };
 
-  function swapBTTtoWBTT() {
-
-
-    Alert.alert(
-          "Confirming Swap... \n(" + strCoinSwap + ")" ,
-          "Are you sure?",
-          [
-            // The "Yes" button
-            {
-              text: "Yes",
-              onPress: () => {
-              btt2wbtt();
-              },
-            },
-            // The "No" button
-            // Does nothing but dismiss the dialog when tapped
-            {
-              text: "No",
-            },
-          ]
-        );
-  }
 
 
   async function processSwap(swapOption) {
@@ -93,28 +81,96 @@ const FileTransfer: React.FC = () => {
 
     switch (swapOption) {
       case 1:
-        console.log("From BTT to WBTT");
+        console.log("From BTT to WBT");
         strCoinSwap = "BTT to WBTT";
-        swapBTTtoWBTT();
-        sendDevFee(3.33);
+        Alert.alert(
+              "Confirming Swap... \n(" + strCoinSwap + ")" ,
+              "Are you sure?",
+              [
+                // The "Yes" button
+                {
+                  text: "Yes",
+                  onPress: () => {
+                      btt2wbtt();
+                  },
+                },
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                  text: "No",
+                },
+              ]
+            );
+        //sendDevFee(3.33);
         break;
       case 2:
         console.log("From WBTT to BTT");
         strCoinSwap = "WBTT to BTT";
-        swapWBTTtoBTT();
-        sendDevFee(3.33);
+        Alert.alert(
+              "Confirming Swap... \n(" + strCoinSwap + ")" ,
+              "Are you sure?",
+              [
+                // The "Yes" button
+                {
+                  text: "Yes",
+                  onPress: () => {
+                      wbtt2btt();
+                  },
+                },
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                  text: "No",
+                },
+              ]
+            );
+        //sendDevFee(3.33);
         break;
       case 3:
         console.log("From WBTT to WBTT(Vault)");
         strCoinSwap = "WBTT to WBTT(Vault)";
-        swapWBTTtoWBTTVault();
-        sendDevFee(3.33);
+        Alert.alert(
+              "Confirming Swap... \n(" + strCoinSwap + ")" ,
+              "Are you sure?",
+              [
+                // The "Yes" button
+                {
+                  text: "Yes",
+                  onPress: () => {
+                      wbtt2vaultbtt();
+                  },
+                },
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                  text: "No",
+                },
+              ]
+            );
+        //sendDevFee(3.33);
         break;
       case 4:
         console.log("From WBTT(Vault) to WBTT");
         strCoinSwap = "WBTT(Vault) to WBTT";
-        swapWBTTVaultToWBTT();
-        sendDevFee(3.33);
+        Alert.alert(
+              "Confirming Swap... \n(" + strCoinSwap + ")" ,
+              "Are you sure?",
+              [
+                // The "Yes" button
+                {
+                  text: "Yes",
+                  onPress: () => {
+                      vaultbtt2wbtt();
+                  },
+                },
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                  text: "No",
+                },
+              ]
+            );
+        //sendDevFee(3.33);
         break;
 
       default:
@@ -127,52 +183,117 @@ const FileTransfer: React.FC = () => {
 
   function btt2wbtt(){
 
-  try{
-  var oneBTT = new BigNumber(amountToSwap);
-  oneBTT = oneBTT.shiftedBy(18);
-  oneBTT = oneBTT.toFixed();
 
-  var swappedBTT =  axios.post('http://localhost:5001/api/v1/bttc/btt2wbtt?arg=' + oneBTT )
-         .then(function (swappedBTT) {
-          var str_Message = swappedBTT.data.hash;
-          console.log(str_Message);
-          Alert.alert("Swap Done!, Hash", str_Message);
-          })
+    var bigBTT = new BigNumber(amountToSwap);
+    bigBTT = bigBTT.shiftedBy(18);
+    bigBTT = bigBTT.toFixed();
 
-          .catch(function(error) {
-           console.log('There has been a problem with your fetch operation: ' + error.message);
-                      //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                      console.log("Call response: " + JSON.stringify(swappedBTT));
-                      Alert.alert("Swap Error", "Not enough WBTT balance u.u ");
-           });
+    let data = Client10.BTT2WBTT(bigBTT);
 
-  }
+    Promise.resolve(data).then(function(data) {
+      console.log(data); // "Success"
 
-  catch (err) {
+      if(data.Type == "error"){
+        Alert.alert("Swap Error ", data.Message);
+      }
+      else{
+        Alert.alert("Swap Done!, Hash ", data.hash);
+      }
 
-              throw err;
+  }, function(data) {
+    // not called
+  });
+}
 
-          }
+function wbtt2btt(){
 
 
-  }
+  var bigBTT = new BigNumber(amountToSwap);
+  bigBTT = bigBTT.shiftedBy(18);
+  bigBTT = bigBTT.toFixed();
+
+  let data = Client10.WBTT2BTT(bigBTT);
+
+  Promise.resolve(data).then(function(data) {
+    console.log(data); // "Success"
+
+    if(data.Type == "error"){
+      Alert.alert("Swap Error ", data.Message);
+    }
+    else{
+      Alert.alert("Swap Done!, Hash ", data.hash);
+    }
+
+}, function(data) {
+  // not called
+});
+}
+
+function wbtt2vaultbtt(){
+
+
+  var bigBTT = new BigNumber(amountToSwap);
+  bigBTT = bigBTT.shiftedBy(18);
+  bigBTT = bigBTT.toFixed();
+
+  let data = Client10.deposit(bigBTT);
+
+  Promise.resolve(data).then(function(data) {
+    console.log(data); // "Success"
+
+    if(data.Type == "error"){
+      Alert.alert("Swap Error ", data.Message);
+    }
+    else{
+      Alert.alert("Swap Done!, Hash ", data.hash);
+    }
+
+}, function(data) {
+  // not called
+});
+}
+
+function vaultbtt2wbtt(){
+
+  var bigBTT = new BigNumber(amountToSwap);
+  bigBTT = bigBTT.shiftedBy(18);
+  bigBTT = bigBTT.toFixed();
+
+  let data = Client10.withdraw(bigBTT);
+
+  Promise.resolve(data).then(function(data) {
+    console.log(data); // "Success"
+
+    if(data.Type == "error"){
+      Alert.alert("Swap Error ", data.Message);
+    }
+    else{
+      Alert.alert("Swap Done!, Hash ", data.hash);
+    }
+
+  }, function(data) {
+  // not called
+  });
+
+}
 
 
   const getBTTCAddress = async () => {
-      try{
-      let data1 = Client10.getChainInfo();
+
+      let data1 = Client10.getHostInfo();
       let data2 = Client10.getChequeBTTBalance(bttAddress);
       let data3 = Client10.getChequeWBTTBalance(bttAddress);
+      let data4 = Client10.getChequeBookBalance();
 
-      return Promise.all([data1, data2, data3]).then((result) => {
-          setbttAddress(result[0].node_addr);
-          setvaultAddress(result[0].vault_addr);
+      return Promise.all([data1, data2, data3, data4]).then((result) => {
+          //setbttAddress(result[0].node_addr);
+          //setvaultAddress(result[0].vault_addr);
           //console.log(result[4].Message);
-          //console.log(result[0]);
+          console.log(result[0]);
           var bttBalanceBig = new BigNumber(parseFloat(result[1].balance));
           bttBalanceBig = bttBalanceBig.shiftedBy(-18);
           bttBalanceBig = bttBalanceBig.toFixed();
-          console.log(result[1]);
+          console.log(bttBalanceBig);
           setbttBalance(bttBalanceBig);
           //console.log(result[0].BttcAddress);
           //console.log(result[0].VaultAddress);
@@ -180,144 +301,30 @@ const FileTransfer: React.FC = () => {
           var wbttBalanceBig = new BigNumber(parseFloat(result[2].balance));
           wbttBalanceBig = wbttBalanceBig.shiftedBy(-18);
           wbttBalanceBig = wbttBalanceBig.toFixed();
-          console.log(result[2]);
+          console.log(wbttBalanceBig);
           setwbttBalance(wbttBalanceBig);
+
+          var vaultBalanceBig = new BigNumber(parseFloat(result[3].balance));
+          vaultBalanceBig = vaultBalanceBig.shiftedBy(-18);
+          vaultBalanceBig = vaultBalanceBig.toFixed();
+          console.log(vaultBalanceBig);
+          setvaultBalance(vaultBalanceBig);
 
 
           return {
 
           }
       })
-  }
-  catch (err) {
 
-              throw err;
 
-          }
   };
-
-  function wbtt2btt(){
-
-  try{
-  var oneBTT = new BigNumber(amountToDeposit);
-  oneBTT = oneBTT.shiftedBy(18);
-  oneBTT = oneBTT.toFixed();
-
-  var swappedBTT =  axios.post('http://localhost:5001/api/v1/bttc/wbtt2btt?arg=' + oneBTT )
-         .then(function (swappedBTT) {
-          var str_Message = swappedBTT.data.hash;
-          console.log(str_Message);
-          Alert.alert("Swap Done!, Hash", str_Message);
-          })
-
-          .catch(function(error) {
-           console.log('There has been a problem with your fetch operation: ' + error.message);
-                      //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                      console.log("Call response: " + JSON.stringify(swappedBTT));
-                      Alert.alert("Swap Error", "Not enough WBTT balance u.u ");
-           });
-
-  }
-
-  catch (err) {
-
-              throw err;
-
-          }
-
-
-  }
-
-
-  function wbttvault2wbtt(){
-
-  try{
-  var oneBTT = new BigNumber(amountToDeposit);
-  oneBTT = oneBTT.shiftedBy(18);
-  oneBTT = oneBTT.toFixed();
-
-      var swappedBTT =  axios.post('http://localhost:5001/api/v1/vault/withdraw?arg=' + oneBTT )
-             .then(function (swappedBTT) {
-              var str_Message = swappedBTT.data.hash;
-              console.log(swappedBTT);
-              console.log(str_Message);
-              Alert.alert("Withdrawal Success!, Hash", str_Message);
-              })
-
-              .catch(function(error) {
-               console.log('There has been a problem with your fetch operation: ' + error.message);
-                          //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                          console.log("Call response: " + JSON.stringify(swappedBTT.data));
-                          Alert.alert("Withdraw Error", "Please make sure to leave at least some WBTT in vault");
-
-               });
-
-      }
-
-      catch (err) {
-
-                  throw err;
-
-              }
-
-
-  }
-
-
-  function swapWBTTtoWBTTVault() {
-
-
-  Alert.alert(
-        "Confirming Swap... \n(" + strCoinSwap + ")" ,
-        "Are you sure?",
-        [
-          // The "Yes" button
-          {
-            text: "Yes",
-            onPress: () => {
-            amountToDeposit = globalSwapQty;
-            wbtt2wbttvault();
-            },
-          },
-          // The "No" button
-          // Does nothing but dismiss the dialog when tapped
-          {
-            text: "No",
-          },
-        ]
-      );
-  }
-
-  function swapWBTTVaultToWBTT() {
-
-
-  Alert.alert(
-        "Confirming Swap... \n(" + strCoinSwap + ")" ,
-        "Are you sure?",
-        [
-          // The "Yes" button
-          {
-            text: "Yes",
-            onPress: () => {
-            amountToDeposit = globalSwapQty;
-            wbttvault2wbtt();
-            },
-          },
-          // The "No" button
-          // Does nothing but dismiss the dialog when tapped
-          {
-            text: "No",
-          },
-        ]
-      );
-  }
 
 
   useEffect(() => {
     const interval = setInterval( async () => {
       var response =  await getBTTCAddress();
       //console.log(response);
-    }, 5000);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -330,6 +337,11 @@ const FileTransfer: React.FC = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const placeholder = {
+      label: 'Select a Swap...',
+      value: null,
+      color: '#9EA0A4',
+    };
   return (
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
       <SafeAreaView>
@@ -362,7 +374,8 @@ const FileTransfer: React.FC = () => {
             <Text style={styles.controlsText}>BTTC MainNet</Text>
           </View>
 
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }]}>
+          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }]} >
+          <ImageBackground source={require('../assets/cardBalance.png')} resizeMode="cover" style={styles.image}>
               <View
                 style={{
                     flexDirection: "row",
@@ -382,8 +395,9 @@ const FileTransfer: React.FC = () => {
               </View>
 
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
-                {bttAddress}
+                {bttAddress + "    "} {"                           "}
               </Text>
+
 
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
                 {"BTT: "} {bttBalance}
@@ -396,17 +410,18 @@ const FileTransfer: React.FC = () => {
               </Text>
 
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
-                {vaultAddress}
+                {vaultAddress} {"                               "}
               </Text>
 
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
                 {"WBTT: "} {vaultBalance}
               </Text>
-
+              </ImageBackground>
           </Card>
 
           <Divider width={20} />
           <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }]}>
+          <ImageBackground source={require('../assets/cardSwap.png')} resizeMode="cover" style={styles.image}>
             <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>TOKEN Swap</Text>
 
             <View
@@ -415,35 +430,47 @@ const FileTransfer: React.FC = () => {
                 justifyContent: "space-around",
               }}
             >
-              <Input style={[styles.sectionCardItemLeft, { color: theme.colors.primary }]}
-                keyboardType="number-pad"
-                placeholder="Amount"
-                fontSize={12}
-                onChangeText={async (value) => set_amountToSwap(value)}
-                value={amountToSwap}
-              />
-              <Picker
-                style={styles.sectionCardItemRight}
-                selectedValue={selectedSwap}
-                fontFamily="Poppins_500Medium"
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedSwap(itemValue)
-                }>
-                <Picker.Item label="BTT to WBTT" value={1} />
-                <Picker.Item label="WBTT to BTT" value={2} />
-                <Picker.Item label="WBTT to WBTT(Vault)" value={3} />
-                <Picker.Item label="WBTT(Vault) to WBTT" value={4} />
-              </Picker>
+
+              <RNPickerSelect
+            placeholder={placeholder}
+            items={bttSWAP}
+            onValueChange={value => {
+              setSelectedSwap(value);
+              //console.log(value);
+            }}
+            style={{
+              ...pickerSelectStyles,
+              iconContainer: {
+                top: 10,
+                right: 12,
+              },
+            }}
+            value={selectedSwap}
+            useNativeAndroidPickerStyle={false}
+            textInputProps={{ underlineColor: 'yellow' }}
+            Icon={() => {
+              return <Feather name="arrow-down" size={24} color="gray" />;
+            }}
+          />
+
+          <Input style={[styles.sectionCardItemLeft, { color: theme.colors.primary }]}
+            keyboardType="number-pad"
+            placeholder="Amount"
+            fontSize={12}
+            onChangeText={async (value) => set_amountToSwap(value)}
+            value={amountToSwap}
+          />
+
 
               <TouchableOpacity
                 style={styles.copyButton}
-                onPress={processSwap.bind(this, selectedSwap)}
+                onPress={processSwap.bind(this, parseInt(selectedSwap))}
               >
                 <Text style={styles.tabMenuText}>SWAP </Text>
               </TouchableOpacity>
 
             </View>
-
+            </ImageBackground>
           </Card>
         </ScrollView>
       </SafeAreaView>
@@ -535,6 +562,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 5,
+    marginLeft: 10,
     marginBottom: 5,
   },
   cardAddressText: {
@@ -583,6 +611,35 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 16,
+  },
+  image: {
+  flex: 1,
+  justifyContent: "center"
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'gray',
+    fontFamily: 'Poppins_500Medium',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 12,
+    color: 'gray',
+    fontFamily: 'Poppins_500Medium',
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
 

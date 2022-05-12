@@ -119,6 +119,20 @@ const Browser = ({ route }: IBrowserProps) => {
     return () => backHandler.remove();
   }, []);
 
+  function mkdir(directory){
+
+    let data = Client10.mkdir(directory);
+
+    Promise.resolve(data).then(function(data) {
+      console.log(data); // "Success"
+
+
+
+  }, function(data) {
+    // not called
+  });
+}
+
   const renderItem = ({ item }: { item: fileItem }) => (
     <FileItem
       item={item}
@@ -250,6 +264,7 @@ const Browser = ({ route }: IBrowserProps) => {
       .then(() => {
         getFiles();
         setFolderDialogVisible(false);
+        //mkdir(currentDir + "TT")
       })
       .catch(() => {
         handleSetSnack({
@@ -553,13 +568,13 @@ const Browser = ({ route }: IBrowserProps) => {
 
       <View style={styles.topButtons}>
         <View style={styles.topLeft}>
-          
+
           <TouchableOpacity onPress={() => setNewFileActionSheet(true)}>
           <SvgComponentFile />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setFolderDialogVisible(true)}>
           <SvgComponentFolder />
-          
+
           </TouchableOpacity>
           <Text style={styles.fileTabTitleText}
              >dBrowse</Text>
