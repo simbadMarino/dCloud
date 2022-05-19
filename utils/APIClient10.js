@@ -1,13 +1,13 @@
 import axios from 'axios';
 class APIClient10 {
     constructor() {
-        this.apiUrl =  "http://localhost:5001/";
+        this.apiUrl =  "http://localhost:5001";
         this.request = async (url) => {
             return new Promise(async (resolve, reject) => {
                 try {
                     let {data} = await axios.post(this.apiUrl + url);
 
-                    //console.log(data);
+                    console.log(data);
                     resolve(data);
 
                 }
@@ -170,7 +170,7 @@ class APIClient10 {
         return this.request('/api/v1/ls?arg=' + hash);
     }
     mkdir(dir){
-        return this.request('/api/v1/mkdir?arg=' + dir)
+        return this.request('/api/v1/files/mkdir?parents=true&arg=' + dir)
     }
 
     getFileStat(hash) {

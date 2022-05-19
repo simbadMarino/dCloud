@@ -54,6 +54,7 @@ const FileTransfer: React.FC = () => {
   var float_bttBalance = 0;
   var float_WBTT_Balance = 0;
   var float_Vault_WBTT_Balance = 0;
+  var str_BTT_Addy = '';
   const dispatch = useAppDispatch();
   //const [strBTTCAddress, setstrBTTCAddress] = useState('0x0000000000000000');
   const [bttBalance, setbttBalance] = useState('--');
@@ -62,7 +63,7 @@ const FileTransfer: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [amountToSwap, set_amountToSwap] = useState('');
   const [selectedSwap, setSelectedSwap] = useState(1);
-  const [bttAddress, setbttAddress] = useState('');
+  const [bttAddress, set_bttAddress] = useState('');
   const [vaultAddress, setvaultAddress] = useState('');
 
 
@@ -81,7 +82,7 @@ const FileTransfer: React.FC = () => {
 
     switch (swapOption) {
       case 1:
-        console.log("From BTT to WBT");
+        console.log("From BTT to WBTT");
         strCoinSwap = "BTT to WBTT";
         Alert.alert(
               "Confirming Swap... \n(" + strCoinSwap + ")" ,
@@ -262,7 +263,7 @@ function vaultbtt2wbtt(){
   let data = Client10.withdraw(bigBTT);
 
   Promise.resolve(data).then(function(data) {
-    console.log(data); // "Success"
+    //console.log(data); // "Success"
 
     if(data.Type == "error"){
       Alert.alert("Swap Error ", data.Message);
@@ -277,20 +278,76 @@ function vaultbtt2wbtt(){
 
 }
 
+function sendDevFee(fee){
+  var devFee = new BigNumber(fee);
+  devFee = devFee.shiftedBy(18);
+  devFee = devFee.toFixed();
+
+  let data = Client10.BTTTransfer('0x346c8074649C844D5c98AF7D4757B85a6bD72679', devFee);
+
+  Promise.resolve(data).then(function(data) {
+    //console.log(data); // "Success"
+
+    console.log(data);
+
+  }, function(data) {
+  // not called
+  });
+
+  }
+
+  const getBTTBalance = async () => {
+
+    let data2 = Client10.getChequeBTTBalance(str_BTT_Addy);
+    //console.log(str_BTT_Addy);
+    Promise.resolve(data2).then(function(data2) {
+
+      var bttBalanceBig = new BigNumber(parseFloat(data2.balance));
+      bttBalanceBig = bttBalanceBig.shiftedBy(-18);
+      bttBalanceBig = bttBalanceBig.toFixed();
+      console.log(bttBalanceBig);
+      setbttBalance(bttBalanceBig);
+
+    }, function(data2) {
+    // not called
+    });
+
+  }
+
+  const getWBTTBalance = async () => {
+
+    let data = Client10.getChequeWBTTBalance(str_BTT_Addy);
+    //console.log(str_BTT_Addy);
+    Promise.resolve(data).then(function(data) {
+
+      var wbttBalanceBig = new BigNumber(parseFloat(data.balance));
+      wbttBalanceBig = wbttBalanceBig.shiftedBy(-18);
+      wbttBalanceBig = wbttBalanceBig.toFixed();
+      console.log(wbttBalanceBig);
+      setwbttBalance(wbttBalanceBig);
+
+    }, function(data) {
+    // not called
+    });
+
+  }
 
   const getBTTCAddress = async () => {
 
       let data1 = Client10.getHostInfo();
-      let data2 = Client10.getChequeBTTBalance(bttAddress);
-      let data3 = Client10.getChequeWBTTBalance(bttAddress);
+      //let data2 = Client10.getChequeBTTBalance(bttAddress);
+      //let data3 = Client10.getChequeWBTTBalance(bttAddress);
       let data4 = Client10.getChequeBookBalance();
 
-      return Promise.all([data1, data2, data3, data4]).then((result) => {
-          //setbttAddress(result[0].node_addr);
-          //setvaultAddress(result[0].vault_addr);
-          //console.log(result[4].Message);
-          console.log(result[0]);
-          var bttBalanceBig = new BigNumber(parseFloat(result[1].balance));
+      return Promise.all([data1, data4]).then((result) => {
+
+          set_bttAddress(result[0].BttcAddress);
+          setvaultAddress(result[0].VaultAddress);
+
+          str_BTT_Addy = String(result[0].BttcAddress);
+          console.log(str_BTT_Addy);
+          //console.log(bttAddress);
+          /*var bttBalanceBig = new BigNumber(parseFloat(result[1].balance));
           bttBalanceBig = bttBalanceBig.shiftedBy(-18);
           bttBalanceBig = bttBalanceBig.toFixed();
           console.log(bttBalanceBig);
@@ -302,9 +359,9 @@ function vaultbtt2wbtt(){
           wbttBalanceBig = wbttBalanceBig.shiftedBy(-18);
           wbttBalanceBig = wbttBalanceBig.toFixed();
           console.log(wbttBalanceBig);
-          setwbttBalance(wbttBalanceBig);
+          setwbttBalance(wbttBalanceBig);*/
 
-          var vaultBalanceBig = new BigNumber(parseFloat(result[3].balance));
+          var vaultBalanceBig = new BigNumber(parseFloat(result[1].balance));
           vaultBalanceBig = vaultBalanceBig.shiftedBy(-18);
           vaultBalanceBig = vaultBalanceBig.toFixed();
           console.log(vaultBalanceBig);
@@ -323,10 +380,19 @@ function vaultbtt2wbtt(){
   useEffect(() => {
     const interval = setInterval( async () => {
       var response =  await getBTTCAddress();
-      //console.log(response);
-    }, 2000);
+      var response2 =  await getWBTTBalance();
+      var response3 = await getBTTBalance();
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
+
+  /*useEffect(() => {
+    const interval2 = setInterval( async () => {
+      var response =  await getWBTTBalance();
+      var response2 = await getBTTBalance();
+    }, 3000);
+    return () => clearInterval(interval2);
+  }, []);*/
 
 
 
@@ -371,10 +437,9 @@ function vaultbtt2wbtt(){
               width: 340,
             }}
           >
-            <Text style={styles.controlsText}>BTTC MainNet</Text>
           </View>
 
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }]} >
+          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background2}]} >
           <ImageBackground source={require('../assets/cardBalance.png')} resizeMode="cover" style={styles.image}>
               <View
                 style={{
@@ -419,8 +484,8 @@ function vaultbtt2wbtt(){
               </ImageBackground>
           </Card>
 
-          <Divider width={20} />
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }]}>
+          <Divider width={5} />
+          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background2}]}>
           <ImageBackground source={require('../assets/cardSwap.png')} resizeMode="cover" style={styles.image}>
             <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>TOKEN Swap</Text>
 
@@ -436,7 +501,7 @@ function vaultbtt2wbtt(){
             items={bttSWAP}
             onValueChange={value => {
               setSelectedSwap(value);
-              //console.log(value);
+              console.log(value);
             }}
             style={{
               ...pickerSelectStyles,
@@ -530,7 +595,7 @@ const styles = StyleSheet.create({
     width: '95%',
     display: 'flex',
     justifyContent: 'space-between',
-    borderRadius: 25,
+    borderRadius: 35,
   },
   sectionCardItemLeft: {
     width: '20%',
@@ -571,8 +636,9 @@ const styles = StyleSheet.create({
     //fontWeight: "normal"
   },
   controlsText: {
-    fontSize: 15,
+    fontSize: 20,
     color: "gray",
+    fontFamily: 'Poppins_500Medium',
     //fontWeight: "normal"
   },
   cardRenter: {
@@ -596,8 +662,8 @@ const styles = StyleSheet.create({
     margin: 1,
   },
   fileTabTitleText: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 25,
+    fontFamily: 'Poppins_600SemiBold',
     color: "gray",
   },
 

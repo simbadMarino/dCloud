@@ -18,7 +18,7 @@ import { SIZE } from '../../utils/Constants';
 
 import Client10 from '../../utils/APIClient10.js'
 
-import axios from 'axios';
+//import axios from 'axios';
 
 import NumericInput from 'react-native-numeric-input'
 
@@ -64,7 +64,7 @@ const getNodeBasicStats = async () => {
     let data5 = Client10.getNetworkStatus();
 
     return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
-        //console.log(result[4].Message);
+        //console.log(result[4]);
         //console.log(result[0]);
         set_node_id(result[0]['ID'] ? result[0]['ID'] : '--');
         set_btfs_ver(result[3]['Version'] ? result[3]['Version'] : '--');
@@ -74,7 +74,12 @@ const getNodeBasicStats = async () => {
         if (result[4]['code_bttc'] === 2 && result[4]['code_status'] === 2) {
             status = 1;
             message = 'online';
-            setBTFS_sts('Online');
+            setBTFS_sts('Online_Host');
+        }
+        if (result[4]['code_bttc'] === 2 && result[4]['code_status'] === 1) {
+            status = 1;
+            message = 'online';
+            setBTFS_sts('Online_Renter');
         }
         if (result[4]['code_bttc'] === 3) {
             status = 2;
@@ -96,6 +101,7 @@ const getNodeBasicStats = async () => {
        {
             message = 'offline';
             setBTFS_sts('Offline');
+            dispatch(setSnack({ message: 'Network error / BTFS node not started' }));
        }
 
         return {
@@ -109,12 +115,11 @@ const getNodeBasicStats = async () => {
     })
 };
 
-
 useEffect(() => {
   const interval = setInterval( async () => {
     var response =  await getNodeBasicStats();
     //console.log(response);
-  }, 4000);
+  }, 1500);
   return () => clearInterval(interval);
 }, []);
 
@@ -262,7 +267,7 @@ const copyToClipboard = () => {
                <FontAwesome5
                  name="wifi"
                  size={24}
-                 color={btfs_sts == 'Online'? "green" : "gray"}
+                 color={btfs_sts == 'Online_Host'? "green" : 'Online_Renter'? "blue" : "gray"}
                />
             </View>
 

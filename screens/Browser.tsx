@@ -120,7 +120,7 @@ const Browser = ({ route }: IBrowserProps) => {
   }, []);
 
   function mkdir(directory){
-
+    console.log(directory);
     let data = Client10.mkdir(directory);
 
     Promise.resolve(data).then(function(data) {
@@ -264,7 +264,8 @@ const Browser = ({ route }: IBrowserProps) => {
       .then(() => {
         getFiles();
         setFolderDialogVisible(false);
-        //mkdir(currentDir + "TT")
+        //console.log(currentDir);
+        mkdir("/" + name);
       })
       .catch(() => {
         handleSetSnack({
