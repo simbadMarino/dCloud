@@ -34,6 +34,7 @@ import Client10 from '../utils/APIClient10.js'
 
 import RNPickerSelect from 'react-native-picker-select';
 
+
 var strCoinSwap = "";
 
 const bttSWAP = [
@@ -382,7 +383,7 @@ function sendDevFee(fee){
       var response =  await getBTTCAddress();
       var response2 =  await getWBTTBalance();
       var response3 = await getBTTBalance();
-    }, 1500);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -409,8 +410,9 @@ function sendDevFee(fee){
       color: '#9EA0A4',
     };
   return (
+
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
-      <SafeAreaView>
+      <SafeAreaView style={{flex:1}}>
         <ScrollView
           contentContainerStyle={styles.scrollView}
           refreshControl={
@@ -587,7 +589,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   scrollView: {
-    flex: 1,
+    
     alignItems: "center",
     justifyContent: "flex-start",
   },

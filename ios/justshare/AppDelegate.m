@@ -50,6 +50,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (NSArray<id<RCTBridgeModule>> *)extraModulesForBridge:(RCTBridge *)bridge
 {
   // If you'd like to export some custom RCTBridgeModules, add them here!
+  
   return @[];
 }
 

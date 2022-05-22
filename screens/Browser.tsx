@@ -119,7 +119,7 @@ const Browser = ({ route }: IBrowserProps) => {
     return () => backHandler.remove();
   }, []);
 
-  function mkdir(directory){
+  function makedir(directory){
     console.log(directory);
     let data = Client10.mkdir(directory);
 
@@ -260,12 +260,13 @@ const Browser = ({ route }: IBrowserProps) => {
   };
 
   async function createDirectory(name: string) {
+    //console.log("test: " + currentDir);
     FileSystem.makeDirectoryAsync(currentDir + '/' + name)
       .then(() => {
         getFiles();
         setFolderDialogVisible(false);
-        //console.log(currentDir);
-        mkdir("/" + name);
+        console.log("test: " + currentDir + name);
+        //makedir("/" + name);
       })
       .catch(() => {
         handleSetSnack({
@@ -322,41 +323,24 @@ const Browser = ({ route }: IBrowserProps) => {
 
     if (result.type === 'success') {
       const { exists: fileExists } = await FileSystem.getInfoAsync(result.uri);
-      if (fileExists) {
-        Alert.alert(
-          'Conflicting File',
-          `The destination folder has a file with the same name ${result.name}`,
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-            },
-            {
-              text: 'Replace the file',
-              onPress: () => {
-                FileSystem.copyAsync({
-                  from: result.uri,
-                  to: currentDir + '/' + result.name,
-                })
-                  .then((_) => {
-                    getFiles();
-                    handleSetSnack({
-                      message: `${result.name} successfully copied.`,
-                    });
-                  })
-                  .catch((_) =>
-                    handleSetSnack({
-                      message: 'An unexpected error importing the file.',
-                    })
-                  );
-              },
-              style: 'default',
-            },
-          ]
-        );
+          FileSystem.copyAsync({
+            from: result.uri,
+            to: currentDir + '/' + result.name,
+          })
+            .then((_) => {
+              getFiles();
+              handleSetSnack({
+                message: `${result.name} successfully copied.`,
+              });
+            })
+            .catch((_) =>
+              handleSetSnack({
+                message: 'An unexpected error importing the file.',
+              })
+            );
       }
     }
-  };
+
 
   const onMultiSelectSubmit = async (data: ExtendedAsset[]) => {
     const transferPromises = data.map((file) =>

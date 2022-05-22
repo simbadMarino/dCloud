@@ -7,7 +7,7 @@ export const useAppState = () => {
 
   const handleStateChange = (nextAppState) => {
     appState.current = nextAppState;
-    if (nextAppState !== 'active') {
+    if (nextAppState !== 'background') {
       setAppStateVisible(false);
     } else {
       setAppStateVisible(true);

@@ -7,7 +7,7 @@ class APIClient10 {
                 try {
                     let {data} = await axios.post(this.apiUrl + url);
 
-                    console.log(data);
+                    //console.log(data);
                     resolve(data);
 
                 }

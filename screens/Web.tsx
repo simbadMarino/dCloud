@@ -17,7 +17,7 @@ import { useAppSelector } from '../hooks/reduxHooks';
 
 const Web: React.FC = () => {
   const { colors } = useAppSelector((state) => state.theme.theme);
-  const [target, setTarget] = useState('localhost:5001/dashboard');
+  const [target, setTarget] = useState('http://localhost:5001/dashboard');
   const [url, setUrl] = useState(target);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingBarVisible, setLoadingBarVisible] = useState(false);

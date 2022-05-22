@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
 import useLock from '../../hooks/useLock';
@@ -24,6 +24,10 @@ import NumericInput from 'react-native-numeric-input'
 
 import Clipboard from '@react-native-clipboard/clipboard';
 
+//import { mainC } from '../../ios/btfs';
+//import btfs from '../../ios/btfs.h';
+
+
 const Settings: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const { theme } = useAppSelector((state) => state.theme);
@@ -42,6 +46,7 @@ const [btfs_uptime, set_btfs_uptime] = useState('');
 const [default_storage, set_default_storage] = useState(0);
 const [host_score,set_host_score] = useState('');
 const [isEnabled, setIsEnabled] = useState(false);
+const [btfsCmd, setBTFSCmd] = useState('');
 
 const enableHostMode = async (en) => {
     let data = Client10.enableHostMode(en);
@@ -119,7 +124,7 @@ useEffect(() => {
   const interval = setInterval( async () => {
     var response =  await getNodeBasicStats();
     //console.log(response);
-  }, 1500);
+  }, 2100);
   return () => clearInterval(interval);
 }, []);
 
@@ -393,6 +398,38 @@ const copyToClipboard = () => {
     </View>
 
 
+    <View
+      style={[
+        styles.sectionItem,
+        { backgroundColor: theme.colors.background2 },
+      ]}
+    >
+      <View style={styles.sectionItemLeft}>
+        <Feather
+          name={'terminal'}
+          size={24}
+          color={theme.colors.primary}
+        />
+      </View>
+      <View style={styles.sectionItemCenter}>
+      <TextInput
+      style={[styles.sectionItemText, { color: theme.colors.primary }]}
+      onChangeText={setBTFSCmd}
+      value={btfsCmd}
+      placeholder="BTFS command ..."
+      keyboardType="default"
+    />
+      </View>
+      <View style={styles.sectionItemRight}>
+      <Button
+        title="Send"
+        onPress={() => Alert.alert('Simple Button pressed')}
+      />
+      </View>
+    </View>
+
+
+
       </View>
 
 
@@ -530,7 +567,7 @@ const copyToClipboard = () => {
   );
 }
 
-export default Settings;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -553,6 +590,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     height: 45,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 5,
+    borderRadius: 15,
   },
   sectionItemText: {
     fontFamily: 'Poppins_500Medium',
@@ -579,3 +620,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default Settings;
