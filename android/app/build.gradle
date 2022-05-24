@@ -166,8 +166,8 @@ android {
     defaultConfig {
         applicationId "com.justshare"
         minSdkVersion project.properties.minSdkVersion.toInteger()
-        versionCode 17
-        versionName "1.4.0"
+        versionCode 18
+        versionName "1.4.1"
 
         manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
         manifestPlaceholders.TERMUX_APP_NAME = "justshare"
@@ -215,8 +215,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 

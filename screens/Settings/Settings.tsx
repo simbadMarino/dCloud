@@ -423,7 +423,7 @@ const copyToClipboard = () => {
       <View style={styles.sectionItemRight}>
       <Button
         title="Send"
-        onPress={() => Alert.alert('Simple Button pressed')}
+        onPress={() => Alert.alert('(TEST) BTFS command sent')}
       />
       </View>
     </View>

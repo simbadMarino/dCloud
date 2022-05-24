@@ -53,6 +53,8 @@ import { setImages } from '../features/files/imagesSlice';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import { HEIGHT, imageFormats, reExt, SIZE } from '../utils/Constants';
 
+import Client10 from '../utils/APIClient10.js'
+
 type BrowserParamList = {
   Browser: { prevDir: string; folderName: string };
 };
@@ -131,6 +133,20 @@ const Browser = ({ route }: IBrowserProps) => {
   }, function(data) {
     // not called
   });
+}
+
+function addBTFS(directory){
+  console.log(directory);
+  let data = Client10.addBTFSfile(directory);
+
+  Promise.resolve(data).then(function(data) {
+    console.log(data); // "Success"
+
+
+
+}, function(data) {
+  // not called
+});
 }
 
   const renderItem = ({ item }: { item: fileItem }) => (
@@ -322,6 +338,13 @@ const Browser = ({ route }: IBrowserProps) => {
     });
 
     if (result.type === 'success') {
+
+      let resmod = result.append(res.name, {
+            uri: result.uri,
+            name: result.name ,
+            type: result.type
+          });
+
       const { exists: fileExists } = await FileSystem.getInfoAsync(result.uri);
           FileSystem.copyAsync({
             from: result.uri,
@@ -329,6 +352,12 @@ const Browser = ({ route }: IBrowserProps) => {
           })
             .then((_) => {
               getFiles();
+              //console.log("FILE_PATH: " + currentDir + '/' + result.uri);
+              addBTFS(resmod,{
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              });
               handleSetSnack({
                 message: `${result.name} successfully copied.`,
               });
