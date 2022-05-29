@@ -8,7 +8,8 @@ import {
   Platform,
   Alert,
   BackHandler,
-  Image
+  Image,
+//  NativeModules
 } from 'react-native';
 
 import Dialog from 'react-native-dialog';
@@ -53,6 +54,8 @@ import { setImages } from '../features/files/imagesSlice';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import { HEIGHT, imageFormats, reExt, SIZE } from '../utils/Constants';
 
+//const {BTFSmodule} = NativeModules;
+
 import Client10 from '../utils/APIClient10.js'
 
 type BrowserParamList = {
@@ -85,6 +88,8 @@ const Browser = ({ route }: IBrowserProps) => {
   const [moveOrCopy, setMoveOrCopy] = useState('');
   const { multiSelect, allSelected } = useSelectionChange(files);
 
+
+
   useEffect(() => {
     getFiles();
   }, [currentDir]);
@@ -92,6 +97,7 @@ const Browser = ({ route }: IBrowserProps) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getFiles();
+      //BTFSmodule.main("daemon --chain-id 199","commands");
     });
 
     return unsubscribe;
@@ -123,7 +129,8 @@ const Browser = ({ route }: IBrowserProps) => {
 
   function makedir(directory){
     console.log(directory);
-    let data = Client10.mkdir(directory);
+    //let data = Client10.mkdir(directory);
+    //BTFSModule("init","G");
 
     Promise.resolve(data).then(function(data) {
       console.log(data); // "Success"
@@ -281,7 +288,7 @@ function addBTFS(directory){
       .then(() => {
         getFiles();
         setFolderDialogVisible(false);
-        console.log("test: " + currentDir + name);
+        //console.log("test: " + currentDir + name);
         //makedir("/" + name);
       })
       .catch(() => {

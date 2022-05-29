@@ -2,6 +2,7 @@ import axios from 'axios';
 class APIClient10 {
     constructor() {
         this.apiUrl =  "http://localhost:5001";
+        //this.apiUrl = "http://127.0.0.1:5001";
         this.request = async (url) => {
             return new Promise(async (resolve, reject) => {
                 try {
@@ -238,6 +239,9 @@ class APIClient10 {
     }
     addBTFSfile(filePath) {
         return this.request('/api/v1/add?' + filePath)
+    }
+    requestGuide(){
+      return this.request('/api/v1/guide-info')
     }
 
 }

@@ -412,17 +412,7 @@ function sendDevFee(fee){
   return (
 
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
-      <SafeAreaView style={{flex:1}}>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              progressBackgroundColor="#6495ed"
-            />
-          }
-        >
+
           <View
             style={{
               flexDirection: "row",
@@ -432,6 +422,17 @@ function sendDevFee(fee){
           >
             <Text style={styles.fileTabTitleText}>Wallet Manager</Text>
           </View>
+          <SafeAreaView style={{flex:1}}>
+            <ScrollView
+              contentContainerStyle={styles.scrollView}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  progressBackgroundColor="#6495ed"
+                />
+              }
+            >
           <View
             style={{
               flexDirection: "row",
@@ -589,7 +590,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   scrollView: {
-    
+
     alignItems: "center",
     justifyContent: "flex-start",
   },

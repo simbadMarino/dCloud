@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
+import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput, SafeAreaView, ScrollView, RefreshControl, NativeModules } from 'react-native';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
 import useLock from '../../hooks/useLock';
@@ -24,8 +24,8 @@ import NumericInput from 'react-native-numeric-input'
 
 import Clipboard from '@react-native-clipboard/clipboard';
 
-//import { mainC } from '../../ios/btfs';
-//import btfs from '../../ios/btfs.h';
+const {BTFSmodule} = NativeModules;
+
 
 
 const Settings: React.FC = () => {
@@ -37,7 +37,7 @@ const Settings: React.FC = () => {
 
 
 
-
+//127.0.0.1:5001/
 const [btfs_sts, setBTFS_sts] = useState('');
 const [node_id, set_node_id] = useState('');
 const [btfs_ver, set_btfs_ver] = useState('');
@@ -46,7 +46,12 @@ const [btfs_uptime, set_btfs_uptime] = useState('');
 const [default_storage, set_default_storage] = useState(0);
 const [host_score,set_host_score] = useState('');
 const [isEnabled, setIsEnabled] = useState(false);
+const [enableDaemon, setenableDaemon] = useState(false);
 const [btfsCmd, setBTFSCmd] = useState('');
+const [refreshing, setRefreshing] = useState(false);
+const [bttcAddress, setbttcAddress] = useState('');
+const [btfsRepo, setbtfsRepo] = useState(false);
+
 
 const enableHostMode = async (en) => {
     let data = Client10.enableHostMode(en);
@@ -61,18 +66,56 @@ const enableHostMode = async (en) => {
 
 };
 
+const enableBTFSDaemon = async (en) => {
+  if(en)
+    BTFSmodule.main("daemon --chain-id 199","commands");
+
+}
+
+const initializeRepo = async () => {
+  BTFSmodule.main("init","commands");
+  /*let data = Client10.setApiUrl("http://127.0.0.1:5001");
+  Promise.resolve(data).then(function(data) {
+    console.log(data); // "Success"
+
+      Alert.alert("Repo initialized in dCloud/Documents :)");
+
+
+}, function(data) {
+  // not called
+});*/
+
+}
+
+function getGuideData(){
+
+
+  let data = Client10.requestGuide();
+
+  Promise.resolve(data).then(function(data) {
+    console.log(data); // "Success"
+    setbttcAddress(data['bttc_address']? data['bttc_address'] : '--');
+
+}, function(data) {
+  // not called
+});
+}
+
 const getNodeBasicStats = async () => {
     let data1 = Client10.getHostInfo();
     let data2 = Client10.getHostScore();
     let data3 = Client10.getPeers();
     let data4 = Client10.getHostVersion();
     let data5 = Client10.getNetworkStatus();
+    //let data6 = Client10.requestGuide();
 
     return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
         //console.log(result[4]);
         //console.log(result[0]);
         set_node_id(result[0]['ID'] ? result[0]['ID'] : '--');
+      //  console.log("GUIDE: " + result[5]);
         set_btfs_ver(result[3]['Version'] ? result[3]['Version'] : '--');
+
         //set_host_score
         let status = null;
         let message = null;
@@ -123,8 +166,9 @@ const getNodeBasicStats = async () => {
 useEffect(() => {
   const interval = setInterval( async () => {
     var response =  await getNodeBasicStats();
-    //console.log(response);
-  }, 2100);
+    var response2 = await getGuideData();
+    console.log(response2);
+  }, 1500);
   return () => clearInterval(interval);
 }, []);
 
@@ -133,11 +177,23 @@ useEffect(()  => {
   const setPreviousHostEnable = async () => {
   const storedHostEnabled = await AsyncStorage.getItem('host_enable');
   console.log(storedHostEnabled);
-  let boolStoredHostEnable = (storedHostEnabled === 'true');
+  let boolStoredHostEnable = (storedHostEnabled === 'true');  //Converting string to boolean
   setIsEnabled(boolStoredHostEnable);
 
   };
   setPreviousHostEnable();
+
+},[]);
+
+useEffect(()  => {
+  const setPreviousInitRepoSts= async () => {
+  const storedRepoSts= await AsyncStorage.getItem('btfsrepo_enable');
+  console.log(storedRepoSts);
+  let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
+  setbtfsRepo(boolStoredRepoSts);
+
+  };
+  setPreviousInitRepoSts();
 
 },[]);
 
@@ -159,11 +215,31 @@ const copyToClipboard = () => {
     dispatch(setSnack({ message: 'Node ID copied to clipboard!' }));
   };
 
+  const copyToClipboardAddress = () => {
+      Clipboard.setString(bttcAddress);
+      console.log("Copied: " + bttcAddress);
+      dispatch(setSnack({ message: 'Address copied to clipboard!' }));
+    };
+
+const sendBTFScmd = () => {
+    Alert.alert("Command sent");
+    BTFSmodule.main(btfsCmd,"commands");
+
+};
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   return (
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
+    <SafeAreaView style={{flex:1}}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+
+      >
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>
           PREFERENCES
@@ -246,6 +322,36 @@ const copyToClipboard = () => {
         </View>
 
 
+            <View
+              style={[
+                styles.sectionItem,
+                { backgroundColor: theme.colors.background2 },
+              ]}
+            >
+              <View style={styles.sectionItemLeft}>
+                <Feather
+                  name={'map'}
+                  size={24}
+                  color={theme.colors.primary}
+                />
+              </View>
+              <View style={styles.sectionItemCenter}>
+                <Text
+                  style={[styles.sectionItemText , { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'
+                >
+                  {bttcAddress}
+                </Text>
+              </View>
+              <View style={styles.sectionItemRight}>
+              <Feather
+                name={'copy'}
+                size={24}
+                color={theme.colors.primary}
+                onPress={copyToClipboard}
+              />
+              </View>
+          </View>
+
 
           <View
             style={[
@@ -272,7 +378,7 @@ const copyToClipboard = () => {
                <FontAwesome5
                  name="wifi"
                  size={24}
-                 color={btfs_sts == 'Online_Host'? "green" : 'Online_Renter'? "blue" : "gray"}
+                 color={btfs_sts == 'Online_Host'? "green" : btfs_sts == 'Online_Renter'? "blue" : "gray"}
                />
             </View>
 
@@ -317,11 +423,56 @@ const copyToClipboard = () => {
       >
         <View style={styles.sectionItemLeft}>
           <Feather
+            name={'database'}
+            size={24}
+            color={theme.colors.primary}
+          />
+        </View>
+
+        <View style={styles.sectionItemCenter}>
+          <Text
+            style={[styles.sectionItemText, { color: theme.colors.primary }]}
+          >
+            {"BTFS Repository"}
+          </Text>
+        </View>
+        <View style={styles.sectionItemRight}>
+          <Switch
+             trackColor={{ false: "#767577", true: "#81b0ff" }}
+             thumbColor={theme.colors.switchThumb}
+             value={btfsRepo}
+             onValueChange={async (value) => {
+               if (value) {
+                 setbtfsRepo(value);
+                 initializeRepo(true);
+                 await AsyncStorage.setItem('btfsrepo_enable', 'true');
+                 console.log("Initializing Repo");
+               } else {
+                 setbtfsRepo(value);
+                 await AsyncStorage.setItem('btfsrepo_enable', 'false');
+                 console.log("Deactivating Repo(no action)");
+               }
+             }}
+             disabled={false}
+          />
+        </View>
+      </View>
+
+
+      <View
+        style={[
+          styles.sectionItem,
+          { backgroundColor: theme.colors.background2 },
+        ]}
+      >
+        <View style={styles.sectionItemLeft}>
+          <Feather
             name={'hard-drive'}
             size={24}
             color={theme.colors.primary}
           />
         </View>
+
         <View style={styles.sectionItemCenter}>
           <Text
             style={[styles.sectionItemText, { color: theme.colors.primary }]}
@@ -351,6 +502,50 @@ const copyToClipboard = () => {
           />
         </View>
     </View>
+
+
+    <View
+      style={[
+        styles.sectionItem,
+        { backgroundColor: theme.colors.background2 },
+      ]}
+    >
+      <View style={styles.sectionItemLeft}>
+        <Feather
+          name={'command'}
+          size={24}
+          color={theme.colors.primary}
+        />
+      </View>
+    <View style={styles.sectionItemCenter}>
+      <Text
+        style={[styles.sectionItemText, { color: theme.colors.primary }]}
+      >
+        {"BTFS Daemon"}
+      </Text>
+    </View>
+    <View style={styles.sectionItemRight}>
+      <Switch
+         trackColor={{ false: "#767577", true: "#81b0ff" }}
+         thumbColor={theme.colors.switchThumb}
+         value={enableDaemon}
+         onValueChange={async (value) => {
+           if (value) {
+             setenableDaemon(value);
+             enableBTFSDaemon(true);
+             await AsyncStorage.setItem('daemon_enable', 'true');
+             console.log("Enabling daemon")
+           } else {
+             setenableDaemon(value);
+             enableBTFSDaemon(false);
+             await AsyncStorage.setItem('daemon_enable', 'false');
+             console.log("Disabling daemon")
+           }
+         }}
+         disabled={false}
+      />
+    </View>
+</View>
 
 
       <View
@@ -423,7 +618,7 @@ const copyToClipboard = () => {
       <View style={styles.sectionItemRight}>
       <Button
         title="Send"
-        onPress={() => Alert.alert('(TEST) BTFS command sent')}
+        onPress={sendBTFScmd}
       />
       </View>
     </View>
@@ -563,6 +758,8 @@ const copyToClipboard = () => {
 
 
       </View>
+      </ScrollView>
+    </SafeAreaView>
     </View>
   );
 }

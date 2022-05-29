@@ -12,7 +12,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		476C346BA0EF4162BB738E65 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97901F9358248A6BAB8877F /* noop-file.swift */; };
-		85A68EC128373E6400199EA2 /* btfs.m in Sources */ = {isa = PBXBuildFile; fileRef = 85A68EC028373E6400199EA2 /* btfs.m */; };
+		85072CBC2842FE1D0057A559 /* btfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85072CBB2842FE1D0057A559 /* btfs.a */; };
+		85EA4F92283F3EB8008E9789 /* BTFSnodeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */; };
+		85EA4F94283F3FE9008E9789 /* BTFSnodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */; };
 		96905EF65AED1B983A6B3ABC /* libPods-justshare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-justshare.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
@@ -29,9 +31,12 @@
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-justshare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-justshare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-justshare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-justshare.debug.xcconfig"; path = "Target Support Files/Pods-justshare/Pods-justshare.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-justshare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-justshare.release.xcconfig"; path = "Target Support Files/Pods-justshare/Pods-justshare.release.xcconfig"; sourceTree = "<group>"; };
+		85072CB32842D6870057A559 /* btfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btfs.h; path = "../../btfs-sharedLib/cmd/btfs/btfs.h"; sourceTree = "<group>"; };
+		85072CBB2842FE1D0057A559 /* btfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = btfs.a; sourceTree = "<group>"; };
 		856F207B2839F3D70052D58A /* justshareDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = justshareDebug.entitlements; path = justshare/justshareDebug.entitlements; sourceTree = "<group>"; };
-		85A68EBF28373CCF00199EA2 /* btfs_node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = btfs_node.h; sourceTree = "<group>"; };
-		85A68EC028373E6400199EA2 /* btfs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = btfs.m; sourceTree = "<group>"; };
+		85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTFSnodeBridge.m; sourceTree = "<group>"; };
+		85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFSnodeBridge.swift; sourceTree = "<group>"; };
+		85EA4F95283F43E7008E9789 /* RCTBTFSmodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBTFSmodule.h; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = justshare/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		D744A672438744BF98CA317F /* justshare-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "justshare-Bridging-Header.h"; path = "justshare/justshare-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -45,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85072CBC2842FE1D0057A559 /* btfs.a in Frameworks */,
 				96905EF65AED1B983A6B3ABC /* libPods-justshare.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,12 +61,12 @@
 		13B07FAE1A68108700A75B9A /* justshare */ = {
 			isa = PBXGroup;
 			children = (
+				85072CB32842D6870057A559 /* btfs.h */,
+				85072CBB2842FE1D0057A559 /* btfs.a */,
 				856F207B2839F3D70052D58A /* justshareDebug.entitlements */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				85A68EBF28373CCF00199EA2 /* btfs_node.h */,
-				85A68EC028373E6400199EA2 /* btfs.m */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -68,6 +74,9 @@
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				E97901F9358248A6BAB8877F /* noop-file.swift */,
 				D744A672438744BF98CA317F /* justshare-Bridging-Header.h */,
+				85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */,
+				85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */,
+				85EA4F95283F43E7008E9789 /* RCTBTFSmodule.h */,
 			);
 			name = justshare;
 			sourceTree = "<group>";
@@ -300,7 +309,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85A68EC128373E6400199EA2 /* btfs.m in Sources */,
+				85EA4F92283F3EB8008E9789 /* BTFSnodeBridge.m in Sources */,
+				85EA4F94283F3FE9008E9789 /* BTFSnodeBridge.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
@@ -323,6 +333,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P6UG545LF4;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
@@ -333,8 +344,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/justshare",
 				);
 				MARKETING_VERSION = 1.4.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -362,12 +375,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P6UG545LF4;
+				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = justshare/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/justshare",
 				);
 				MARKETING_VERSION = 1.4.0;
 				ONLY_ACTIVE_ARCH = YES;

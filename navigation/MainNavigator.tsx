@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Platform from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +10,7 @@ import SettingsStackNavigator from './SettingsStackNavigator';
 import Web from '../screens/Web';
 
 import Terminal from '../screens/Terminal';
+import TerminalIOS from '../screens/TerminalIOS';
 
 import FileTransfer from '../screens/FileTransfer';
 
@@ -19,6 +20,7 @@ const Tab = createBottomTabNavigator();
 
 export const MainNavigator: React.FC = () => {
   const { colors } = useAppSelector((state) => state.theme.theme);
+  const platform = Platform.OS === 'android'? 'android' : 'ios';
   return (
     <Tab.Navigator
       initialRouteName="dBrowse"
@@ -48,7 +50,7 @@ export const MainNavigator: React.FC = () => {
       <Tab.Screen name="dBrowse" component={HomeStackNavigator} />
       <Tab.Screen name="dWeb" component={Web} />
       <Tab.Screen name="Wallet" component={FileTransfer} />
-      <Tab.Screen name="Terminal" component={Terminal} />
+      {platform === 'ios'? <Tab.Screen name="Terminal"  component={TerminalIOS}/> : <Tab.Screen name="Terminal" component={Terminal}/>}
       <Tab.Screen name="Settings" component={SettingsStackNavigator} />
     </Tab.Navigator>
   );
