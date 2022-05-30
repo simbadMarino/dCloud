@@ -166,8 +166,8 @@ android {
     defaultConfig {
         applicationId "com.justshare"
         minSdkVersion project.properties.minSdkVersion.toInteger()
-        versionCode 18
-        versionName "1.4.1"
+        versionCode 20
+        versionName "1.5.0"
 
         manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
         manifestPlaceholders.TERMUX_APP_NAME = "justshare"
