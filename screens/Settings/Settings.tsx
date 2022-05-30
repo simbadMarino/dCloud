@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput, SafeAreaView, ScrollView, RefreshControl, NativeModules } from 'react-native';
+import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput, SafeAreaView, ScrollView, RefreshControl, NativeModules, Platform } from 'react-native';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
 import useLock from '../../hooks/useLock';
@@ -25,7 +25,7 @@ import NumericInput from 'react-native-numeric-input'
 import Clipboard from '@react-native-clipboard/clipboard';
 
 const {BTFSmodule} = NativeModules;
-
+var flagGuideDone = false;
 
 
 const Settings: React.FC = () => {
@@ -93,13 +93,26 @@ function getGuideData(){
   let data = Client10.requestGuide();
 
   Promise.resolve(data).then(function(data) {
-    console.log(data); // "Success"
-    setbttcAddress(data['bttc_address']? data['bttc_address'] : '--');
+    if(data.Type == 'error')
+      {
+        console.log("Guide is DONE, nothing else to do");
+        flagGuideDone = 1;
+      }
+
+    else{
+      setbttcAddress(data.info['bttc_address']? data.info['bttc_address'] : '--');
+      set_node_id(data.info['host_id']? data.info['host_id'] : '--');
+      set_btfs_ver(data.info['btfs_version']? data.info['btfs_version'] : '--')
+      flagGuideDone = 0;
+    }
+
 
 }, function(data) {
   // not called
 });
 }
+
+
 
 const getNodeBasicStats = async () => {
     let data1 = Client10.getHostInfo();
@@ -111,9 +124,10 @@ const getNodeBasicStats = async () => {
 
     return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
         //console.log(result[4]);
-        //console.log(result[0]);
-        set_node_id(result[0]['ID'] ? result[0]['ID'] : '--');
+        //console.log(result[0].BttcAddress);
+        setbttcAddress(result[0].BttcAddress);
       //  console.log("GUIDE: " + result[5]);
+        set_node_id(result[0]['ID'] ? result[0]['ID'] : '--');
         set_btfs_ver(result[3]['Version'] ? result[3]['Version'] : '--');
 
         //set_host_score
@@ -165,9 +179,13 @@ const getNodeBasicStats = async () => {
 
 useEffect(() => {
   const interval = setInterval( async () => {
-    var response =  await getNodeBasicStats();
+    if(flagGuideDone)
+    {
+      var response =  await getNodeBasicStats();
+    }
+
     var response2 = await getGuideData();
-    console.log(response2);
+
   }, 1500);
   return () => clearInterval(interval);
 }, []);
@@ -191,6 +209,11 @@ useEffect(()  => {
   console.log(storedRepoSts);
   let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
   setbtfsRepo(boolStoredRepoSts);
+  setenableDaemon(boolStoredRepoSts);
+  if (boolStoredRepoSts)
+  {
+    enableBTFSDaemon(true);
+  }
 
   };
   setPreviousInitRepoSts();
@@ -347,7 +370,7 @@ const sendBTFScmd = () => {
                 name={'copy'}
                 size={24}
                 color={theme.colors.primary}
-                onPress={copyToClipboard}
+                onPress={copyToClipboardAddress}
               />
               </View>
           </View>
@@ -453,7 +476,7 @@ const sendBTFScmd = () => {
                  console.log("Deactivating Repo(no action)");
                }
              }}
-             disabled={false}
+             disabled={Platform.OS == 'android'}
           />
         </View>
       </View>
@@ -529,20 +552,23 @@ const sendBTFScmd = () => {
          trackColor={{ false: "#767577", true: "#81b0ff" }}
          thumbColor={theme.colors.switchThumb}
          value={enableDaemon}
-         onValueChange={async (value) => {
-           if (value) {
-             setenableDaemon(value);
+         onValueChange={async (value2) => {
+           if (value2) {
+             setenableDaemon(value2);
              enableBTFSDaemon(true);
              await AsyncStorage.setItem('daemon_enable', 'true');
              console.log("Enabling daemon")
            } else {
-             setenableDaemon(value);
-             enableBTFSDaemon(false);
+             setenableDaemon(value2);
+             /*if(btfsRepo)
+             {
+               enableBTFSDaemon(true);
+             }*/
              await AsyncStorage.setItem('daemon_enable', 'false');
-             console.log("Disabling daemon")
+             //console.log("Disabling daemon")
            }
          }}
-         disabled={false}
+         disabled={Platform.OS == 'android'}
       />
     </View>
 </View>
@@ -613,12 +639,14 @@ const sendBTFScmd = () => {
       value={btfsCmd}
       placeholder="BTFS command ..."
       keyboardType="default"
+      
     />
       </View>
       <View style={styles.sectionItemRight}>
       <Button
         title="Send"
         onPress={sendBTFScmd}
+        disabled = {Platform.OS == 'android'}
       />
       </View>
     </View>

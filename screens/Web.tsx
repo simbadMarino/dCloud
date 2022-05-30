@@ -123,6 +123,7 @@ const Web: React.FC = () => {
       </View>
       <WebView
         allowsLinkPreview
+        style={{ opacity: 0.99 }}
         ref={browserRef}
         source={{ uri: target }}
         pullToRefreshEnabled
