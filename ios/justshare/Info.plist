@@ -67,7 +67,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use Face ID</string>
 	<key>NSHumanReadableCopyright</key>
-	<string></string>
+	<string>2022 cctechmx - Copyleft</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to access your microphone</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

@@ -13,6 +13,7 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		476C346BA0EF4162BB738E65 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97901F9358248A6BAB8877F /* noop-file.swift */; };
 		85072CD428435F8C0057A559 /* btfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85072CD328435F8B0057A559 /* btfs.a */; };
+		85B56BCA2859AE6B0068EF50 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B56BC92859AE6B0068EF50 /* CloudKit.framework */; };
 		85EA4F92283F3EB8008E9789 /* BTFSnodeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */; };
 		85EA4F94283F3FE9008E9789 /* BTFSnodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */; };
 		96905EF65AED1B983A6B3ABC /* libPods-justshare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-justshare.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -33,6 +34,7 @@
 		7A4D352CD337FB3A3BF06240 /* Pods-justshare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-justshare.release.xcconfig"; path = "Target Support Files/Pods-justshare/Pods-justshare.release.xcconfig"; sourceTree = "<group>"; };
 		85072CD228435F8B0057A559 /* btfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btfs.h; path = "../../btfs-sharedLib/cmd/btfs/btfs.h"; sourceTree = "<group>"; };
 		85072CD328435F8B0057A559 /* btfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = btfs.a; path = "../../btfs-sharedLib/cmd/btfs/btfs.a"; sourceTree = "<group>"; };
+		85B56BC92859AE6B0068EF50 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTFSnodeBridge.m; sourceTree = "<group>"; };
 		85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFSnodeBridge.swift; sourceTree = "<group>"; };
 		85EA4F95283F43E7008E9789 /* RCTBTFSmodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBTFSmodule.h; sourceTree = "<group>"; };
@@ -49,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85B56BCA2859AE6B0068EF50 /* CloudKit.framework in Frameworks */,
 				85072CD428435F8C0057A559 /* btfs.a in Frameworks */,
 				96905EF65AED1B983A6B3ABC /* libPods-justshare.a in Frameworks */,
 			);
@@ -82,6 +85,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				85B56BC92859AE6B0068EF50 /* CloudKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				58EEBF8E8E6FB1BC6CAF49B5 /* libPods-justshare.a */,
 			);

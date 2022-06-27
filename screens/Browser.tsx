@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -41,9 +41,15 @@ import moment from 'moment';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
-import * as DocumentPicker from 'expo-document-picker';
+//import * as DocumentPicker from 'expo-document-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as mime from 'react-native-mime-types';
+import DocumentPicker, {
+  DirectoryPickerResponse,
+  DocumentPickerResponse,
+  isInProgress,
+  types,
+} from 'react-native-document-picker'
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -53,7 +59,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { setImages } from '../features/files/imagesSlice';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import { HEIGHT, imageFormats, reExt, SIZE } from '../utils/Constants';
-
+var jDocumentRes = '';
 //const {BTFSmodule} = NativeModules;
 
 import Client10 from '../utils/APIClient10.js'
@@ -69,9 +75,7 @@ const Browser = ({ route }: IBrowserProps) => {
   const navigation = useNavigation();
   const { colors } = useAppSelector((state) => state.theme.theme);
   const docDir: string = FileSystem.documentDirectory || '';
-  const [currentDir, setCurrentDir] = useState<string>(
-    route?.params?.prevDir !== undefined ? route?.params?.prevDir : docDir
-  );
+  const [currentDir, setCurrentDir] = useState<string>(route?.params?.prevDir !== undefined ? route?.params?.prevDir : docDir);
   const [moveDir, setMoveDir] = useState('');
   const [files, setFiles] = useState<fileItem[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<fileItem[]>([]);
@@ -82,22 +86,31 @@ const Browser = ({ route }: IBrowserProps) => {
   const [renamingFile, setRenamingFile] = useState<fileItem>();
   const [multiImageVisible, setMultiImageVisible] = useState(false);
   const [importProgressVisible, setImportProgressVisible] = useState(false);
-  const [destinationDialogVisible, setDestinationDialogVisible] =
-    useState(false);
+  const [destinationDialogVisible, setDestinationDialogVisible] = useState(false);
   const [newFileActionSheet, setNewFileActionSheet] = useState(false);
   const [moveOrCopy, setMoveOrCopy] = useState('');
   const { multiSelect, allSelected } = useSelectionChange(files);
+  const [result, setResult] = useState<Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null>();
+  //const [fileResponse, setFileResponse] = useState([]);
+
+
+
+
+
+
 
 
 
   useEffect(() => {
     getFiles();
+    console.log("currentDir");
   }, [currentDir]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getFiles();
-      //BTFSmodule.main("daemon --chain-id 199","commands");
+      console.log(currentDir);
+
     });
 
     return unsubscribe;
@@ -105,12 +118,16 @@ const Browser = ({ route }: IBrowserProps) => {
 
   useEffect(() => {
     if (route?.params?.folderName !== undefined) {
+      //console.log("Updating Current Dir");
+
       setCurrentDir((prev) =>
         prev?.endsWith('/')
           ? prev + route.params.folderName
           : prev + '/' + route.params.folderName
       );
+        console.log("Updated directory: " + currentDir);
     }
+
   }, [route]);
 
   useEffect(() => {
@@ -128,8 +145,8 @@ const Browser = ({ route }: IBrowserProps) => {
   }, []);
 
   function makedir(directory){
-    console.log(directory);
-    //let data = Client10.mkdir(directory);
+    console.log("MAKEDIR:" + directory);
+    let data = Client10.mkdir(directory);
     //BTFSModule("init","G");
 
     Promise.resolve(data).then(function(data) {
@@ -182,7 +199,7 @@ function addBTFS(directory){
         )
           .then(() => {
             getFiles();
-            setDownloadDialogVisible(false);
+            setDownloadDialogVisible(true);
             handleSetSnack({
               message: 'Download complete',
             });
@@ -288,8 +305,27 @@ function addBTFS(directory){
       .then(() => {
         getFiles();
         setFolderDialogVisible(false);
-        //console.log("test: " + currentDir + name);
-        //makedir("/" + name);
+
+        console.log("CURRENT DIR MAKE_FOLDER: " + currentDir);
+        if(currentDir == FileSystem.documentDirectory)
+        {
+          if (Platform.OS == 'ios')
+          {
+            console.log("iOS | You are in home dir!");
+            makedir(currentDir.slice(93)  + name);
+          }
+          else
+          {
+            makedir(currentDir.slice(93) + '/' + name);
+          }
+
+        }
+        else
+        {
+          makedir(currentDir.slice(93) + '/' + name);
+          console.log("NOT IN HOME dir");
+        }
+
       })
       .catch(() => {
         handleSetSnack({
@@ -324,6 +360,7 @@ function addBTFS(directory){
       const filename: string = uri.replace(/^.*[\\\/]/, '');
       const ext: string | null = reExt.exec(filename)![1];
       const fileNamePrefix = type === 'image' ? 'IMG_' : 'VID_';
+      console.log("Pic dir: " + currentDir);
       FileSystem.moveAsync({
         from: uri,
         to:
@@ -339,43 +376,47 @@ function addBTFS(directory){
     }
   };
 
-  const pickDocument = async () => {
-    const result = await DocumentPicker.getDocumentAsync({
-      copyToCacheDirectory: false,
-    });
+  const pickDocument =  async () => {
 
-    if (result.type === 'success') {
 
-      let resmod = result.append(res.name, {
-            uri: result.uri,
-            name: result.name ,
-            type: result.type
-          });
+    try {
+      const response = await DocumentPicker.pick({
+        presentationStyle: 'fullScreen',
+        allowMultiSelection: true,
+      });
+      //console.log(response);
+      setResult(response);
+      //const obj = JSON.parse(response[0]);
+      console.log(response);
+      var urresponse = decodeURIComponent(response[0].uri);
+      console.log(urresponse);
+      console.log(currentDir);
+      //console.log(JSON.stringify(obj));
+      const { exists: fileExists } = await FileSystem.getInfoAsync(urresponse);
 
-      const { exists: fileExists } = await FileSystem.getInfoAsync(result.uri);
-          FileSystem.copyAsync({
-            from: result.uri,
-            to: currentDir + '/' + result.name,
-          })
-            .then((_) => {
-              getFiles();
-              //console.log("FILE_PATH: " + currentDir + '/' + result.uri);
-              addBTFS(resmod,{
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-              });
-              handleSetSnack({
-                message: `${result.name} successfully copied.`,
-              });
-            })
-            .catch((_) =>
-              handleSetSnack({
-                message: 'An unexpected error importing the file.',
-              })
-            );
-      }
+       FileSystem.copyAsync({
+         from: urresponse,
+         to: currentDir + '/' + response[0].name,
+       })
+         .then((_) => {
+          getFiles();
+           console.log("FILE_PATH: " + currentDir + '/' + response[0].name);
+
+           handleSetSnack({
+             message: `${response[0].name} successfully copied.`,
+           });
+         })
+         .catch((_) =>
+           handleSetSnack({
+             message: 'An unexpected error importing the file.',
+           })
+         );
+   }
+     catch (err) {
+      console.log(err);
     }
+
+  }
 
 
   const onMultiSelectSubmit = async (data: ExtendedAsset[]) => {
