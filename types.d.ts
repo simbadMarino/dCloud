@@ -23,6 +23,7 @@ export type fileItem = {
   isDirectory: boolean;
   modificationTime: number;
   md5?: string;
+  qmhash: string;
 };
 
 export type ExtendedAsset = {

@@ -139,18 +139,19 @@ export default function FileItem({
             : decodeURI(item.name)
         }
         visible={itemActionsOpen}
-        actionItems={['Rename', 'Move', 'Copy', 'Share', 'Delete', 'Cancel']}
+        actionItems={['Rename', 'Move', 'Copy', 'Copy BTFS Link', 'Share', 'Delete', 'Cancel']}
         itemIcons={[
           'edit',
           'drive-file-move',
           'file-copy',
+          'cloud',
           'share',
           'delete',
           'close',
         ]}
         onClose={setItemActionsOpen}
         onItemPressed={(buttonIndex) => {
-          if (buttonIndex === 4) {
+          if (buttonIndex === 5) {
             setTimeout(() => {
               Alert.alert(
                 'Confirm Delete',
@@ -173,13 +174,16 @@ export default function FileItem({
                 ]
               );
             }, 300);
-          } else if (buttonIndex === 3) {
+          } else if (buttonIndex === 4) {
             Sharing.isAvailableAsync().then((canShare) => {
               if (canShare) {
                 Sharing.shareAsync(docDir + '/' + item.name);
               }
             });
-          } else if (buttonIndex === 2) {
+          } else if (buttonIndex === 3) {
+
+          }
+          else if (buttonIndex === 2) {
             setMoveOrCopy('Copy');
             if (!multiSelect) toggleSelect(item);
             setTransferDialog(true);
@@ -193,7 +197,7 @@ export default function FileItem({
             setNewFileName(item.name);
           }
         }}
-        cancelButtonIndex={5}
+        cancelButtonIndex={6}
         modalStyle={{ backgroundColor: colors.background2 }}
         itemTextStyle={{ color: colors.text }}
         titleStyle={{ color: colors.secondary }}
@@ -224,6 +228,9 @@ export default function FileItem({
             </Text>
             <Text style={{ ...styles.fileDetailText, color: colors.secondary }}>
               {moment(item.modificationTime * 1000).fromNow()}
+            </Text>
+            <Text style={{ ...styles.fileDetailText, color: colors.secondary } } numberOfLines = { 1 } ellipsizeMode = 'middle'>
+              {item.qmhash}
             </Text>
           </View>
         </TouchableOpacity>

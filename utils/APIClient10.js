@@ -237,9 +237,13 @@ class APIClient10 {
     enableHostMode(en) {
         return this.request('/api/v1/config/storage-host-enable?arg=' + en);
     }
-    addBTFSfile(filePath) {
-        return this.request('/api/v1/add?' + filePath)
-    }
+  /*  addBTFSfile(filePath) {
+        return this.request('/api/v1/add?' + formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+    }*/
     requestGuide(){
       return this.request('/api/v1/guide-info')
     }
