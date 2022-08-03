@@ -24,7 +24,7 @@ export const MainNavigator: React.FC = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="dBrowse"
+      initialRouteName="Settings"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: '#6495ed',

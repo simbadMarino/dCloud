@@ -306,7 +306,7 @@ function sendDevFee(fee){
       var bttBalanceBig = new BigNumber(parseFloat(data2.balance));
       bttBalanceBig = bttBalanceBig.shiftedBy(-18);
       bttBalanceBig = bttBalanceBig.toFixed();
-      console.log(bttBalanceBig);
+      //console.log(bttBalanceBig);
       setbttBalance(bttBalanceBig);
 
     }, function(data2) {
@@ -324,7 +324,7 @@ function sendDevFee(fee){
       var wbttBalanceBig = new BigNumber(parseFloat(data.balance));
       wbttBalanceBig = wbttBalanceBig.shiftedBy(-18);
       wbttBalanceBig = wbttBalanceBig.toFixed();
-      console.log(wbttBalanceBig);
+      //console.log(wbttBalanceBig);
       setwbttBalance(wbttBalanceBig);
 
     }, function(data) {
@@ -346,7 +346,7 @@ function sendDevFee(fee){
           setvaultAddress(result[0].VaultAddress);
 
           str_BTT_Addy = String(result[0].BttcAddress);
-          console.log(str_BTT_Addy);
+          //console.log(str_BTT_Addy);
           //console.log(bttAddress);
           /*var bttBalanceBig = new BigNumber(parseFloat(result[1].balance));
           bttBalanceBig = bttBalanceBig.shiftedBy(-18);
@@ -365,7 +365,7 @@ function sendDevFee(fee){
           var vaultBalanceBig = new BigNumber(parseFloat(result[1].balance));
           vaultBalanceBig = vaultBalanceBig.shiftedBy(-18);
           vaultBalanceBig = vaultBalanceBig.toFixed();
-          console.log(vaultBalanceBig);
+          //console.log(vaultBalanceBig);
           setvaultBalance(vaultBalanceBig);
 
 

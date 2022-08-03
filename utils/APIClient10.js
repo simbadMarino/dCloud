@@ -237,13 +237,12 @@ class APIClient10 {
     enableHostMode(en) {
         return this.request('/api/v1/config/storage-host-enable?arg=' + en);
     }
-  /*  addBTFSfile(filePath) {
-        return this.request('/api/v1/add?' + formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-    }*/
+
+    enableStorageSaver(en) {
+        return this.request('/api/v1/config?arg=Experimental.FilestoreEnabled&arg=' + en + '&json=true');
+          //"http://localhost:5001/api/v1/config?arg=Experimental.FilestoreEnabled&arg=false&json=true"
+    }
+
     requestGuide(){
       return this.request('/api/v1/guide-info')
     }

@@ -47,6 +47,7 @@ const [default_storage, set_default_storage] = useState(0);
 const [host_score,set_host_score] = useState('');
 const [isEnabled, setIsEnabled] = useState(false);
 const [enableDaemon, setenableDaemon] = useState(false);
+const [enableStorageSaver, setenableStorageSaver] = useState(false);
 const [btfsCmd, setBTFSCmd] = useState('');
 const [refreshing, setRefreshing] = useState(false);
 const [bttcAddress, setbttcAddress] = useState('');
@@ -56,6 +57,19 @@ const [btfsRepo, setbtfsRepo] = useState(false);
 const enableHostMode = async (en) => {
     let data = Client10.enableHostMode(en);
     console.log("Executing host enable");
+    return Promise.all(data).then((result) => {
+
+      //console.log(result);
+    }
+
+
+    )
+
+};
+
+const f_enableStorageSaver = async (en) => {
+    let data = Client10.enableStorageSaver(en);
+
     return Promise.all(data).then((result) => {
 
       //console.log(result);
@@ -95,7 +109,7 @@ function getGuideData(){
   Promise.resolve(data).then(function(data) {
     if(data.Type == 'error')
       {
-        console.log("Guide is DONE, nothing else to do");
+        //console.log("Guide is DONE, nothing else to do");
         flagGuideDone = 1;
       }
 
@@ -229,6 +243,18 @@ useEffect(()  => {
 
   };
   setPreviousStorageDuration();
+
+},[]);
+
+useEffect(()  => {
+  const setPreviousStorageSaverEnable = async () => {
+  const storedStorageSaverEnabled = await AsyncStorage.getItem('storage_saver');
+  console.log(storedStorageSaverEnabled);
+  let boolStoredStorageSaver = (storedStorageSaverEnabled === 'true');  //Converting string to boolean
+  setenableStorageSaver(boolStoredStorageSaver);
+
+  };
+  setPreviousStorageSaverEnable();
 
 },[]);
 
@@ -574,6 +600,50 @@ const sendBTFScmd = () => {
 </View>
 
 
+<View
+  style={[
+    styles.sectionItem,
+    { backgroundColor: theme.colors.background2 },
+  ]}
+>
+  <View style={styles.sectionItemLeft}>
+    <Feather
+      name={'save'}
+      size={24}
+      color={theme.colors.primary}
+    />
+  </View>
+<View style={styles.sectionItemCenter}>
+  <Text
+    style={[styles.sectionItemText, { color: theme.colors.primary }]}
+  >
+    {"Repo Storage Saver"}
+  </Text>
+</View>
+<View style={styles.sectionItemRight}>
+  <Switch
+     trackColor={{ false: "#767577", true: "#81b0ff" }}
+     thumbColor={theme.colors.switchThumb}
+     value={enableStorageSaver}
+     onValueChange={async (value3) => {
+       if (value3) {
+         setenableStorageSaver(value3);
+         f_enableStorageSaver(true);
+         await AsyncStorage.setItem('storage_saver', 'true');
+         console.log("Enabling Storage Saver")
+       } else {
+         setenableStorageSaver(value3);
+         f_enableStorageSaver(false);
+         console.log("Disabling Storage Saver")
+         await AsyncStorage.setItem('storage_saver', 'false');
+         //console.log("Disabling daemon")
+       }
+     }}
+  />
+</View>
+</View>
+
+
       <View
         style={[
           styles.sectionItem,
@@ -596,7 +666,7 @@ const sendBTFScmd = () => {
         </View>
         <View style={styles.sectionItemRight}>
         <NumericInput
-          value={default_storage}
+          value={default_storage? 0: 32 }
           onChange={async (value) => {
             await AsyncStorage.setItem('storage_duration', value.toString());
             set_default_storage(value);
@@ -605,6 +675,7 @@ const sendBTFScmd = () => {
           onLimitReached={(isMax,msg) => Alert.alert(isMax,msg)}
           totalWidth={70}
           totalHeight={30}
+          minValue={32}
           iconSize={25}
           initValue={default_storage}
           step={1}
@@ -619,37 +690,7 @@ const sendBTFScmd = () => {
     </View>
 
 
-    <View
-      style={[
-        styles.sectionItem,
-        { backgroundColor: theme.colors.background2 },
-      ]}
-    >
-      <View style={styles.sectionItemLeft}>
-        <Feather
-          name={'terminal'}
-          size={24}
-          color={theme.colors.primary}
-        />
-      </View>
-      <View style={styles.sectionItemCenter}>
-      <TextInput
-      style={[styles.sectionItemText, { color: theme.colors.primary }]}
-      onChangeText={setBTFSCmd}
-      value={btfsCmd}
-      placeholder="BTFS command ..."
-      keyboardType="default"
-      
-    />
-      </View>
-      <View style={styles.sectionItemRight}>
-      <Button
-        title="Send"
-        onPress={sendBTFScmd}
-        disabled = {Platform.OS == 'android'}
-      />
-      </View>
-    </View>
+
 
 
 
@@ -746,42 +787,6 @@ const sendBTFScmd = () => {
         </View>
 
 
-
-        <View
-          style={[
-            styles.sectionItem,
-            { backgroundColor: theme.colors.background2 },
-          ]}
-        >
-          <View style={styles.sectionItemLeft}>
-            <FontAwesome5
-              name="key"
-              size={24}
-              color={theme.colors.primary}
-            />
-          </View>
-          <View style={styles.sectionItemCenter}>
-            <Text
-              style={[styles.sectionItemText, { color: theme.colors.primary }]}
-            >
-              File Storage Encryption (To-Do)
-            </Text>
-          </View>
-
-          <View style={styles.sectionItemRight}>
-            <Switch
-
-
-              trackColor={{
-                false: theme.colors.switchFalse,
-                true: 'tomato',
-              }}
-              thumbColor={theme.colors.switchThumb}
-
-            />
-          </View>
-
-        </View>
 
 
 

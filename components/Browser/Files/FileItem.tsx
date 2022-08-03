@@ -50,6 +50,7 @@ export default function FileItem({
   setRenamingFile,
   setRenameDialogVisible,
   setNewFileName,
+  qmhash,
 }: Props) {
   const { colors } = useAppSelector((state) => state.theme.theme);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -139,11 +140,12 @@ export default function FileItem({
             : decodeURI(item.name)
         }
         visible={itemActionsOpen}
-        actionItems={['Rename', 'Move', 'Copy', 'Copy BTFS Link', 'Share', 'Delete', 'Cancel']}
+        actionItems={['Rename', 'Move', 'Copy', 'Upload to BTFS', 'Copy BTFS CID', 'Share', 'Delete', 'Cancel']}
         itemIcons={[
           'edit',
           'drive-file-move',
           'file-copy',
+          'cloud-upload',
           'cloud',
           'share',
           'delete',
@@ -151,7 +153,7 @@ export default function FileItem({
         ]}
         onClose={setItemActionsOpen}
         onItemPressed={(buttonIndex) => {
-          if (buttonIndex === 5) {
+          if (buttonIndex === 6) {
             setTimeout(() => {
               Alert.alert(
                 'Confirm Delete',
@@ -174,15 +176,18 @@ export default function FileItem({
                 ]
               );
             }, 300);
-          } else if (buttonIndex === 4) {
+          } else if (buttonIndex === 5) {
             Sharing.isAvailableAsync().then((canShare) => {
               if (canShare) {
                 Sharing.shareAsync(docDir + '/' + item.name);
               }
             });
-          } else if (buttonIndex === 3) {
-
+          } else if (buttonIndex === 4) {
+            Alert.alert("Not implemented yet :)")
           }
+         else if (buttonIndex === 3) {
+            Alert.alert("Not implemented yet :)")
+        }
           else if (buttonIndex === 2) {
             setMoveOrCopy('Copy');
             if (!multiSelect) toggleSelect(item);

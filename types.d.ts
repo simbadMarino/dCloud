@@ -19,17 +19,19 @@ export type fileItem = {
   selected?: boolean;
   exists: true;
   uri: string;
+  qmhash: string;
   size: number;
   isDirectory: boolean;
   modificationTime: number;
   md5?: string;
-  qmhash: string;
+
 };
 
 export type ExtendedAsset = {
   id: string;
   filename: string;
   uri: string;
+  qmhash: string;
   mediaType: MediaLibrary.MediaTypeValue;
   mediaSubtypes?: string[] | undefined;
   width: number;
@@ -55,6 +57,7 @@ export interface imageFile {
   albumId: string;
   filename: string;
   uri: string;
+  qmhash: string;
   duration: number;
   width: number;
   height: number;
