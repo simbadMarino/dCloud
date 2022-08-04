@@ -612,7 +612,7 @@ function addFileToBTFS(file)
                    console.log(file.name + " Uploaded to BTFS :) for: " + default_storage + " days");
                    //console.log(fileUploadID);
                    //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-                   Alert.alert(file.name + " Uploaded to BTFS :)", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => this.closeAlert()}, ], { cancelable: true});
+                   Alert.alert(file.name + " Uploaded to BTFS :)", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
 
                    //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
 
