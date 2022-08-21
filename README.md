@@ -1,17 +1,27 @@
-# dCloud ++ Branch (New Expo UI)
+# dCloud 
+Brought to you by [cctechmx](https://www.cctechmx.org)
+
 dCloud is a Web3 Cloud Storage Mobile App
 
-The starting goal of dCloud is to create a seamless and masses ready app for Descentralized Cloud Storage(DCS) solutions. As a starting point and due to the possibility of having a light Full Node BTFS was picked up as the dCloud DCS.
+dCloud short/medium term goals in 2022:
+- Introduce an intuitive and portable way of uploading files to BTFS (iOS + Android).
+- Bring mobile apps to Google Play and App Store
+- Bring dCloud to desktop environments (macOS and Windows)
 
-dCloud is basically an Integration of [Termux](https://github.com/termux) | BTFS shared library + React Native/Expo GUI. dCloud propposed architecture is shown below:
+The  goal of dCloud is to create a seamless and masses ready app for Descentralized Cloud Storage(DCS) powered by [BTFS](https://github.com/bittorrent/go-btfs).
 
+dCloud is basically an Integration of a [BTFS shared library](https://github.com/simbadMarino/btfs-sharedLib) + React Native/Expo GUI. 
 
 
 
 **Getting started**
 
 
-Currently dCloud is only available for Android due to limitations on how iOS manages binary files, however further investigation/implementation is planned to release an iOS version.
+Currently dCloud is only available for the following platforms:
+
+  - Android 
+  - iOS
+  - macOS (experimental)
 
 As a Google Play / F-Droid version is not ready yet you will need to install dCloud using 
 
