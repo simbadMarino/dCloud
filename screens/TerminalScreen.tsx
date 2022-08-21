@@ -4,10 +4,10 @@ import { Alert, View, Text, StyleSheet, Button, Platform, NativeModules } from '
 
 export default class App extends React.Component {
   render() {
-    console.log(Platform.OS);
-    if(Platform.OS == 'ios')
-    {
-      const titleText = "iOS terminal, Work in progress... If you really need to send BTFS commands use the BTFS commands sender in Settings";
+
+      const titleText = "Work in progres (•̀ᴗ•́ )و. \n\n\nThanks for using dCloud!\n\n(∩｀-´)⊃━☆ﾟ.*･｡ﾟ\n\n v1.5.3"
+
+
 
       return (
           <View style={{ margin: 30, flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
@@ -22,27 +22,6 @@ export default class App extends React.Component {
 
           </View>
         );
-    }
-    else if(Platform.OS == 'android')
-    {
-      const titleText = "Terminal Service running in background";
-
-      return (
-          <View style={{ margin: 30, flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
-          <Text style={styles.titleText} >
-             {titleText}
-           </Text>
-
-
-                {NativeModules.Terminal.navigateToTerminal()}
-
-
-
-          </View>
-        );
-
-    }
-
 
 
 

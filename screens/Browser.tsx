@@ -9,7 +9,7 @@ import {
   Alert,
   BackHandler,
   Image,
-//  NativeModules
+  NativeModules
 } from 'react-native';
 
 import Dialog from 'react-native-dialog';
@@ -60,7 +60,7 @@ import { setImages } from '../features/files/imagesSlice';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import { HEIGHT, imageFormats, reExt, SIZE } from '../utils/Constants';
 var jDocumentRes = '';
-//const {BTFSmodule} = NativeModules;
+const {BTFSmodule} = NativeModules;
 var currentFileQMhash = '';
 
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -99,9 +99,26 @@ const Browser = ({ route }: IBrowserProps) => {
   const [qmhash, setqmhash] = useState('');
   const [default_storage, set_default_storage] = useState('');
   //const [fileResponse, setFileResponse] = useState([]);
+  const [btfsRepo, setbtfsRepo] = useState(false);
+  const [enableDaemon, setenableDaemon] = useState(false);
 
 
+  useEffect(()  => {
+    const setPreviousInitRepoSts= async () => {
+    const storedRepoSts= await AsyncStorage.getItem('btfsrepo_enable');
+    console.log(storedRepoSts);
+    let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
+    setbtfsRepo(boolStoredRepoSts);
+    setenableDaemon(boolStoredRepoSts);
+    if (boolStoredRepoSts)
+    {
+      enableBTFSDaemon(true);
+    }
 
+    };
+    setPreviousInitRepoSts();
+
+  },[]);
 
 
 
@@ -188,6 +205,12 @@ async function getStorageDuration(){
   //let numericstoredStorageDuration = parseInt(storedStorageDuration);
   set_default_storage(storedStorageDuration);
 
+
+}
+
+const enableBTFSDaemon = async (en) => {
+  if(en)
+    BTFSmodule.main("daemon --chain-id 199","commands");
 
 }
 
@@ -491,7 +514,7 @@ function addFileToBTFS(file)
                        console.log(file.name + " Uploaded to BTFS :) for: " + default_storage + " days");
                        //console.log(fileUploadID);
                        //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-                       Alert.alert(file.name + " Uploaded to BTFS :)", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => this.closeAlert()}, ], { cancelable: true});
+                       Alert.alert(file.name + " Uploaded to BTFS :)", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
 
                        //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
 

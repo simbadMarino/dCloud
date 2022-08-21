@@ -1,2 +1,0 @@
-[x86] Compile        : termux <= termux.c
-[x86] SharedLibrary  : libtermux.so

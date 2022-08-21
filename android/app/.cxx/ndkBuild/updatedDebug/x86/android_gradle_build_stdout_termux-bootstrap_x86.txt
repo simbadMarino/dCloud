@@ -1,3 +1,0 @@
-[x86] Compile        : termux-bootstrap <= termux-bootstrap-zip.S
-[x86] Compile        : termux-bootstrap <= termux-bootstrap.c
-[x86] SharedLibrary  : libtermux-bootstrap.so

@@ -94,12 +94,12 @@ apply from: new File(["node", "--print", "require.resolve('react-native/package.
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = true
+def enableSeparateBuildPerCPUArchitecture = false
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-//def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = false
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -124,59 +124,20 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
-    flavorDimensions "version"
-    productFlavors {
-
-        updated {
-            dimension "version"
-            targetSdkVersion project.properties.updatedTargetSdkVersion.toInteger()
-        }
-
-        current {
-            dimension "version"
-            targetSdkVersion project.properties.targetSdkVersion.toInteger()
-        }
-    }
-
-    compileSdkVersion project.properties.compileSdkVersion.toInteger()
+    compileSdkVersion rootProject.ext.compileSdkVersion
     ndkVersion project.properties.ndkVersion
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dependencies {
-        implementation "androidx.annotation:annotation:1.2.0"
-        implementation "androidx.core:core:1.5.0-rc01"
-        implementation "androidx.drawerlayout:drawerlayout:1.1.1"
-        implementation "androidx.preference:preference:1.1.1"
-        implementation "androidx.viewpager:viewpager:1.0.0"
-        implementation "com.google.guava:guava:24.1-jre"
-        implementation "io.noties.markwon:core:$markwonVersion"
-        implementation "io.noties.markwon:ext-strikethrough:$markwonVersion"
-        implementation "io.noties.markwon:linkify:$markwonVersion"
-        implementation "io.noties.markwon:recycler:$markwonVersion"
-
-        implementation project(":terminal-view")
-        implementation project(":termux-shared")
-    }
-
-
-
     defaultConfig {
         applicationId "com.justshare"
-        minSdkVersion project.properties.minSdkVersion.toInteger()
-        versionCode 20
-        versionName "1.5.0"
-
-        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
-        manifestPlaceholders.TERMUX_APP_NAME = "justshare"
-        manifestPlaceholders.TERMUX_API_APP_NAME = "Termux:API"
-        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "Termux:Boot"
-        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "Termux:Float"
-        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "Termux:Styling"
-        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "Termux:Tasker"
-        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "Termux:Widget"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.5.3"
 
         externalNativeBuild {
             ndkBuild {
@@ -187,13 +148,12 @@ android {
         ndk {
             abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
-
     }
     /*splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk true  // If true, also generate a universal APK
+            universalApk false  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }*/
@@ -204,16 +164,20 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(MYAPP_UPLOAD_STORE_FILE)
-                storePassword MYAPP_UPLOAD_STORE_PASSWORD
-                keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-            }
-        }
     }
     buildTypes {
+        /*
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.debug
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }*/
+
         release {
             minifyEnabled false
             shrinkResources false
@@ -223,39 +187,26 @@ android {
         debug {
             signingConfig signingConfigs.debug
         }
-
-        /*debug {
-            signingConfig signingConfigs.debug
-        }
-        release {
-
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            //signingConfig signingConfigs.debug
-            //minifyEnabled enableProguardInReleaseBuilds
-            //proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
-        }*/
     }
 
     // applicationVariants are e.g. debug, release
-    /* applicationVariants.all { variant ->
-         variant.outputs.each { output ->
-             // For each separate APK per architecture, set a unique version code as described here:
-             // https://developer.android.com/studio/build/configure-apk-splits.html
-             def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
-             def abi = output.getFilter(OutputFile.ABI)
-             if (abi != null) {  // null for the universal-debug, universal-release variants
-                 output.versionCodeOverride =
-                         versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
-             }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // https://developer.android.com/studio/build/configure-apk-splits.html
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+            }
 
-         }
-     }*/
+        }
+    }
 
     externalNativeBuild {
-        ndkBuild {
-            path "src/main/cpp/Android.mk"
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
 
@@ -271,10 +222,9 @@ android {
 }
 
 dependencies {
-    testImplementation "junit:junit:4.13.2"
-    testImplementation "org.robolectric:robolectric:4.4"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
+
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
@@ -303,10 +253,6 @@ dependencies {
     }
     
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation project(path: ':terminal-emulator')
-    implementation project(path: ':terminal-view')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
@@ -328,137 +274,9 @@ dependencies {
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
-// Run this once to be able to run the application with BUCK
-// puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
-    from configurations.implementation
+    from configurations.compile
     into 'libs'
-}
-
-task versionName {
-    doLast {
-        print android.defaultConfig.versionName
-    }
-}
-
-def expandBootstrap(File bootstrapZip, String expectedChecksum, String arch) {
-    def doneMarkerFile = new File(bootstrapZip.getAbsolutePath() + "." + expectedChecksum + ".done")
-    if (doneMarkerFile.exists()) return
-
-    def archDirName
-    if (arch == "aarch64") archDirName = "arm64-v8a";
-    if (arch == "arm") archDirName = "armeabi-v7a";
-    if (arch == "i686") archDirName = "x86";
-    if (arch == "x86_64") archDirName = "x86_64";
-
-    def outputPath = project.getRootDir().getAbsolutePath() + "/app/src/main/jniLibs/" + archDirName + "/"
-    def outputDir = new File(outputPath).getAbsoluteFile()
-    if (!outputDir.exists()) outputDir.mkdirs()
-
-    def symlinksFile = new File(outputDir, "libsymlinks.so").getAbsoluteFile()
-    if (symlinksFile.exists()) symlinksFile.delete();
-
-    def mappingsFile = new File(outputDir, "libfiles.so").getAbsoluteFile()
-    if (mappingsFile.exists()) mappingsFile.delete()
-    mappingsFile.createNewFile()
-    def mappingsFileWriter = new BufferedWriter(new FileWriter(mappingsFile))
-
-    def counter = 100
-    new java.util.zip.ZipInputStream(new FileInputStream(bootstrapZip)).withCloseable { zipInput ->
-        def zipEntry
-        while ((zipEntry = zipInput.getNextEntry()) != null) {
-            if (zipEntry.getName() == "SYMLINKS.txt") {
-                zipInput.transferTo(new FileOutputStream(symlinksFile))
-            } else if (!zipEntry.isDirectory()) {
-                def soName = "lib" + counter + ".so"
-                def targetFile = new File(outputDir, soName).getAbsoluteFile()
-
-                println "target file path is ${targetFile}"
-
-                try {
-                    zipInput.transferTo(new FileOutputStream(targetFile))
-                } catch (Exception e) {
-                    println "Error ${e}"
-                }
-
-
-                mappingsFileWriter.writeLine(soName + "←" + zipEntry.getName())
-                counter++
-            }
-        }
-    }
-
-    mappingsFileWriter.close()
-    doneMarkerFile.createNewFile()
-}
-
-def downloadBootstrap(String arch, String expectedChecksum, boolean isPackagesInApk) {
-
-    def digest = java.security.MessageDigest.getInstance("SHA-256")
-
-    def file = isPackagesInApk ? new File(project.buildDir, "./gradle/bootstrap-" + arch  + ".zip")
-            : new File(projectDir, "src/main/cpp/bootstrap-" + arch + ".zip");
-    if (file.exists()) {
-        def buffer = new byte[8192]
-        def input = new FileInputStream(file)
-        while (true) {
-            def readBytes = input.read(buffer)
-            if (readBytes < 0) break
-            digest.update(buffer, 0, readBytes)
-        }
-        def checksum = new BigInteger(1, digest.digest()).toString(16)
-        if (checksum == expectedChecksum) {
-            if (isPackagesInApk) expandBootstrap(file, expectedChecksum, arch)
-            return
-        } else {
-            logger.quiet("Deleting old local file with wrong hash: " + file)
-            file.delete()
-        }
-    }
-
-    def remoteUrl = "https://github.com/simbadMarino/dCloud/releases/download/v1.2.2_BTFS_Binaries" + "/bootstrap-" + arch + ".zip"
-    logger.quiet("Downloading " + remoteUrl + " ...")
-
-    file.parentFile.mkdirs()
-    def out = new BufferedOutputStream(new FileOutputStream(file))
-
-    def connection = new URL(remoteUrl).openConnection()
-    connection.setInstanceFollowRedirects(true)
-    def digestStream = new java.security.DigestInputStream(connection.inputStream, digest)
-    out << digestStream
-    out.close()
-
-    def checksum = new BigInteger(1, digest.digest()).toString(16)
-    if (checksum != expectedChecksum) {
-        file.delete()
-        throw new GradleException("Wrong checksum for " + remoteUrl + ": expected: " + expectedChecksum + ", actual: " + checksum)
-    }
-    if (isPackagesInApk) expandBootstrap(file, expectedChecksum, arch)
-}
-
-
-clean {
-    doLast {
-        def tree = fileTree(new File(projectDir, 'src/main/cpp'))
-        tree.include 'bootstrap-*.zip'
-        tree.each { it.delete() }
-    }
-}
-
-task downloadBootstraps() {
-    boolean isPackagesInApk = getGradle().getStartParameter().getTaskRequests().toString().contains("Updated");
-    doLast {
-        downloadBootstrap("aarch64", "d78dfbb3381fd965655ad0bc30d6c255412dbfb15afd463eb40529895eead74b",  isPackagesInApk)
-        downloadBootstrap("arm",     "6f83d2e316d606774973ba0ea6d98f83f5f3cc952577f37ee483eb68ab6749aa",  isPackagesInApk)
-        downloadBootstrap("i686",    "db9018c4fd85ff58281562722e023cdbfde1891e9a6e3f821820243ce018c13",  isPackagesInApk)
-        downloadBootstrap("x86_64",  "aa20abbe1d206e1fabdd5d7b50e34fc13227c4dde1ac62bbc24e456e3b91397d",  isPackagesInApk)
-    }
-}
-
-afterEvaluate {
-    android.applicationVariants.all { variant ->
-        variant.javaCompileProvider.get().dependsOn(downloadBootstraps)
-    }
 }
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");

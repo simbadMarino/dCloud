@@ -12,8 +12,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		476C346BA0EF4162BB738E65 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97901F9358248A6BAB8877F /* noop-file.swift */; };
-		85072CD428435F8C0057A559 /* btfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85072CD328435F8B0057A559 /* btfs.a */; };
 		85B56BCA2859AE6B0068EF50 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85B56BC92859AE6B0068EF50 /* CloudKit.framework */; };
+		85D543E7289F8DC800940B7B /* btfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D543E5289F8DC800940B7B /* btfs.a */; };
 		85EA4F92283F3EB8008E9789 /* BTFSnodeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */; };
 		85EA4F94283F3FE9008E9789 /* BTFSnodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */; };
 		96905EF65AED1B983A6B3ABC /* libPods-justshare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-justshare.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -32,9 +32,9 @@
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-justshare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-justshare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-justshare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-justshare.debug.xcconfig"; path = "Target Support Files/Pods-justshare/Pods-justshare.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-justshare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-justshare.release.xcconfig"; path = "Target Support Files/Pods-justshare/Pods-justshare.release.xcconfig"; sourceTree = "<group>"; };
-		85072CD228435F8B0057A559 /* btfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = btfs.h; path = "../../btfs-sharedLib/cmd/btfs/btfs.h"; sourceTree = "<group>"; };
-		85072CD328435F8B0057A559 /* btfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = btfs.a; path = "../../btfs-sharedLib/cmd/btfs/btfs.a"; sourceTree = "<group>"; };
 		85B56BC92859AE6B0068EF50 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		85D543E5289F8DC800940B7B /* btfs.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = btfs.a; sourceTree = "<group>"; };
+		85D543E6289F8DC800940B7B /* btfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btfs.h; sourceTree = "<group>"; };
 		85EA4F91283F3EB8008E9789 /* BTFSnodeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BTFSnodeBridge.m; sourceTree = "<group>"; };
 		85EA4F93283F3FE9008E9789 /* BTFSnodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTFSnodeBridge.swift; sourceTree = "<group>"; };
 		85EA4F95283F43E7008E9789 /* RCTBTFSmodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBTFSmodule.h; sourceTree = "<group>"; };
@@ -52,8 +52,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				85B56BCA2859AE6B0068EF50 /* CloudKit.framework in Frameworks */,
-				85072CD428435F8C0057A559 /* btfs.a in Frameworks */,
 				96905EF65AED1B983A6B3ABC /* libPods-justshare.a in Frameworks */,
+				85D543E7289F8DC800940B7B /* btfs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,12 +63,12 @@
 		13B07FAE1A68108700A75B9A /* justshare */ = {
 			isa = PBXGroup;
 			children = (
-				85072CD328435F8B0057A559 /* btfs.a */,
-				85072CD228435F8B0057A559 /* btfs.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				85D543E5289F8DC800940B7B /* btfs.a */,
+				85D543E6289F8DC800940B7B /* btfs.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -186,7 +186,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = P6UG545LF4;
@@ -348,7 +348,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/justshare",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -386,7 +386,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/justshare",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -426,6 +426,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -484,6 +485,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -508,6 +510,7 @@
 				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -43,7 +43,7 @@ const [node_id, set_node_id] = useState('');
 const [btfs_ver, set_btfs_ver] = useState('');
 const [btfs_peers, set_btfs_peers] = useState('');
 const [btfs_uptime, set_btfs_uptime] = useState('');
-const [default_storage, set_default_storage] = useState(0);
+const [default_storage, set_default_storage] = useState(32);
 const [host_score,set_host_score] = useState('');
 const [isEnabled, setIsEnabled] = useState(false);
 const [enableDaemon, setenableDaemon] = useState(false);
@@ -82,22 +82,17 @@ const f_enableStorageSaver = async (en) => {
 
 const enableBTFSDaemon = async (en) => {
   if(en)
-    BTFSmodule.main("daemon --chain-id 199","commands");
-
+  {
+    if(Platform.OS == 'ios')
+    {
+      BTFSmodule.main("daemon --chain-id 199","commands");
+    }
+  }
 }
 
 const initializeRepo = async () => {
-  BTFSmodule.main("init","commands");
-  /*let data = Client10.setApiUrl("http://127.0.0.1:5001");
-  Promise.resolve(data).then(function(data) {
-    console.log(data); // "Success"
 
-      Alert.alert("Repo initialized in dCloud/Documents :)");
-
-
-}, function(data) {
-  // not called
-});*/
+    BTFSmodule.main("init","commands");
 
 }
 
@@ -502,102 +497,11 @@ const sendBTFScmd = () => {
                  console.log("Deactivating Repo(no action)");
                }
              }}
-             disabled={Platform.OS == 'android'}
+
           />
         </View>
       </View>
 
-
-      <View
-        style={[
-          styles.sectionItem,
-          { backgroundColor: theme.colors.background2 },
-        ]}
-      >
-        <View style={styles.sectionItemLeft}>
-          <Feather
-            name={'hard-drive'}
-            size={24}
-            color={theme.colors.primary}
-          />
-        </View>
-
-        <View style={styles.sectionItemCenter}>
-          <Text
-            style={[styles.sectionItemText, { color: theme.colors.primary }]}
-          >
-            {"Host enabled"}
-          </Text>
-        </View>
-        <View style={styles.sectionItemRight}>
-          <Switch
-             trackColor={{ false: "#767577", true: "#81b0ff" }}
-             thumbColor={theme.colors.switchThumb}
-             value={isEnabled}
-             onValueChange={async (value) => {
-               if (value) {
-                 setIsEnabled(value);
-                 enableHostMode(true);
-                 await AsyncStorage.setItem('host_enable', 'true');
-                 console.log("Changing to true")
-               } else {
-                 setIsEnabled(value);
-                 enableHostMode(false);
-                 await AsyncStorage.setItem('host_enable', 'false');
-                 console.log("Changing to false")
-               }
-             }}
-             disabled={false}
-          />
-        </View>
-    </View>
-
-
-    <View
-      style={[
-        styles.sectionItem,
-        { backgroundColor: theme.colors.background2 },
-      ]}
-    >
-      <View style={styles.sectionItemLeft}>
-        <Feather
-          name={'command'}
-          size={24}
-          color={theme.colors.primary}
-        />
-      </View>
-    <View style={styles.sectionItemCenter}>
-      <Text
-        style={[styles.sectionItemText, { color: theme.colors.primary }]}
-      >
-        {"BTFS Daemon"}
-      </Text>
-    </View>
-    <View style={styles.sectionItemRight}>
-      <Switch
-         trackColor={{ false: "#767577", true: "#81b0ff" }}
-         thumbColor={theme.colors.switchThumb}
-         value={enableDaemon}
-         onValueChange={async (value2) => {
-           if (value2) {
-             setenableDaemon(value2);
-             enableBTFSDaemon(true);
-             await AsyncStorage.setItem('daemon_enable', 'true');
-             console.log("Enabling daemon")
-           } else {
-             setenableDaemon(value2);
-             /*if(btfsRepo)
-             {
-               enableBTFSDaemon(true);
-             }*/
-             await AsyncStorage.setItem('daemon_enable', 'false');
-             //console.log("Disabling daemon")
-           }
-         }}
-         disabled={Platform.OS == 'android'}
-      />
-    </View>
-</View>
 
 
 <View

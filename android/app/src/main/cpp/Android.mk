@@ -1,5 +1,5 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
-LOCAL_MODULE := libtermux-bootstrap
-LOCAL_SRC_FILES := termux-bootstrap-zip.S termux-bootstrap.c
-include $(BUILD_SHARED_LIBRARY)
+LOCAL_MODULE := foo
+LOCAL_SRC_FILES := ../jniLibs/$(TARGET_ARCH_ABI)/libfoo.so
+include $(PREBUILT_SHARED_LIBRARY)
