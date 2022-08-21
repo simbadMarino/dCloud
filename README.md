@@ -23,6 +23,11 @@ Currently dCloud is only available for the following platforms:
   - iOS
   - macOS (experimental)
 
+## EVERYTHING BEYOND this line is under update, please ignore until further notice!!
+<a href="" target="_blank">
+<img src="https://thumbs.dreamstime.com/z/thin-line-style-under-maintenance-message-banner-100071034.jpg" width="600" height="350">
+</a>
+
 As a Google Play / F-Droid version is not ready yet you will need to install dCloud using 
 
 **a) Compiling from Android Studio by cloning this repo and performing the following actions:**
