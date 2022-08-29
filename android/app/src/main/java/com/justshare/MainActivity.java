@@ -1,29 +1,33 @@
 package com.justshare;
-
 import android.os.Build;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.NativeModule;
+
 import android.util.Log;
 import expo.modules.ReactActivityDelegateWrapper;
+import kotlin.jvm.JvmName;
 
 public class MainActivity extends ReactActivity {
-  /*static {
-    System.loadLibrary("foo");
-  }*/
+
   //public native String  stringFromJNI();
+  private static final native String mainC(String var0);
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
+    // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null);
-    /*String text = stringFromJNI();
-    Log.d("MainActivity", text);*/
+
+
+
+    //Log.d("MainActivity", text);
   }
+
 
   /**
    * Returns the name of the main component registered from JavaScript.
@@ -61,5 +65,8 @@ public class MainActivity extends ReactActivity {
     super.invokeDefaultOnBackPressed();
   }
 
-
+  static {
+    Log.d("LIB_LOAD","Loading BTFS library");
+   // System.loadLibrary("nativelib");
+  }
 }

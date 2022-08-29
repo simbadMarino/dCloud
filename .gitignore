@@ -91,7 +91,7 @@ project.xcworkspace
 # Android/IntelliJ
 #
 build/
-.idea
+android/.idea
 .gradle
 local.properties
 *.iml
@@ -119,5 +119,9 @@ buck-out/
 .expo/
 web-build/
 dist/
+
+#jniLibs
+android/nativelib/src/main/jniLibs/
+android/nativelib/.cxx/
 
 # @end expo-cli
