@@ -126,6 +126,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -140,7 +141,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                cFlags "-std=c11", "-Wall", "-Wextra", "-Werror", "-Os", "-fno-stack-protector", "-Wl,--gc-sections"
+                cFlags ""
             }
         }
 
@@ -205,11 +206,11 @@ android {
         }
     }
 
-    /*externalNativeBuild {
+    externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
         }
-    }*/
+    }
 
     lintOptions {
         disable 'ProtectedPermissions'

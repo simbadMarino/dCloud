@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class coreBTFSPackage implements ReactPackage {
+public class BTFSPackage implements ReactPackage {
 
    
 
@@ -25,7 +25,7 @@ class coreBTFSPackage implements ReactPackage {
             ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new coreBTFSModule(reactContext));
+        modules.add(new BTFSmodule(reactContext));
 
         return modules;
     }

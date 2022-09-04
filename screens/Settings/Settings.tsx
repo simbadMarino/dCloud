@@ -83,10 +83,9 @@ const f_enableStorageSaver = async (en) => {
 const enableBTFSDaemon = async (en) => {
   if(en)
   {
-    if(Platform.OS == 'ios')
-    {
+
       BTFSmodule.main("daemon --chain-id 199","commands");
-    }
+
   }
 }
 
@@ -488,7 +487,7 @@ const sendBTFScmd = () => {
              onValueChange={async (value) => {
                if (value) {
                  setbtfsRepo(value);
-                 initializeRepo(true);
+                 initializeRepo();
                  await AsyncStorage.setItem('btfsrepo_enable', 'true');
                  console.log("Initializing Repo");
                } else {
