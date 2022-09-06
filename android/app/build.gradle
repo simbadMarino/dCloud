@@ -187,6 +187,7 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -209,6 +210,7 @@ android {
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
         }
     }
 
