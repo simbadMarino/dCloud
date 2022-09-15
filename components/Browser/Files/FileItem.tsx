@@ -26,6 +26,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppSelector } from '../../../hooks/reduxHooks';
 import { fileIcons } from '../../../utils/Constants';
 
+//import { MMKV } from 'react-native-mmkv'
+//export const FileItemMMKV = new MMKV();
+
 type Props = {
   item: fileItem;
   currentDir: string;
@@ -50,7 +53,6 @@ export default function FileItem({
   setRenamingFile,
   setRenameDialogVisible,
   setNewFileName,
-  qmhash,
 }: Props) {
   const { colors } = useAppSelector((state) => state.theme.theme);
   const navigation = useNavigation<StackNavigationProp<any>>();

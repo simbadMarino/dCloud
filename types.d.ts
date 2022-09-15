@@ -31,7 +31,6 @@ export type ExtendedAsset = {
   id: string;
   filename: string;
   uri: string;
-  qmhash: string;
   mediaType: MediaLibrary.MediaTypeValue;
   mediaSubtypes?: string[] | undefined;
   width: number;

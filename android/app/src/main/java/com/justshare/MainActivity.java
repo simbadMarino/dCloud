@@ -65,7 +65,7 @@ public class MainActivity extends ReactActivity {
 
   static {
    Log.d("LIB_LOAD","Loading BTFS library");
-    System.loadLibrary("foo");
+    System.loadLibrary("btfs");
     System.loadLibrary("nativelib");
   }
 }

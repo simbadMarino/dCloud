@@ -45,7 +45,7 @@
     </scenes>
     <color key="tintColor" systemColor="labelColor"/>
     <resources>
-        <image name="SplashScreen" width="840" height="569"/>
+        <image name="SplashScreen" width="414" height="414"/>
         <image name="SplashScreenBackground" width="1" height="1"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

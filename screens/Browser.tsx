@@ -23,6 +23,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
 import FileItem from '../components/Browser/Files/FileItem';
+//import FileItemMMKV from '../components/Browser/Files/FileItem';
 import Pickimages from '../components/Browser/PickImages';
 import ActionSheet from '../components/ActionSheet';
 import SvgComponentFile from "../assets/icons/svgAddFile";
@@ -68,6 +69,8 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Client10 from '../utils/APIClient10.js'
+
+
 
 type BrowserParamList = {
   Browser: { prevDir: string; folderName: string };
@@ -253,7 +256,6 @@ function addFileToBTFS(file)
   const renderItem = ({ item }: { item: fileItem }) => (
     <FileItem
       item={item}
-      qmhash={qmhash}
       currentDir={currentDir}
       toggleSelect={toggleSelect}
       multiSelect={multiSelect}
@@ -590,8 +592,7 @@ function addFileToBTFS(file)
       formData.append(file.name, {
             uri: file.uri,
             name: file.name ,
-            type: file.type,
-            qmhash: file.qmhash
+            type: file.type
           });
 
       var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true&n=true", formData, {

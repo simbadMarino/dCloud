@@ -1,7 +1,6 @@
 #include <jni.h>
 #include <string>
-#include "libfoo.h"
-#include <cstdio>
+#include "libbtfs.h"
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_justshare_MainActivity_stringFromJNI(
