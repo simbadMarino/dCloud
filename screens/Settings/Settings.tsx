@@ -84,7 +84,7 @@ const enableBTFSDaemon = async (en) => {
   if(en)
   {
 
-      BTFSmodule.main("daemon --chain-id 199","commands");
+      //BTFSmodule.main("daemon --chain-id 199","commands");
 
   }
 }

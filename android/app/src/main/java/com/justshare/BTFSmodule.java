@@ -21,10 +21,25 @@ public class BTFSmodule extends ReactContextBaseJavaModule
 
     @ReactMethod
     public void main(String cmd,String dummy) {
+
+        Runnable btfsService = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mainC(cmd);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
+
         //private static final native String mainC(String in);
         Log.d("BTFSmodule","Commands to be send: "+ cmd);
+        Thread btfsThread = new Thread(btfsService);
+        btfsThread.start();
         //mainC(cmd);
-        Log.d("BTFSModule",mainC(cmd));
+        //Log.d("BTFSModule",mainC(cmd));
         Log.d("BTFSModule","Hello from Android");
     }
 
