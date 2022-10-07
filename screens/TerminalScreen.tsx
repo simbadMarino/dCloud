@@ -14,12 +14,6 @@ export default class App extends React.Component {
           <Text style={styles.titleText} >
              {titleText}
            </Text>
-           <Text >{Platform.OS}</Text>
-
-
-
-
-
           </View>
         );
 

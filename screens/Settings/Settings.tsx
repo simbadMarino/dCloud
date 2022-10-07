@@ -194,7 +194,7 @@ useEffect(() => {
 
     var response2 = await getGuideData();
 
-  }, 1500);
+  }, 600);
   return () => clearInterval(interval);
 }, []);
 

@@ -5,7 +5,7 @@ buildscript {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 24
         compileSdkVersion = 30
-        targetSdkVersion = 29
+        targetSdkVersion = 29  //TODO: Anything equal or higher than 30 will fail due to Android blocking p2p unsecure transactions. Need to workaround like
         kotlinVersion = "1.6.0"
     }
     repositories {

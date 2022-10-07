@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactMethod;
 
 public class BTFSmodule extends ReactContextBaseJavaModule
 {
+    long btfsThreadID = 0;
     public native String mainC(String var0);
 
     public BTFSmodule(ReactApplicationContext reactContext) {
@@ -36,8 +37,12 @@ public class BTFSmodule extends ReactContextBaseJavaModule
 
         //private static final native String mainC(String in);
         Log.d("BTFSmodule","Commands to be send: "+ cmd);
-        Thread btfsThread = new Thread(btfsService);
-        btfsThread.start();
+        if(btfsThreadID==0) {       //If No BTFS threads have been started before start a new thread
+            Thread btfsThread = new Thread(btfsService);
+            btfsThreadID = btfsThread.getId();
+            Log.d("New Thread ID:", btfsThreadID + "");
+            btfsThread.start();
+        }
         //mainC(cmd);
         //Log.d("BTFSModule",mainC(cmd));
         Log.d("BTFSModule","Hello from Android");

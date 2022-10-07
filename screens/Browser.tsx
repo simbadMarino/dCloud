@@ -63,6 +63,8 @@ import { HEIGHT, imageFormats, reExt, SIZE } from '../utils/Constants';
 var jDocumentRes = '';
 const {BTFSmodule} = NativeModules;
 var currentFileQMhash = '';
+var OSpath = '';
+var OSpathHomeSize = 0;
 
 import Clipboard from "@react-native-clipboard/clipboard";
 
@@ -120,6 +122,17 @@ const Browser = ({ route }: IBrowserProps) => {
 
     };
     setPreviousInitRepoSts();
+
+    if(Platform.OS == "android")  //Determine HOME dir per OS
+    {
+      OSpath = "files";
+      OSpathHomeSize = 5;
+    }
+    else if (Platform.OS == "ios")
+    {
+      OSpath = "Documents";
+      OSpathHomeSize = 9;
+    }
 
   },[]);
 
@@ -238,7 +251,7 @@ function addBTFS(directory){
 
 function addFileToBTFS(file)
 {
-  let homePointer = currentDir.search("Documents") + 9; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+  let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
   let file_stripped = file.slice(homePointer);
   console.log("File to be added: " + file_stripped);
   let data = Client10.addBTFSfile(file_stripped);
@@ -341,7 +354,7 @@ function addFileToBTFS(file)
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage'
+            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js'
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
@@ -393,14 +406,14 @@ function addFileToBTFS(file)
         {
             //console.log("You are in home dir!");
             //console.log(currentDir.search("Documents"))
-            let homePointer = currentDir.search("Documents") + 9; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+            let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + OSpath home folder, 9 is the "Documents" string magic number
             console.log(homePointer);
             makedir(currentDir.slice(homePointer)  + name);
         }
         else
         {
           //console.log("NOT IN HOME dir");
-          let homePointer = currentDir.search("Documents") + 9;   // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+          let homePointer = currentDir.search(OSpath) + OSpathHomeSize;   // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
           //console.log(homePointer);
           makedir(currentDir.slice(homePointer) + '/' + name);
 
@@ -492,7 +505,7 @@ function addFileToBTFS(file)
                     console.log("Step 2");
                     //console.log(file);
                     console.log("QMhash obtained :), proceeding to upload file...");
-                    let homePointer = currentDir.search("Documents") + 9; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+                    let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, O is the "Documents" string magic number
                     let currentdir_stripped = currentDir.slice(homePointer);
                     console.log(currentdir_stripped);
                     var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
@@ -552,10 +565,25 @@ function addFileToBTFS(file)
 
 
     try {
-      const response = await DocumentPicker.pick({
-        presentationStyle: 'fullScreen',
-        allowMultiSelection: true,
-      });
+      var response = [];
+      if(Platform.OS == "android")
+      {
+         response = await DocumentPicker.pick({
+          presentationStyle: 'fullScreen',
+          allowMultiSelection: true,
+          copyTo: "cachesDirectory", //TODO: Android Only?
+        });
+      }
+
+      if(Platform.OS == "ios")
+      {
+         response = await DocumentPicker.pick({
+          presentationStyle: 'fullScreen',
+          allowMultiSelection: true,
+        });
+      }
+
+
       console.log(response);
       //setResult(response);
 
@@ -576,24 +604,36 @@ function addFileToBTFS(file)
       //const obj = JSON.parse(response[0]);
       console.log(file);
       console.log("Index: " + index);
-      var urresponse = decodeURIComponent(file.uri);
+      var urresponse = decodeURIComponent(file.fileCopyUri); //TODO:Check if this is OK for Android
       console.log("urresponse: " + urresponse);
       //console.log(currentDir);
 
       FileSystem.copyAsync({
-        from: file.uri,
+        from: file.fileCopyUri,  //TODO:Check if this is OK for Android
         to: currentDir  + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase(),
       })
       console.log("Step 1");
       //addFileToBTFS(currentDir + '/' + file.name);
       getFiles();
 
+      if(Platform.OS == "android")
+      {
+        formData.append(file.name, {
+              uri: file.fileCopyUri,
+              name: file.name ,
+              type: file.type
+            });
+      }
 
-      formData.append(file.name, {
-            uri: file.uri,
-            name: file.name ,
-            type: file.type
-          });
+      if(Platform.OS == "ios")
+      {
+        formData.append(file.name, {
+              uri: file.uri,
+              name: file.name ,
+              type: file.type
+            });
+      }
+
 
       var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true&n=true", formData, {
           headers: {
@@ -612,7 +652,7 @@ function addFileToBTFS(file)
                 console.log("Step 2");
                 //console.log(file);
                 console.log("QMhash obtained :), proceeding to upload file...");
-                let homePointer = currentDir.search("Documents") + 9; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+                let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
                 let currentdir_stripped = currentDir.slice(homePointer);
                 console.log(currentdir_stripped);
                 var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())

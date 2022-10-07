@@ -383,7 +383,7 @@ function sendDevFee(fee){
       var response =  await getBTTCAddress();
       var response2 =  await getWBTTBalance();
       var response3 = await getBTTBalance();
-    }, 2000);
+    }, 500);
     return () => clearInterval(interval);
   }, []);
 
