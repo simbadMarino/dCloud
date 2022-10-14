@@ -91,7 +91,14 @@ const enableBTFSDaemon = async (en) => {
 
 const initializeRepo = async () => {
 
-    BTFSmodule.main("init","commands");
+try
+{
+  BTFSmodule.main("init","commands");
+}
+catch (err) {
+ console.log(err);
+}
+
 
 }
 
@@ -194,7 +201,7 @@ useEffect(() => {
 
     var response2 = await getGuideData();
 
-  }, 600);
+  }, 1000);
   return () => clearInterval(interval);
 }, []);
 
@@ -231,6 +238,10 @@ useEffect(()  => {
 useEffect(()  => {
   const setPreviousStorageDuration = async () => {
   const storedStorageDuration = await AsyncStorage.getItem('storage_duration');
+  if (storedStorageDuration == null)
+  {
+    await AsyncStorage.setItem('storage_duration', '32');
+  }
   console.log(storedStorageDuration);
   let numericstoredStorageDuration = parseInt(storedStorageDuration);
   set_default_storage(numericstoredStorageDuration);
@@ -507,6 +518,7 @@ const sendBTFScmd = () => {
   style={[
     styles.sectionItem,
     { backgroundColor: theme.colors.background2 },
+    {display: 'none'}
   ]}
 >
   <View style={styles.sectionItemLeft}>

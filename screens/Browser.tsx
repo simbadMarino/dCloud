@@ -65,6 +65,8 @@ const {BTFSmodule} = NativeModules;
 var currentFileQMhash = '';
 var OSpath = '';
 var OSpathHomeSize = 0;
+var actionItemsVar = [];
+var itemIconsVar = [];
 
 import Clipboard from "@react-native-clipboard/clipboard";
 
@@ -103,6 +105,7 @@ const Browser = ({ route }: IBrowserProps) => {
   const [result, setResult] = useState<Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null>();
   const [qmhash, setqmhash] = useState('');
   const [default_storage, set_default_storage] = useState('');
+  //const [storage_saver, set_storage_saver] = useState('');
   //const [fileResponse, setFileResponse] = useState([]);
   const [btfsRepo, setbtfsRepo] = useState(false);
   const [enableDaemon, setenableDaemon] = useState(false);
@@ -127,11 +130,33 @@ const Browser = ({ route }: IBrowserProps) => {
     {
       OSpath = "files";
       OSpathHomeSize = 5;
+      actionItemsVar = [
+        'Import File from Storage',
+        'Import CID',
+        'Cancel',
+      ];
+      itemIconsVar = [
+        'storage',
+        'cloud-download',
+        'close',
+      ];
     }
     else if (Platform.OS == "ios")
     {
       OSpath = "Documents";
       OSpathHomeSize = 9;
+      actionItemsVar = [
+        'Camera Roll',
+        'Import File from Storage',
+        'Import CID',
+        'Cancel',
+      ];
+      itemIconsVar = [
+        'camera-roll',
+        'storage',
+        'cloud-download',
+        'close',
+      ];
     }
 
   },[]);
@@ -151,6 +176,8 @@ const Browser = ({ route }: IBrowserProps) => {
       getFiles();
       console.log("Getting default storage...");
       getStorageDuration();
+      //console.log("Getting storage saver data...");
+      //getStorageSaverFlag();
 
     });
 
@@ -217,9 +244,23 @@ const Browser = ({ route }: IBrowserProps) => {
 async function getStorageDuration(){
 
   const storedStorageDuration = await AsyncStorage.getItem('storage_duration');
+  if (storedStorageDuration == null)
+  {
+    await AsyncStorage.setItem('storage_duration', '32');
+  }
   console.log(storedStorageDuration);
   //let numericstoredStorageDuration = parseInt(storedStorageDuration);
   set_default_storage(storedStorageDuration);
+
+
+}
+
+async function getStorageSaverFlag(){
+
+  const storedStorageSaver = await AsyncStorage.getItem('storage_saver');
+  console.log(storedStorageSaver);
+  //let numericstoredStorageDuration = parseInt(storedStorageDuration);
+  set_storage_saver(storedStorageSaver);
 
 
 }
@@ -444,6 +485,7 @@ function addFileToBTFS(file)
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsMultipleSelection: false,
       aspect: [4, 3],
       quality: 1,
     });
@@ -476,9 +518,9 @@ function addFileToBTFS(file)
         {
           const formData = new FormData();
 
-          console.log("FILE: " + file);
-          var urresponse = decodeURIComponent(file.uri);
-          console.log("urresponse: " + urresponse);
+          console.log(file);
+        //  var urresponse = decodeURIComponent(file.uri);
+          //console.log("urresponse: " + urresponse);
 
 
 
@@ -550,7 +592,7 @@ function addFileToBTFS(file)
                       });
 
 
-                      const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
+                      //const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
                       //let filenameStr = file.name.replace(' ','_').replace('-', '_');
                       //filenameStr = filenameStr.replace(/-/,'_');
                       //console.log("str filename: " + filenameStr);
@@ -566,23 +608,12 @@ function addFileToBTFS(file)
 
     try {
       var response = [];
-      if(Platform.OS == "android")
-      {
+
          response = await DocumentPicker.pick({
           presentationStyle: 'fullScreen',
           allowMultiSelection: true,
-          copyTo: "cachesDirectory", //TODO: Android Only?
+          //copyTo: "cachesDirectory", //TODO: Android Only?
         });
-      }
-
-      if(Platform.OS == "ios")
-      {
-         response = await DocumentPicker.pick({
-          presentationStyle: 'fullScreen',
-          allowMultiSelection: true,
-        });
-      }
-
 
       console.log(response);
       //setResult(response);
@@ -604,38 +635,31 @@ function addFileToBTFS(file)
       //const obj = JSON.parse(response[0]);
       console.log(file);
       console.log("Index: " + index);
-      var urresponse = decodeURIComponent(file.fileCopyUri); //TODO:Check if this is OK for Android
-      console.log("urresponse: " + urresponse);
+      //var urresponse = decodeURIComponent(file.fileCopyUri); //TODO:Check if this is OK for Android
+      //console.log("urresponse: " + urresponse);
       //console.log(currentDir);
 
-      FileSystem.copyAsync({
-        from: file.fileCopyUri,  //TODO:Check if this is OK for Android
-        to: currentDir  + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase(),
-      })
-      console.log("Step 1");
-      //addFileToBTFS(currentDir + '/' + file.name);
-      getFiles();
 
-      if(Platform.OS == "android")
-      {
-        formData.append(file.name, {
-              uri: file.fileCopyUri,
-              name: file.name ,
-              type: file.type
-            });
-      }
 
-      if(Platform.OS == "ios")
-      {
+
+        FileSystem.copyAsync({
+          from: file.uri,  //TODO:Check if this is OK for Android
+          to: currentDir  + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase(),
+        })
+        console.log("Step 1");
+        //addFileToBTFS(currentDir + '/' + file.name);
+        getFiles();
         formData.append(file.name, {
               uri: file.uri,
-              name: file.name ,
+              name: file.name,
               type: file.type
             });
-      }
 
 
-      var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true&n=true", formData, {
+
+
+
+      var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true", formData, {  //TODO: Future implementation: Enable storage saver by not copying files to btfs repo with http://localhost:5001/api/v1/add?w=true&n=true
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -654,21 +678,26 @@ function addFileToBTFS(file)
                 console.log("QMhash obtained :), proceeding to upload file...");
                 let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
                 let currentdir_stripped = currentDir.slice(homePointer);
-                console.log(currentdir_stripped);
-                var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
-                .then(function (fileCopyToMFS){
-                  console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase());
-                  console.log(fileCopyToMFS);
-                  console.log("Step 3");
-                //  getStorageDuration();
-                })
+                console.log("currentdir_Stripped: " + currentdir_stripped);
+                //Now proceeding to copy to Mutable File System
 
-                .catch(function(error) {
-                 console.log('There has been a problem with the BTFS copy command: ' + error.message);
-                            //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                            //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                            Alert.alert("BTFS Copy MFS Error", "Format error u.u ");
-                 });
+                  var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
+                  .then(function (fileCopyToMFS){
+                    console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase());
+                    console.log(fileCopyToMFS);
+                    console.log("Step 3");
+                  //  getStorageDuration();
+                  })
+
+                  .catch(function(error) {
+                   console.log('There has been a problem with the BTFS copy command: ' + error.message);
+                              //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                              //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+                              Alert.alert("BTFS Copy MFS Error", "Format error u.u ");
+                   });
+
+
+
                 console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
                 console.log("Step 4");
                 var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
@@ -697,7 +726,7 @@ function addFileToBTFS(file)
                   });
 
 
-                  const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
+                  //const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
                   //let filenameStr = file.name.replace(' ','_').replace('-', '_');
                   //filenameStr = filenameStr.replace(/-/,'_');
                   //console.log("str filename: " + filenameStr);
@@ -831,33 +860,32 @@ function addFileToBTFS(file)
       <ActionSheet
         title={'Add a new file'}
         visible={newFileActionSheet}
-        actionItems={[
-          'Camera Roll',
-          'Multi Image Picker',
-          'Import File from Storage',
-          'Import CID',
-          'Cancel',
-        ]}
-        itemIcons={[
-          'camera-roll',
-          'image',
-          'storage',
-          'cloud-download',
-          'close',
-        ]}
+        actionItems={actionItemsVar}
+        itemIcons={itemIconsVar}
         onClose={setNewFileActionSheet}
         onItemPressed={(buttonIndex) => {
-          if (buttonIndex === 0) {
-            pickImage();
-          } else if (buttonIndex === 1) {
-            setMultiImageVisible(true);
-          } else if (buttonIndex === 2) {
-            pickDocument();
-          } else if (buttonIndex === 3) {
-            setDownloadDialogVisible(true);
+          if(Platform.OS=='ios')
+          {
+            if (buttonIndex === 0) {
+              pickImage();
+            }  else if (buttonIndex === 1) {
+              pickDocument();
+            } else if (buttonIndex === 2) {
+              setDownloadDialogVisible(true);
+            }
           }
+          if(Platform.OS=='android')
+          {
+             if (buttonIndex === 0) {
+              pickDocument();
+            } else if (buttonIndex === 1) {
+              setDownloadDialogVisible(true);
+            }
+          }
+
+
         }}
-        cancelButtonIndex={4}
+        cancelButtonIndex={Platform.OS == 'ios'?3:2}
         modalStyle={{ backgroundColor: colors.background2 }}
         itemTextStyle={{ color: colors.text }}
         titleStyle={{ color: colors.secondary }}

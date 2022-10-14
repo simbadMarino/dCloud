@@ -14,11 +14,22 @@ extern "C" {
     Java_com_justshare_BTFSmodule_mainC(JNIEnv *env, jobject, jstring btfsCMD) {
         const char *cstr = env->GetStringUTFChars(btfsCMD, 0);
         //printf("Transformed Commands into %*C", cstr);
-        char *cout = mainC(const_cast<char *>(cstr));
-        jstring out = env->NewStringUTF(cout);
-        //std::string hello = "Hello from C++ mainC function";
-        env->ReleaseStringUTFChars(btfsCMD, cstr);
-        free(cout);
-        return out;
+        try
+        {
+            char *cout = mainC(const_cast<char *>(cstr));
+            jstring out = env->NewStringUTF(cout);
+            //std::string hello = "Hello from C++ mainC function";
+            env->ReleaseStringUTFChars(btfsCMD, cstr);
+            free(cout);
+            return out;
+        }
+        catch(...)
+        {
+            jstring out = env->NewStringUTF("General Error");
+            return out;
+        }
+
+
+
     }
 }

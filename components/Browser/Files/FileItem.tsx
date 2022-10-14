@@ -142,20 +142,18 @@ export default function FileItem({
             : decodeURI(item.name)
         }
         visible={itemActionsOpen}
-        actionItems={['Rename', 'Move', 'Copy', 'Upload to BTFS', 'Copy BTFS CID', 'Share', 'Delete', 'Cancel']}
+        actionItems={['Rename', 'Move', 'Copy', 'Share', 'Delete', 'Cancel']}
         itemIcons={[
           'edit',
           'drive-file-move',
           'file-copy',
-          'cloud-upload',
-          'cloud',
           'share',
           'delete',
           'close',
         ]}
         onClose={setItemActionsOpen}
         onItemPressed={(buttonIndex) => {
-          if (buttonIndex === 6) {
+          if (buttonIndex === 4) {
             setTimeout(() => {
               Alert.alert(
                 'Confirm Delete',
@@ -178,18 +176,13 @@ export default function FileItem({
                 ]
               );
             }, 300);
-          } else if (buttonIndex === 5) {
+          } else if (buttonIndex === 3) {
             Sharing.isAvailableAsync().then((canShare) => {
               if (canShare) {
                 Sharing.shareAsync(docDir + '/' + item.name);
               }
             });
-          } else if (buttonIndex === 4) {
-            Alert.alert("Not implemented yet :)")
           }
-         else if (buttonIndex === 3) {
-            Alert.alert("Not implemented yet :)")
-        }
           else if (buttonIndex === 2) {
             setMoveOrCopy('Copy');
             if (!multiSelect) toggleSelect(item);
@@ -204,7 +197,7 @@ export default function FileItem({
             setNewFileName(item.name);
           }
         }}
-        cancelButtonIndex={6}
+        cancelButtonIndex={5}
         modalStyle={{ backgroundColor: colors.background2 }}
         itemTextStyle={{ color: colors.text }}
         titleStyle={{ color: colors.secondary }}
