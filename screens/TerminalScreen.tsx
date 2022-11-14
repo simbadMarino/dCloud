@@ -5,7 +5,7 @@ import { Alert, View, Text, StyleSheet, Button, Platform, NativeModules } from '
 export default class App extends React.Component {
   render() {
 
-      const titleText = "Work in progres (•̀ᴗ•́ )و. \n\n\nThanks for using dCloud!\n\n(∩｀-´)⊃━☆ﾟ.*･｡ﾟ\n\n v1.5.3"
+      const titleText = "Work in progres (•̀ᴗ•́ )و. \n\n\nThanks for using dCloud!\n\n(∩｀-´)⊃━☆ﾟ.*･｡ﾟ\n\n v1.5.4"
 
 
 
@@ -14,6 +14,12 @@ export default class App extends React.Component {
           <Text style={styles.titleText} >
              {titleText}
            </Text>
+           <Text >{Platform.OS}</Text>
+
+
+
+
+
           </View>
         );
 

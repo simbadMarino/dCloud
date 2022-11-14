@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 
+
+
+import java.util.List;
+
 import androidx.annotation.NonNull;
 
 import com.facebook.react.PackageList;
@@ -52,7 +56,8 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-
+    // setContext here, so that if RunOnJVM() with golang.org/x/mobile/app to call JAVA from GO,
+    // will not cause error "no current JVM"
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     ApplicationLifecycleDispatcher.onApplicationCreate(this);
   }
@@ -62,6 +67,8 @@ public class MainApplication extends Application implements ReactApplication {
     super.onConfigurationChanged(newConfig);
     ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig);
   }
+
+
 
   /**
    * Loads Flipper in React Native templates. Call this in the onCreate method with something like

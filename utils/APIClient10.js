@@ -247,6 +247,10 @@ class APIClient10 {
       return this.request('/api/v1/guide-info')
     }
 
+    getUploadStatus(sessionID) {
+      return this.request('/api/v1/storage/upload/status?arg=' + sessionID)
+    }
+
 }
 
 const Client10 = new APIClient10();

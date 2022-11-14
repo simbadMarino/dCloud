@@ -443,7 +443,7 @@ function sendDevFee(fee){
           </View>
 
           <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background2}]} >
-          <ImageBackground source={require('../assets/cardBalance.png')} resizeMode="cover" style={styles.image}>
+
               <View
                 style={{
                     flexDirection: "row",
@@ -484,12 +484,10 @@ function sendDevFee(fee){
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
                 {"WBTT: "} {vaultBalance}
               </Text>
-              </ImageBackground>
           </Card>
 
           <Divider width={5} />
           <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background2}]}>
-          <ImageBackground source={require('../assets/cardSwap.png')} resizeMode="cover" style={styles.image}>
             <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>TOKEN Swap</Text>
 
             <View
@@ -538,7 +536,6 @@ function sendDevFee(fee){
               </TouchableOpacity>
 
             </View>
-            </ImageBackground>
           </Card>
         </ScrollView>
       </SafeAreaView>

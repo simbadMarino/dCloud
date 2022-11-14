@@ -9,7 +9,8 @@ import {
   Alert,
   BackHandler,
   Image,
-  NativeModules
+  NativeModules,
+  Modal,
 } from 'react-native';
 
 import Dialog from 'react-native-dialog';
@@ -272,7 +273,7 @@ const enableBTFSDaemon = async (en) => {
 }
 
 const CopyQmHash = () => {
-  Clipboard.setString(currentFileQMhash);
+  Clipboard.setString("http://gateway.btfs.io/btfs/" + currentFileQMhash);
   dispatch(setSnack({ message: 'QmHash Copied to Clipboard' }));
 };
 
@@ -568,10 +569,11 @@ function addFileToBTFS(file)
                     console.log("Step 4");
                     var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
                     .then(function (fileUploadID){
+                       console.log(fileUploadID.data.ID);
                        console.log(file.name + " Uploaded to BTFS :) for: " + default_storage + " days");
-                       //console.log(fileUploadID);
+
                        //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-                       Alert.alert(file.name + " Uploaded to BTFS :)", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
+                       Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
 
                        //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
 
@@ -702,10 +704,11 @@ function addFileToBTFS(file)
                 console.log("Step 4");
                 var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
                 .then(function (fileUploadID){
-                   console.log(file.name + " Uploaded to BTFS :) for: " + default_storage + " days");
-                   //console.log(fileUploadID);
+                   console.log(fileUploadID.data.ID);
+                   console.log(file.name + " Uploading to BTFS... for: " + default_storage + " days");
+
                    //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-                   Alert.alert(file.name + " Uploaded to BTFS :)", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
+                   Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
 
                    //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
 
