@@ -4,7 +4,7 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 24
-        compileSdkVersion = 30
+        compileSdkVersion = 31
         targetSdkVersion = 29  //TODO: Anything equal or higher than 30 will fail due to Android blocking p2p unsecure transactions. Need to workaround like
         kotlinVersion = "1.6.0"
     }
@@ -14,7 +14,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0")
+        classpath('com.android.tools.build:gradle:4.1.0')
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
 
         // NOTE: Do not place your application dependencies here; they belong
