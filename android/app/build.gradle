@@ -133,8 +133,8 @@ android {
         applicationId "com.justshare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.5.5"
+        versionCode 3
+        versionName "1.5.6"
 
         externalNativeBuild {
             ndkBuild {

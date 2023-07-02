@@ -5,7 +5,7 @@ buildscript {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 24
         compileSdkVersion = 31
-        targetSdkVersion = 29  //TODO: Anything equal or higher than 30 will fail due to Android blocking p2p unsecure transactions. Need to workaround like
+        targetSdkVersion = 33  //TODO: Anything equal or higher than 30 will fail due to Android blocking p2p unsecure transactions. Need to workaround like NEWS(June 23rd 2023): Attemping to fix with proposal from community: https://github.com/golang/go/issues/40569#issuecomment-1600898227
         kotlinVersion = "1.6.0"
     }
     repositories {

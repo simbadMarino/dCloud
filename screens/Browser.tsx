@@ -396,7 +396,7 @@ function addFileToBTFS(file)
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js'
+            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal'
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
