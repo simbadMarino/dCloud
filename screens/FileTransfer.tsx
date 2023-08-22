@@ -16,6 +16,8 @@ import {
 import * as FileSystem from "expo-file-system";
 import Constants from "expo-constants";
 
+import BTTlogo from '../assets/bttLogo.png';
+
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 import { base64reg, SIZE } from "../utils/Constants";
@@ -383,7 +385,7 @@ function sendDevFee(fee){
       var response =  await getBTTCAddress();
       var response2 =  await getWBTTBalance();
       var response3 = await getBTTBalance();
-    }, 500);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -405,9 +407,9 @@ function sendDevFee(fee){
   }, []);
 
   const placeholder = {
-      label: 'Select a Swap...',
+      label: 'Select a pair...',
       value: null,
-      color: '#9EA0A4',
+      color: theme.colors.primary,
     };
   return (
 
@@ -420,7 +422,14 @@ function sendDevFee(fee){
               width: 340,
             }}
           >
-            <Text style={styles.fileTabTitleText}>Wallet Manager</Text>
+          <Icon
+            name="cube"
+            type="font-awesome"
+            color={theme.colors.primary}
+            size={18}
+          />
+            <Text style={styles.WalletTitleText}>   BitTorrent Chain</Text>
+
           </View>
           <SafeAreaView style={{flex:1}}>
             <ScrollView
@@ -433,62 +442,87 @@ function sendDevFee(fee){
                 />
               }
             >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              width: 340,
-            }}
-          >
-          </View>
 
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background2}]} >
+
+          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background3}]} >
 
               <View
                 style={{
                     flexDirection: "row",
-                    justifyContent: 'space-between',
+
                   }}
                 >
-                  <Text style={[styles.sectionTitle, { color: theme.colors.primary }]} >
-                    BTTC Address
-                  </Text>
-                    <Icon
-                      name="copy"
-                      type="font-awesome"
-                      color={theme.colors.primary}
-                      size={18}
-                      onPress={copyToClipboard}
-                    />
+
+                <Text style={[styles.textbalanceBTT, { color: theme.colors.primary }]}>
+                   {bttBalance}
+                </Text>
+                <Text style={[styles.textBTT_currency, { color: theme.colors.primary }]}>
+                   {" BTT"}
+                </Text>
+
+
+              </View>
+              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
+                {wbttBalance}{" WBTT"}
+              </Text>
+
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  width: 220,
+                }}
+              >
+
+              <Text style={[styles.addressItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
+                {bttAddress + "  "}
+              </Text>
+
+              <Icon
+                name="copy"
+                type="font-awesome"
+                color={theme.colors.primary}
+                size={18}
+                onPress={copyToClipboard}
+              />
               </View>
 
-              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
-                {bttAddress + "    "} {"                           "}
-              </Text>
 
 
-              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
-                {"BTT: "} {bttBalance}
-              </Text>
-              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
-                {"WBTT: "}{wbttBalance}
-              </Text>
               <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>
                 Vault Address
               </Text>
 
-              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
-                {vaultAddress} {"                               "}
+              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
+                 {vaultBalance}{" WBTT"}
               </Text>
 
-              <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
-                {"WBTT: "} {vaultBalance}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  width: 220,
+                }}
+              >
+              <Text style={[styles.addressItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
+                {vaultAddress + "  "}
               </Text>
+              <Icon
+                name="copy"
+                type="font-awesome"
+                color={theme.colors.primary}
+                size={18}
+                onPress={copyToClipboard}
+              />
+              </View>
+
+
           </Card>
 
           <Divider width={5} />
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background2}]}>
-            <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>TOKEN Swap</Text>
+          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background3}]}>
+            <Text style={[styles.tokenSwapTitleText, { color: theme.colors.primary }]}>Token Swap</Text>
 
             <View
               style={{
@@ -498,6 +532,7 @@ function sendDevFee(fee){
             >
 
               <RNPickerSelect
+
             placeholder={placeholder}
             items={bttSWAP}
             onValueChange={value => {
@@ -508,21 +543,31 @@ function sendDevFee(fee){
               ...pickerSelectStyles,
               iconContainer: {
                 top: 10,
-                right: 12,
+                position: 'absolute',
+                right: 30,
               },
             }}
             value={selectedSwap}
             useNativeAndroidPickerStyle={false}
-            textInputProps={{ underlineColor: 'yellow' }}
             Icon={() => {
-              return <Feather name="arrow-down" size={24} color="gray" />;
+              return <Feather name="refresh-ccw" size={24} color="gray" />;
             }}
+
           />
 
           <Input style={[styles.sectionCardItemLeft, { color: theme.colors.primary }]}
             keyboardType="number-pad"
             placeholder="Amount"
-            fontSize={12}
+            leftIcon={
+              <Icon
+                name='bold'
+                type="feather"
+                size={20}
+                solid='true'
+                color={theme.colors.primary}
+
+              />
+            }
             onChangeText={async (value) => set_amountToSwap(value)}
             value={amountToSwap}
           />
@@ -598,7 +643,8 @@ const styles = StyleSheet.create({
     borderRadius: 35,
   },
   sectionCardItemLeft: {
-    width: '20%',
+    fontSize: 16,
+    height: 20,
     display: 'flex',
     justifyContent: 'flex-start',
   },
@@ -623,12 +669,12 @@ const styles = StyleSheet.create({
     width: "30%",
     backgroundColor: "#6495ed",
     borderRadius: 15,
-    height: 40,
+    height: 30,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 5,
-    marginLeft: 10,
-    marginBottom: 5,
+    marginTop: 0,
+    marginLeft: 0,
+    marginBottom: 0,
   },
   cardAddressText: {
     fontSize: 12,
@@ -661,8 +707,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     margin: 1,
   },
-  fileTabTitleText: {
-    fontSize: 25,
+  WalletTitleText: {
+    fontSize: 14,
     fontFamily: 'Poppins_600SemiBold',
     color: "gray",
   },
@@ -674,9 +720,26 @@ const styles = StyleSheet.create({
   sectionItemText: {
     fontFamily: 'Poppins_500Medium',
   },
+  textbalanceBTT: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 25,
+  },
+  textBTT_currency:{
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 16,
+  },
+  addressItemText: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 12,
+    color: "gray",
+  },
   sectionTitle: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 16,
+  },
+  tokenSwapTitleText: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 20,
   },
   image: {
   flex: 1,
@@ -707,6 +770,7 @@ const pickerSelectStyles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
     paddingRight: 30, // to ensure the text is never behind the icon
   },
+
 });
 
 export default FileTransfer;

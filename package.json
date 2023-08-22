@@ -44,6 +44,7 @@
     "react": "17.0.1",
     "react-dom": "16.14.0",
     "react-native": "0.64.4",
+    "react-native-app-intro-slider": "^4.0.4",
     "react-native-appearance": "^0.3.4",
     "react-native-dialog": "*",
     "react-native-document-picker": "^8.1.1",

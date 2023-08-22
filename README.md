@@ -1,4 +1,4 @@
-# dCloud 
+# dCloud
 Brought to you by [cctechmx](https://www.cctechmx.org)
 
 “Secure, seamless, fully decentralized”
@@ -6,12 +6,12 @@ Brought to you by [cctechmx](https://www.cctechmx.org)
 Project goal: Bring decentralized cloud storage (BTFS) to the masses by creating intuitive and Open Source apps for mobile, desktop and web
 
 dCloud short/medium term roadmap in 2022:
-- Introduce an intuitive and portable way of uploading files to BTFS (iOS + Android).
-- Bring mobile apps to Google Play and App Store
-- Bring dCloud to desktop environments (macOS and Windows)
+- Introduce an intuitive and portable way of uploading files to BTFS (iOS + Android). --> Done
+- Bring mobile apps to Google Play and App Store --> Done (Open Test)
+- Bring dCloud to desktop environments (macOS and Windows) --> Partially done, Windows still pending
 
 
-dCloud is basically an Integration of a [BTFS shared library](https://github.com/simbadMarino/btfs-sharedLib) + React Native/Expo GUI. 
+dCloud is basically an Integration of a [BTFS shared library](https://github.com/simbadMarino/btfs-sharedLib) + React Native/Expo GUI.
 
 
 
@@ -20,7 +20,7 @@ dCloud is basically an Integration of a [BTFS shared library](https://github.com
 
 Currently dCloud is only available for the following platforms:
 
-  - Android 
+  - Android
   - iOS (Iphone, macOS, iPAD)
   - windows (experimental)
 
@@ -54,17 +54,17 @@ Build & Run sequences in development environments:
 5. `npx react-native run-windows`
 
 React Native configuration:
- "react": "16.13.1" OR "17.0.2",
- "react-native": "0.63.4" OR "0.67.1" 
+ "react": "17.01" OR "17.0.2",
+ "react-native": "0.64.4" OR "0.67.1"
  these versions were tested and currently working, any other version might have some unknown issues
 
 
 **b) USING A RELEASE FROM GITHUB**
 
-  Please refer to the Releases section (https://github.com/simbadMarino/dCloud/releases) to get the latest APK file format, please note this is a "FAT" installer because it contains all architectures(i686,x86_64,aarch64,arm) BTFS binaries which consumes a large percentage of the overall app size. 
-       
+  Please refer to the Releases section (https://github.com/simbadMarino/dCloud/releases) to get the latest APK file format, please note this is a "FAT" installer because it contains all architectures(x86_64,aarch64,arm) BTFS binaries which consumes a large percentage of the overall app size.
 
- Note 1:  Follow the official guidelines (https://docs.btfs.io/v2.0/docs/introduction-setup20) to explore the use cases of BTFS 2.1 in your mobile device.
+
+ Note 1:  Follow the official guidelines (https://docs.btfs.io/v2.0/docs/introduction-setup20) to explore the use cases of BTFS 2.3 in your mobile device.
 
 If you are looking for some video tutorials please take a look at the following videos from our Youtube channel:
 
@@ -102,7 +102,3 @@ TRON Address: TXQJCQnUNW73vzd4koeZKdzChfKWv8J9G5
 <a href="https://trxdomains.xyz/" target="_blank">
 <img src="https://trxdomains.xyz/logo/logo_cic.png?v=3" width="100" height="100">
 </a>
-
-
-
-

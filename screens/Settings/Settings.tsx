@@ -80,13 +80,12 @@ const f_enableStorageSaver = async (en) => {
 
 };
 
-const enableBTFSDaemon = async (en) => {
-  if(en)
-  {
+const enableBTFSDaemon = async () => {
 
-      //BTFSmodule.main("daemon --chain-id 199","commands");
+      console.log("Activating daemon")
+      BTFSmodule.main("daemon --chain-id 199","commands");
 
-  }
+
 }
 
 const initializeRepo = async () => {
@@ -110,7 +109,7 @@ function getGuideData(){
   Promise.resolve(data).then(function(data) {
     if(data.Type == 'error')
       {
-        //console.log("Guide is DONE, nothing else to do");
+        console.log("Guide is DONE, nothing else to do from Settings");
         flagGuideDone = 1;
       }
 
@@ -221,14 +220,14 @@ useEffect(()  => {
 useEffect(()  => {
   const setPreviousInitRepoSts= async () => {
   const storedRepoSts= await AsyncStorage.getItem('btfsrepo_enable');
-  console.log(storedRepoSts);
+  console.log("BTFS repo created: " + storedRepoSts);
   let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
   setbtfsRepo(boolStoredRepoSts);
   setenableDaemon(boolStoredRepoSts);
-  if (boolStoredRepoSts)
+  /*if (boolStoredRepoSts)
   {
     enableBTFSDaemon(true);
-  }
+  }*/
 
   };
   setPreviousInitRepoSts();
@@ -376,35 +375,6 @@ const sendBTFScmd = () => {
         </View>
 
 
-            <View
-              style={[
-                styles.sectionItem,
-                { backgroundColor: theme.colors.background2 },
-              ]}
-            >
-              <View style={styles.sectionItemLeft}>
-                <Feather
-                  name={'map'}
-                  size={24}
-                  color={theme.colors.primary}
-                />
-              </View>
-              <View style={styles.sectionItemCenter}>
-                <Text
-                  style={[styles.sectionItemText , { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'
-                >
-                  {bttcAddress}
-                </Text>
-              </View>
-              <View style={styles.sectionItemRight}>
-              <Feather
-                name={'copy'}
-                size={24}
-                color={theme.colors.primary}
-                onPress={copyToClipboardAddress}
-              />
-              </View>
-          </View>
 
 
           <View
@@ -469,48 +439,6 @@ const sendBTFScmd = () => {
       </View>
 
 
-      <View
-        style={[
-          styles.sectionItem,
-          { backgroundColor: theme.colors.background2 },
-        ]}
-      >
-        <View style={styles.sectionItemLeft}>
-          <Feather
-            name={'database'}
-            size={24}
-            color={theme.colors.primary}
-          />
-        </View>
-
-        <View style={styles.sectionItemCenter}>
-          <Text
-            style={[styles.sectionItemText, { color: theme.colors.primary }]}
-          >
-            {"BTFS Repository"}
-          </Text>
-        </View>
-        <View style={styles.sectionItemRight}>
-          <Switch
-             trackColor={{ false: "#767577", true: "#81b0ff" }}
-             thumbColor={theme.colors.switchThumb}
-             value={btfsRepo}
-             onValueChange={async (value) => {
-               if (value) {
-                 setbtfsRepo(value);
-                 initializeRepo();
-                 await AsyncStorage.setItem('btfsrepo_enable', 'true');
-                 console.log("Initializing Repo");
-               } else {
-                 setbtfsRepo(value);
-                 await AsyncStorage.setItem('btfsrepo_enable', 'false');
-                 console.log("Deactivating Repo(no action)");
-               }
-             }}
-
-          />
-        </View>
-      </View>
 
 
 

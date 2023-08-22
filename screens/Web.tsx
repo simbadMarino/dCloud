@@ -149,17 +149,17 @@ const Web: React.FC = () => {
         <TouchableOpacity onPress={goBack}>
           <Ionicons
             name="ios-arrow-back"
-            size={32}
+            size={22}
             color={canGoBack ? colors.primary : colors.background}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={reloadPage}>
-          <Ionicons name="ios-refresh" size={32} color={colors.text} />
+          <Ionicons name="ios-refresh" size={22} color={colors.text} />
         </TouchableOpacity>
         <TouchableOpacity onPress={goForward}>
           <Ionicons
             name="ios-arrow-forward"
-            size={32}
+            size={22}
             color={canGoForward ? colors.primary : colors.background}
           />
         </TouchableOpacity>

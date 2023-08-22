@@ -12,13 +12,14 @@ import Foundation
 class RCTBTFSmodule: NSObject {
 
   @objc(main:command:)
-  func main(_ name: String, command: UnsafeMutablePointer<Int8>) -> Void {
-    let txt: String = name
-   // Date is ready to use!
+  func main(name: String, command: UnsafeMutablePointer<Int8>) -> Void {
+    let txt = UnsafeMutablePointer<Int8>(mutating: (name as NSString).utf8String)
    //var String = "daemon --chain-id 199";
    NSLog("%@", name);
-    mainC(UnsafeMutablePointer<Int8>(mutating: (txt as NSString).utf8String))
+    mainC(txt);
    //__mainC(UnsafeMutablePointer<Int8>(mutating: (String, NSString).utf8String));
+    // release the memory to the C String
+    //txt?.deallocate();
  }
 
  @objc

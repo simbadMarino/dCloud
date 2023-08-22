@@ -30,7 +30,7 @@ import ActionSheet from '../components/ActionSheet';
 import SvgComponentFile from "../assets/icons/svgAddFile";
 import SvgComponentFolder from "../assets/icons/svgAddFolder";
 //import AddFolderIcon from '../assets/icons/folder-add-svgrepo-com.svg';
-
+import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import useSelectionChange from '../hooks/useSelectionChange';
 import allProgress from '../utils/promiseProgress';
 
@@ -59,21 +59,28 @@ import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { ExtendedAsset, fileItem } from '../types';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { setImages } from '../features/files/imagesSlice';
-import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
+
 import { HEIGHT, imageFormats, reExt, SIZE } from '../utils/Constants';
 var jDocumentRes = '';
-const {BTFSmodule} = NativeModules;
 var currentFileQMhash = '';
 var OSpath = '';
 var OSpathHomeSize = 0;
 var actionItemsVar = [];
 var itemIconsVar = [];
 
+
 import Clipboard from "@react-native-clipboard/clipboard";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Client10 from '../utils/APIClient10.js'
+
+import AppIntroSlider from 'react-native-app-intro-slider';
+
+import NodeLoadingGIF from '../assets/nodeLoading.gif';
+
+import NodeLoadedGIF from '../assets/nodeHungry.gif';
+
 
 
 
@@ -106,26 +113,42 @@ const Browser = ({ route }: IBrowserProps) => {
   const [result, setResult] = useState<Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null>();
   const [qmhash, setqmhash] = useState('');
   const [default_storage, set_default_storage] = useState('');
+  const [bttAddress, set_bttAddress] = useState('');
   //const [storage_saver, set_storage_saver] = useState('');
   //const [fileResponse, setFileResponse] = useState([]);
-  const [btfsRepo, setbtfsRepo] = useState(false);
-  const [enableDaemon, setenableDaemon] = useState(false);
+  const [enableGuide, setenableGuide] = useState(false);
+  const [showRealApp, setshowRealApp] = useState(false);
+  const [nodeLoadingText, setnodeLoadingText] = useState('Loading, please wait...')
+  const [slideTitleText, setslideTitleText] = useState('Creating BTFS node')
+  const [flagGuideDone, setflagGuideDone] = useState(false);
+  const [nodeFilledWithBTT, setnodeFilledWithBTT] = useState(false);
+
+
+
+
+
+
+
+  const slides = [
+    {
+      key: 'one',
+      title: slideTitleText,
+      text: nodeLoadingText,
+      image: flagGuideDone?NodeLoadedGIF:NodeLoadingGIF,
+      backgroundColor: '#59b2ab',
+    },
+    {
+      key: 'two',
+      title: 'Your node is ready',
+      text: 'You can now start uploading and sharing :)',
+      image: require('../assets/node_ok.png'),
+      backgroundColor: '#22bcb5',
+    }
+  ];
+
 
 
   useEffect(()  => {
-    const setPreviousInitRepoSts= async () => {
-    const storedRepoSts= await AsyncStorage.getItem('btfsrepo_enable');
-    console.log(storedRepoSts);
-    let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
-    setbtfsRepo(boolStoredRepoSts);
-    setenableDaemon(boolStoredRepoSts);
-    if (boolStoredRepoSts)
-    {
-      enableBTFSDaemon(true);
-    }
-
-    };
-    setPreviousInitRepoSts();
 
     if(Platform.OS == "android")  //Determine HOME dir per OS
     {
@@ -171,6 +194,10 @@ const Browser = ({ route }: IBrowserProps) => {
     getFiles();
     //console.log("currentDir");
   }, [currentDir]);
+
+
+
+
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -266,11 +293,7 @@ async function getStorageSaverFlag(){
 
 }
 
-const enableBTFSDaemon = async (en) => {
-  if(en)
-    BTFSmodule.main("daemon --chain-id 199","commands");
 
-}
 
 const CopyQmHash = () => {
   Clipboard.setString("http://gateway.btfs.io/btfs/" + currentFileQMhash);
@@ -858,7 +881,9 @@ function addFileToBTFS(file)
     dispatch(setSnack(data));
   };
 
+
   return (
+
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
       <ActionSheet
         title={'Add a new file'}
@@ -1010,7 +1035,10 @@ function addFileToBTFS(file)
         </View>
       )}
     </View>
+
   );
+
+
 };
 
 const _keyExtractor = (item: fileItem) => item.name;
@@ -1071,7 +1099,7 @@ const styles = StyleSheet.create({
     width: SIZE,
     padding: 0,
     margin: 0,
-  },
+  }
 });
 
 export default Browser;
