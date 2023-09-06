@@ -12,11 +12,9 @@ import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 
 /* Slider Intro section Start */
 import Client10 from '../utils/APIClient10.js'
-import AppIntroSlider from 'react-native-app-intro-slider';
 import NodeLoadingGIF from '../assets/nodeLoading.gif';
 import NodeLoadedGIF from '../assets/nodeHungry.gif';
 import BTFSLoadingFilledGIF from '../assets/loading_test.gif';
-import Logo from '../assets/nodeHungry.gif';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const {BTFSmodule} = NativeModules;
@@ -45,22 +43,6 @@ export const MainNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
 
 
-  const slides = [
-    {
-      key: 'one',
-      title: slideTitleText,
-      text: nodeLoadingText,
-      image: flagGuideDone?NodeLoadedGIF:NodeLoadingGIF,
-      backgroundColor: '#59b2ab',
-    },
-    {
-      key: 'two',
-      title: 'Your node is ready',
-      text: 'You can now start uploading and sharing :)',
-      image: require('../assets/node_ok.png'),
-      backgroundColor: '#22bcb5',
-    }
-  ];
 
 
   useEffect(() => {
@@ -132,12 +114,14 @@ export const MainNavigator: React.FC = () => {
 
   const copyToClipboard = () => {
     Clipboard.setString(bttcAddress);
-    Alert.alert("Address copied to clipboard");
+    //Alert.alert("Address copied to clipboard");
+    dispatch(setSnack({ message: "Address copied to clipboard" }));
   };
 
 
   function triggerAppRestart(){
     Alert.alert("Init completed", "Please restart app");
+    //enableBTFSDaemon();
   }
 
 
@@ -149,7 +133,7 @@ export const MainNavigator: React.FC = () => {
       if(data.Type == 'error')
         {
           //console.log(data);
-          console.log("Guide is DONE, nothing else to do");
+        //  console.log("Guide is DONE, nothing else to do");
           //setnodeFilledWithBTT(true);
         }
 
@@ -160,7 +144,7 @@ export const MainNavigator: React.FC = () => {
         console.log(str_BTT_Addy)
         if(str_BTT_Addy != '')
         {
-            setnodeLoadingText("Send at least 1K BTT to your address:");
+            setnodeLoadingText("Send at least 1K BTT to your address and wait a moment...");
             setslideTitleText("Setup your Wallet")
             AsyncStorage.setItem('bttcWalletSts', 'fillOngoing');
             setflagGuideDone(true);
@@ -183,7 +167,7 @@ export const MainNavigator: React.FC = () => {
       let data4 = Client10.getHostVersion();
       let data5 = Client10.getNetworkStatus();
       //let data6 = Client10.requestGuide();
-      console.log("Network Status update");
+      //console.log("Network Status update");
       return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
           //console.log(result[4]);
           //console.log(result[0].BttcAddress);
@@ -199,7 +183,7 @@ export const MainNavigator: React.FC = () => {
               status = 1;
               message = 'online';
               setbtfs_sts('Online');
-              console.log("Network Status update:Online");
+              //console.log("Network Status update:Online");
               setslideTitleText("All Set :)")
               setnodeLoadingText("Tap Next to finalize setup");
               setnodeFilledWithBTT(true);
@@ -248,29 +232,6 @@ export const MainNavigator: React.FC = () => {
   };
 
 
-  _renderItem = ({ item }) => {
-    return (
-      <View style={styles.slide}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.title}>{btfs_sts}</Text>
-        <Image source={item.image} style={styles.image}/>
-        <Text style={styles.text }>{item.text}</Text>
-        <Text style={styles.text }  numberOfLines={1} ellipsizeMode = 'middle' >{str_BTT_Addy}</Text>
-        {enableGuide && <Icon
-          name="copy"
-          type="font-awesome"
-          color={theme.colors.primary}
-          size={18}
-          onPress={copyToClipboard}
-        />}
-      </View>
-    );
-  }
-  _onDone = () => {
-    // User finished the introduction. Show real app through
-    // navigation or simply by controlling state
-    setshowRealApp(true);
-  }
   if((showRealApp || btfs_sts == 'Online') & bttcWalletStatus == 'filled')
   {
     return (
@@ -321,8 +282,35 @@ export const MainNavigator: React.FC = () => {
 
   )
   else
-      return <AppIntroSlider renderItem={this._renderItem} data={slides} ref={(ref) => (this.slider = ref)} onDone={this._onDone} showNextButton={nodeFilledWithBTT}/>;
+  return(
+    <View style={styles.container}>
+    <Text style={[styles.text, { color: theme.colors.primary }]}> {slideTitleText} </Text>
+    <Image
+        style={styles.logo}
+        source={BTFSLoadingFilledGIF}
+    />
+    <Text style={[styles.text, { color: theme.colors.primary }]}> {nodeLoadingText} </Text>
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        width: 220,
+      }}
+    >
+    <Text style={styles.text }  numberOfLines={1} ellipsizeMode = 'middle' >{str_BTT_Addy}</Text>
+    </View>
+    {enableGuide && <Icon
+      name="copy"
+      type="font-awesome"
+      color={theme.colors.primary}
+      size={25}
+      onPress={copyToClipboard}
+    />}
 
+</View>
+
+
+  )
 };
 
 

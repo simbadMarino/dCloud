@@ -109,7 +109,7 @@ function getGuideData(){
   Promise.resolve(data).then(function(data) {
     if(data.Type == 'error')
       {
-        console.log("Guide is DONE, nothing else to do from Settings");
+        //console.log("Guide is DONE, nothing else to do from Settings");
         flagGuideDone = 1;
       }
 

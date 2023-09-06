@@ -419,7 +419,7 @@ function addFileToBTFS(file)
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal'
+            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home'  //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
