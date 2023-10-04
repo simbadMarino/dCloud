@@ -200,7 +200,7 @@ useEffect(() => {
 
     var response2 = await getGuideData();
 
-  }, 1000);
+  }, 300);
   return () => clearInterval(interval);
 }, []);
 

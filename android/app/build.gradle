@@ -75,6 +75,7 @@ apply plugin: "com.android.application"
  */
 
 project.ext.react = [
+    nodeExecutableAndArgs: ["node", "--openssl-legacy-provider"],
     enableHermes: (findProperty('expo.jsEngine') ?: "jsc") == "hermes",
     cliPath: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/cli.js",
     hermesCommand: new File(["node", "--print", "require.resolve('hermes-engine/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/%OS-BIN%/hermesc",
@@ -133,8 +134,8 @@ android {
         applicationId "com.justshare"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.5.7"
+        versionCode 4
+        versionName "1.6.0"
 
         externalNativeBuild {
             ndkBuild {

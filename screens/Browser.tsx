@@ -75,8 +75,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Client10 from '../utils/APIClient10.js'
 
-import AppIntroSlider from 'react-native-app-intro-slider';
-
 import NodeLoadingGIF from '../assets/nodeLoading.gif';
 
 import NodeLoadedGIF from '../assets/nodeHungry.gif';
@@ -646,7 +644,7 @@ function addFileToBTFS(file)
       response.forEach(await processDocuments)
 
 
-         //console.log("FILE_PATH: " + currentDir + '/' + response[0].name);
+         console.log("FILE_PATH: " + currentDir + '/' + response[0].name);
 
    }
      catch (err) {
