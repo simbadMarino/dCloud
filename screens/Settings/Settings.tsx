@@ -20,7 +20,7 @@ import Client10 from '../../utils/APIClient10.js'
 
 //import axios from 'axios';
 
-import NumericInput from 'react-native-numeric-input'
+import NumericInput from '@knro/react-native-numeric-input'
 
 import Clipboard from '@react-native-clipboard/clipboard';
 

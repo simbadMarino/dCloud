@@ -30,8 +30,6 @@ import Clipboard from "@react-native-clipboard/clipboard";
 
 import { setSnack } from '../features/files/snackbarSlice';
 
-import NumericInput from 'react-native-numeric-input'
-
 import Client10 from '../utils/APIClient10.js'
 
 import RNPickerSelect from 'react-native-picker-select';
