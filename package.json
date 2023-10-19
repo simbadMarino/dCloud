@@ -67,7 +67,7 @@
     "react-native-webview": "13.2.2",
     "react-redux": "^7.2.5",
     "remove-accents": "^0.4.2",
-    "@Valli-/rn-pdf-reader-js": "git+https://github.com/Valli-/rn-pdf-reader-js.git",
+    "rn-pdf-reader-js": "^4.1.1",
     "scrollview": "^0.0.0",
     "socket.io-client": "*",
     "yarn": "^1.22.18"

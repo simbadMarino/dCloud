@@ -2,6 +2,7 @@ package com.justshare;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -11,6 +12,9 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import expo.modules.ReactActivityDelegateWrapper;
 
 public class MainActivity extends ReactActivity {
+
+  private static final native String  stringFromJNI();
+  //private static final native String mainC(String var0);
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // Set the theme to AppTheme BEFORE onCreate to support 
@@ -18,6 +22,10 @@ public class MainActivity extends ReactActivity {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null);
+    //mainC("init");
+
+
+    Log.d("MainActivity", stringFromJNI());
   }
 
   /**
@@ -61,5 +69,11 @@ public class MainActivity extends ReactActivity {
     // Use the default back button implementation on Android S
     // because it's doing more than {@link Activity#moveTaskToBack} in fact.
     super.invokeDefaultOnBackPressed();
+  }
+
+  static {
+   Log.d("LIB_LOAD","Loading BTFS library");
+    System.loadLibrary("btfs");
+    System.loadLibrary("nativelib");
   }
 }

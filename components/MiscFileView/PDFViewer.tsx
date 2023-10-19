@@ -1,5 +1,5 @@
 import React from 'react';
-import PDFReader from '@Valli-/rn-pdf-reader-js';
+import PDFReader from 'rn-pdf-reader-js';
 
 type IPDFViewerProps = {
   fileURI: string;
