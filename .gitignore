@@ -40,8 +40,6 @@ yarn-error.log
 # BUCK
 buck-out/
 \.buckd/
-*.keystore
-!debug.keystore
 
 
 # Bundle artifact
@@ -50,8 +48,6 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
-#keystore
-/keystore
 
 #build and bootstraps
 *.apk

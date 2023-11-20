@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { LogBox, View } from 'react-native';
+import { LogBox, View, StyleSheet, SafeAreaView } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
 import { Snackbar } from 'react-native-paper';
@@ -18,7 +18,7 @@ import {
 
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppLoading from 'expo-app-loading';
+//import AppLoading from 'expo-app-loading';
 
 import { MainNavigator } from '../navigation/MainNavigator';
 
@@ -75,7 +75,7 @@ export default function Main() {
     setColorScheme();
   }, []);
 
-  
+
 
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -84,13 +84,14 @@ export default function Main() {
     Poppins_700Bold,
   });
 
-  if (!fontsLoaded) return <AppLoading />;
+  //if (!fontsLoaded) return <AppLoading />;
 
   if (locked) {
     return <LockScreen setLocked={setLocked} />;
   }
 
   return (
+    <SafeAreaView style={styles.container}>
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <Snackbar
         visible={isSnackVisible}
@@ -116,5 +117,13 @@ export default function Main() {
         <MainNavigator />
       </NavigationContainer>
     </View>
+    </SafeAreaView>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+});
