@@ -78,22 +78,22 @@ export default function FileItem({
       case 'dir':
         return <Image
             style={styles.tinyIcon}
-            source={require('../../../assets/icons/folder3.png')}
+            source={require('../../../assets/icons/folder1.png')}
           />;
       case 'image':
       case 'video':
         return <ThumbnailImage uri={item.uri} />;
       case 'audio':
         return (
-          <FontAwesome5 name="file-audio" size={35} color={colors.primary} />
+          <FontAwesome5 name="file-audio" size={50} color={colors.primary} />
         );
       case 'font':
-        return <FontAwesome5 name="font" size={35} color={colors.primary} />;
+        return <FontAwesome5 name="font" size={50} color={colors.primary} />;
       case 'application':
         return (
           <MaterialCommunityIcons
             name={fileIcons[itemFormat] || 'file-outline'}
-            size={35}
+            size={50}
             color={colors.primary}
           />
         );
@@ -101,7 +101,7 @@ export default function FileItem({
         return (
           <MaterialCommunityIcons
             name={fileIcons[itemFormat] || 'file-outline'}
-            size={35}
+            size={50}
             color={colors.primary}
           />
         );
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   itemThumbnail: {
     height: '100%',
     marginLeft: 8,
-    width: '17%',
+    width: '15%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -307,8 +307,8 @@ const styles = StyleSheet.create({
   },
   image: {
     margin: 1,
-    width: 40,
-    height: 50,
+    width: 50,
+    height: 60,
     resizeMode: 'cover',
     borderRadius: 5,
   },
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   tinyIcon: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
 });

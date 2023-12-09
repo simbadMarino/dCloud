@@ -417,7 +417,7 @@ function addFileToBTFS(file)
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home'  //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
+            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home' && file != 'TempFiles' && file != 'RandomFiles' //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
@@ -512,7 +512,7 @@ function addFileToBTFS(file)
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const { uri, type } = result as ImageInfo;
       const filename: string = uri.replace(/^.*[\\\/]/, '');
       const ext: string | null = reExt.exec(filename)![1];

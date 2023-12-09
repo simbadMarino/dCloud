@@ -25,6 +25,14 @@ class RCTBTFSmodule: NSObject {
  @objc
  func constantsToExport() -> [String: Any]! {
    return ["someKey": "someValue"]
+   
  }
+  
+  @objc
+    static func requiresMainQueueSetup() -> Bool {
+        return true
+    }
+  
+  
 
 }
