@@ -879,6 +879,14 @@ function addFileToBTFS(file)
     dispatch(setSnack(data));
   };
 
+  const Separator = () => {
+    return <View style={{
+        height: .5,
+        backgroundColor: "#292929",
+        marginHorizontal: 20}}
+    />;
+    };
+
 
   return (
 
@@ -1014,9 +1022,10 @@ function addFileToBTFS(file)
       <View style={{ ...styles.fileList, borderTopColor: colors.primary }}>
         <FlatList
           data={files}
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
           renderItem={renderItem}
           keyExtractor={_keyExtractor}
+          ItemSeparatorComponent={Separator}
         />
       </View>
       {multiSelect && (
@@ -1072,8 +1081,9 @@ const styles = StyleSheet.create({
   fileList: {
     flex: 1,
     borderTopWidth: 0.5,
-    marginTop: 15,
+    marginTop: 10,
     marginHorizontal: 5,
+
   },
   bottomMenu: {
     height: 45,
@@ -1097,7 +1107,10 @@ const styles = StyleSheet.create({
     width: SIZE,
     padding: 0,
     margin: 0,
-  }
+  },
+  tagView: {
+  flexWrap: "wrap"
+},
 });
 
 export default Browser;
