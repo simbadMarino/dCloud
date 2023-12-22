@@ -417,7 +417,7 @@ function addFileToBTFS(file)
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home'  //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
+            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home' && file != 'TempFiles' && file != 'RandomFiles' //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
@@ -512,7 +512,7 @@ function addFileToBTFS(file)
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const { uri, type } = result as ImageInfo;
       const filename: string = uri.replace(/^.*[\\\/]/, '');
       const ext: string | null = reExt.exec(filename)![1];
@@ -879,6 +879,14 @@ function addFileToBTFS(file)
     dispatch(setSnack(data));
   };
 
+  const Separator = () => {
+    return <View style={{
+        height: .5,
+        backgroundColor: "#292929",
+        marginHorizontal: 20}}
+    />;
+    };
+
 
   return (
 
@@ -1014,9 +1022,10 @@ function addFileToBTFS(file)
       <View style={{ ...styles.fileList, borderTopColor: colors.primary }}>
         <FlatList
           data={files}
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
           renderItem={renderItem}
           keyExtractor={_keyExtractor}
+          ItemSeparatorComponent={Separator}
         />
       </View>
       {multiSelect && (
@@ -1044,7 +1053,7 @@ const _keyExtractor = (item: fileItem) => item.name;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: SIZE,
+    //width: SIZE,
     paddingTop: Constants.statusBarHeight,
   },
   topButtons: {
@@ -1072,8 +1081,9 @@ const styles = StyleSheet.create({
   fileList: {
     flex: 1,
     borderTopWidth: 0.5,
-    marginTop: 15,
+    marginTop: 10,
     marginHorizontal: 5,
+
   },
   bottomMenu: {
     height: 45,
@@ -1097,7 +1107,10 @@ const styles = StyleSheet.create({
     width: SIZE,
     padding: 0,
     margin: 0,
-  }
+  },
+  tagView: {
+  flexWrap: "wrap"
+},
 });
 
 export default Browser;

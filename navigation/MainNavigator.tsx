@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
 
 
   bottomMenu: {
-    height: 45,
+    height: 55,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',

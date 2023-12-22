@@ -30,8 +30,6 @@ import Clipboard from "@react-native-clipboard/clipboard";
 
 import { setSnack } from '../features/files/snackbarSlice';
 
-import NumericInput from 'react-native-numeric-input'
-
 import Client10 from '../utils/APIClient10.js'
 
 import RNPickerSelect from 'react-native-picker-select';
@@ -431,6 +429,7 @@ function sendDevFee(fee){
             <Text style={styles.WalletTitleText}>   BitTorrent Chain</Text>
 
           </View>
+          <Text style={styles.cardMainNetText}>      MainNet </Text>
           <SafeAreaView style={{flex:1}}>
             <ScrollView
               contentContainerStyle={styles.scrollView}
@@ -491,7 +490,7 @@ function sendDevFee(fee){
 
 
               <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>
-                Vault Address
+                Vault Balance
               </Text>
 
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
@@ -520,7 +519,7 @@ function sendDevFee(fee){
 
           </Card>
 
-          <Divider width={5} />
+          <Divider width={15} />
           <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background3}]}>
             <Text style={[styles.tokenSwapTitleText, { color: theme.colors.primary }]}>Token Swap</Text>
 
@@ -669,7 +668,7 @@ const styles = StyleSheet.create({
     width: "30%",
     backgroundColor: "#6495ed",
     borderRadius: 15,
-    height: 30,
+    height: 50,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 0,
@@ -702,13 +701,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   cardMainNetText: {
-    fontSize: 15,
-    color: "black",
-    fontWeight: "bold",
+    fontSize: 16,
+    color: "gray",
     margin: 1,
   },
   WalletTitleText: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
     color: "gray",
   },
@@ -723,10 +721,12 @@ const styles = StyleSheet.create({
   textbalanceBTT: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 25,
+    marginTop: 5,
   },
   textBTT_currency:{
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 16,
+    marginTop: 5,
   },
   addressItemText: {
     fontFamily: 'Poppins_600SemiBold',
@@ -735,11 +735,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontFamily: 'Poppins_600SemiBold',
-    fontSize: 16,
+    fontSize: 18,
+    marginTop: 20,
   },
   tokenSwapTitleText: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 20,
+    marginTop: 5,
+    marginBottom: 20,
   },
   image: {
   flex: 1,

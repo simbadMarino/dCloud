@@ -251,6 +251,10 @@ class APIClient10 {
       return this.request('/api/v1/storage/upload/status?arg=' + sessionID)
     }
 
+    generalCommand(cmd){
+      return this.request(cmd)
+    }
+
 }
 
 const Client10 = new APIClient10();
