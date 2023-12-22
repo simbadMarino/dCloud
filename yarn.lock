@@ -4000,9 +4000,9 @@ crypt@0.0.2, crypt@~0.0.1:
   integrity sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==
 
 crypto-es@*:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/crypto-es/-/crypto-es-2.0.4.tgz#8a7cc6cdf7416a18f9ff85f9b5f45066f5e30366"
-  integrity sha512-GJxgJJ7HjGzwT7iQF0K9RertKkzgSKUXd8X2aQ7RGDS8yMVDzIBFMNHID9hnj48Ep8NAICHWV1CFIETlVNZ/Lg==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/crypto-es/-/crypto-es-2.1.0.tgz#1095f324ffd7dc1ccab8e21d0960e17025da8ce9"
+  integrity sha512-C5Dbuv4QTPGuloy5c5Vv/FZHtmK+lobLAypFfuRaBbwCsk3qbCWWESCH3MUcBsrgXloRNMrzwUAiPg4U6+IaKA==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
