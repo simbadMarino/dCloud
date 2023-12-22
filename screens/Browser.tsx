@@ -1053,7 +1053,7 @@ const _keyExtractor = (item: fileItem) => item.name;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: SIZE,
+    //width: SIZE,
     paddingTop: Constants.statusBarHeight,
   },
   topButtons: {

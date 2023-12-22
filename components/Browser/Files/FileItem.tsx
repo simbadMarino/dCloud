@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   },
   itemLeft: {
     height: '100%',
-    width: '83%',
+    width: '85%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -320,9 +320,11 @@ const styles = StyleSheet.create({
   },
   fileName: {
     fontSize: 15,
+    marginLeft: 10,
   },
   fileDetailText: {
-    fontSize: 10,
+    fontSize: 12,
+    marginLeft: 10,
   },
   tinyIcon: {
     width: 50,

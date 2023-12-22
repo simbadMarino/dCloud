@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight + 20,
   },
   section: {
-    width: SIZE,
+    //width: SIZE,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
