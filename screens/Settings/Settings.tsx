@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput, SafeAreaView, ScrollView, RefreshControl, NativeModules, Platform } from 'react-native';
+import { View, Text, Switch, StyleSheet, TouchableOpacity, Button, Alert, TextInput, SafeAreaView, ScrollView, RefreshControl, NativeModules, Platform, KeyboardAvoidingView } from 'react-native';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
 import useLock from '../../hooks/useLock';
@@ -285,6 +285,10 @@ const sendBTFScmd = () => {
   }, []);
 
   return (
+
+    <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.containerKeyboard}>
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
@@ -637,6 +641,7 @@ const sendBTFScmd = () => {
       </ScrollView>
     </SafeAreaView>
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -691,6 +696,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerKeyboard: {
+    flex: 1
   },
 });
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
-import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TextInput, Button, Alert, NativeModules} from 'react-native';
+import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TextInput, Button, Alert, NativeModules, KeyboardAvoidingView} from 'react-native';
 const {width} = Dimensions.get('window');
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -338,7 +338,11 @@ export default TerminalScreen = () => {
   return (
 
 
+    <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    style={styles.container}>
       <View style={{...styles.viewContainer, backgroundColor: colors.background}}>
+
       <View style={{backgroundColor: 'black', flex: 1}} >
       <ScrollView
         showsVerticalScrollIndicator={true}
@@ -355,6 +359,7 @@ export default TerminalScreen = () => {
 
           <SelectDropdown
             data={btfs_commands}
+            style={{flex: 1}}
              defaultValueByIndex={287}
             // defaultValue={'England'}
             onSelect={(selectedItem, index) => {
@@ -412,17 +417,22 @@ export default TerminalScreen = () => {
             onPress={() => sendCommand(commandSelectedString)}
           />
           </View>
-
       </View>
+      </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
   baseText: {
     //fontFamily: 'terminal',
     fontSize: 16,
     color: 'green',
-    margin: 10,
+    marginTop: 40,
+    marginLeft: 10
   },
 
   //saveAreaViewContainer: {flex: 1, backgroundColor: '#000'},

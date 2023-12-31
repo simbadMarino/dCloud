@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   ImageBackground,
+  KeyboardAvoidingView
 } from "react-native";
 
 import * as FileSystem from "expo-file-system";
@@ -411,6 +412,10 @@ function sendDevFee(fee){
     };
   return (
 
+    <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.containerKeyboard}>
+
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
 
           <View
@@ -584,6 +589,7 @@ function sendDevFee(fee){
         </ScrollView>
       </SafeAreaView>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -592,6 +598,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Constants.statusBarHeight + 20,
     padding: 10,
+  },
+
+  containerKeyboard: {
+    flex: 1
   },
   sectionItemLeft: {
     width: "30%",
