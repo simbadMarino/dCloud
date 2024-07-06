@@ -86,7 +86,7 @@ android {
         applicationId 'com.justshare'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
+        versionCode 6
         versionName "1.6.2"
 
         externalNativeBuild {
