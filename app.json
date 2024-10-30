@@ -2,7 +2,7 @@
   "expo": {
     "name": "justshare",
     "slug": "justshare",
-    "version": "1.6.0",
+    "version": "1.6.3",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
@@ -14,9 +14,6 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": true,
       "usesIcloudStorage": true,
