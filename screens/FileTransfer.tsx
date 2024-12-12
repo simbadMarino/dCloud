@@ -3,25 +3,19 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   Alert,
-  TextInput,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
   RefreshControl,
-  ImageBackground,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 
-import * as FileSystem from "expo-file-system";
 import Constants from "expo-constants";
-
-import BTTlogo from '../assets/bttLogo.png';
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
-import { base64reg, SIZE } from "../utils/Constants";
 import { Feather } from "@expo/vector-icons";
 
 import { Icon, Input, Card, Divider } from "react-native-elements";
@@ -50,13 +44,14 @@ const wait = (timeout) => {
 }
 
 
+
 const FileTransfer: React.FC = () => {
   const { colors } = useAppSelector((state) => state.theme.theme);
   const { theme } = useAppSelector((state) => state.theme);
-  var float_bttBalance = 0;
+  /*var float_bttBalance = 0;
   var float_WBTT_Balance = 0;
-  var float_Vault_WBTT_Balance = 0;
-  var str_BTT_Addy = '';
+  var float_Vault_WBTT_Balance = 0;*/
+  var str_BTT_Addy: string = '';
   const dispatch = useAppDispatch();
   //const [strBTTCAddress, setstrBTTCAddress] = useState('0x0000000000000000');
   const [bttBalance, setbttBalance] = useState('--');
@@ -65,9 +60,44 @@ const FileTransfer: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [amountToSwap, set_amountToSwap] = useState('');
   const [selectedSwap, setSelectedSwap] = useState(1);
-  const [bttAddress, set_bttAddress] = useState('');
+  const [bttAddress, setbttAddress] = useState('');
   const [vaultAddress, setvaultAddress] = useState('');
 
+
+
+
+  useEffect(() => {
+    const getAddressAndBalance = () => {
+      getBTTCAddress()
+        .then((response1) => {
+          //console.log("Address response:", response1);
+          getBTTBalance(); // Chain to the next call
+        })
+        .then((response2) => {
+          //console.log("BTT Balance response:", response2);
+          getWBTTBalance(); // Chain to the next call
+        })
+        .then((response3) => {
+          //console.log("WBTT Balance response:", response3);
+        })
+        .catch((error) => {
+          console.error("Error reading Address and balances:", error);
+        });
+    };
+
+    getAddressAndBalance();
+  }, []);
+
+
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getBTTCAddress();
+    getBTTBalance();
+    getWBTTBalance();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
 
 
@@ -87,92 +117,92 @@ const FileTransfer: React.FC = () => {
         console.log("From BTT to WBTT");
         strCoinSwap = "BTT to WBTT";
         Alert.alert(
-              "Confirming Swap... \n(" + strCoinSwap + ")" ,
-              "Are you sure?",
-              [
-                // The "Yes" button
-                {
-                  text: "Yes",
-                  onPress: () => {
-                      btt2wbtt();
-                  },
-                },
-                // The "No" button
-                // Does nothing but dismiss the dialog when tapped
-                {
-                  text: "No",
-                },
-              ]
-            );
+          "Confirming Swap... \n(" + strCoinSwap + ")",
+          "Are you sure?",
+          [
+            // The "Yes" button
+            {
+              text: "Yes",
+              onPress: () => {
+                btt2wbtt();
+              },
+            },
+            // The "No" button
+            // Does nothing but dismiss the dialog when tapped
+            {
+              text: "No",
+            },
+          ]
+        );
         //sendDevFee(3.33);
         break;
       case 2:
         console.log("From WBTT to BTT");
         strCoinSwap = "WBTT to BTT";
         Alert.alert(
-              "Confirming Swap... \n(" + strCoinSwap + ")" ,
-              "Are you sure?",
-              [
-                // The "Yes" button
-                {
-                  text: "Yes",
-                  onPress: () => {
-                      wbtt2btt();
-                  },
-                },
-                // The "No" button
-                // Does nothing but dismiss the dialog when tapped
-                {
-                  text: "No",
-                },
-              ]
-            );
+          "Confirming Swap... \n(" + strCoinSwap + ")",
+          "Are you sure?",
+          [
+            // The "Yes" button
+            {
+              text: "Yes",
+              onPress: () => {
+                wbtt2btt();
+              },
+            },
+            // The "No" button
+            // Does nothing but dismiss the dialog when tapped
+            {
+              text: "No",
+            },
+          ]
+        );
         //sendDevFee(3.33);
         break;
       case 3:
         console.log("From WBTT to WBTT(Vault)");
         strCoinSwap = "WBTT to WBTT(Vault)";
         Alert.alert(
-              "Confirming Swap... \n(" + strCoinSwap + ")" ,
-              "Are you sure?",
-              [
-                // The "Yes" button
-                {
-                  text: "Yes",
-                  onPress: () => {
-                      wbtt2vaultbtt();
-                  },
-                },
-                // The "No" button
-                // Does nothing but dismiss the dialog when tapped
-                {
-                  text: "No",
-                },
-              ]
-            );
+          "Confirming Swap... \n(" + strCoinSwap + ")",
+          "Are you sure?",
+          [
+            // The "Yes" button
+            {
+              text: "Yes",
+              onPress: () => {
+                wbtt2vaultbtt();
+              },
+            },
+            // The "No" button
+            // Does nothing but dismiss the dialog when tapped
+            {
+              text: "No",
+            },
+          ]
+        );
         //sendDevFee(3.33);
         break;
       case 4:
         console.log("From WBTT(Vault) to WBTT");
         strCoinSwap = "WBTT(Vault) to WBTT";
         Alert.alert(
-              "Confirming Swap... \n(" + strCoinSwap + ")" ,
-              "Are you sure?",
-              [
-                // The "Yes" button
-                {
-                  text: "Yes",
-                  onPress: () => {
-                      vaultbtt2wbtt();
-                  },
-                },
-                // The "No" button
-                // Does nothing but dismiss the dialog when tapped
-                {
-                  text: "No",
-                },
-              ]
-            );
+          "Confirming Swap... \n(" + strCoinSwap + ")",
+          "Are you sure?",
+          [
+            // The "Yes" button
+            {
+              text: "Yes",
+              onPress: () => {
+                vaultbtt2wbtt();
+              },
+            },
+            // The "No" button
+            // Does nothing but dismiss the dialog when tapped
+            {
+              text: "No",
+            },
+          ]
+        );
         //sendDevFee(3.33);
         break;
 
@@ -184,7 +214,7 @@ const FileTransfer: React.FC = () => {
   }
 
 
-  function btt2wbtt(){
+  function btt2wbtt() {
 
 
     var bigBTT = new BigNumber(amountToSwap);
@@ -193,125 +223,128 @@ const FileTransfer: React.FC = () => {
 
     let data = Client10.BTT2WBTT(bigBTT);
 
-    Promise.resolve(data).then(function(data) {
+    Promise.resolve(data).then(function (data) {
       console.log(data); // "Success"
 
-      if(data.Type == "error"){
+      if (data.Type == "error") {
         Alert.alert("Swap Error ", data.Message);
       }
-      else{
+      else {
         Alert.alert("Swap Done!, Hash ", data.hash);
       }
 
-  }, function(data) {
-    // not called
-  });
-}
+    }, function (data) {
+      // not called
+    });
+  }
 
-function wbtt2btt(){
-
-
-  var bigBTT = new BigNumber(amountToSwap);
-  bigBTT = bigBTT.shiftedBy(18);
-  bigBTT = bigBTT.toFixed();
-
-  let data = Client10.WBTT2BTT(bigBTT);
-
-  Promise.resolve(data).then(function(data) {
-    console.log(data); // "Success"
-
-    if(data.Type == "error"){
-      Alert.alert("Swap Error ", data.Message);
-    }
-    else{
-      Alert.alert("Swap Done!, Hash ", data.hash);
-    }
-
-}, function(data) {
-  // not called
-});
-}
-
-function wbtt2vaultbtt(){
+  function wbtt2btt() {
 
 
-  var bigBTT = new BigNumber(amountToSwap);
-  bigBTT = bigBTT.shiftedBy(18);
-  bigBTT = bigBTT.toFixed();
+    var bigBTT = new BigNumber(amountToSwap);
+    bigBTT = bigBTT.shiftedBy(18);
+    bigBTT = bigBTT.toFixed();
 
-  let data = Client10.deposit(bigBTT);
+    let data = Client10.WBTT2BTT(bigBTT);
 
-  Promise.resolve(data).then(function(data) {
-    console.log(data); // "Success"
+    Promise.resolve(data).then(function (data) {
+      console.log(data); // "Success"
 
-    if(data.Type == "error"){
-      Alert.alert("Swap Error ", data.Message);
-    }
-    else{
-      Alert.alert("Swap Done!, Hash ", data.hash);
-    }
+      if (data.Type == "error") {
+        Alert.alert("Swap Error ", data.Message);
+      }
+      else {
+        Alert.alert("Swap Done!, Hash ", data.hash);
+      }
 
-}, function(data) {
-  // not called
-});
-}
+    }, function (data) {
+      // not called
+    });
+  }
 
-function vaultbtt2wbtt(){
+  function wbtt2vaultbtt() {
 
-  var bigBTT = new BigNumber(amountToSwap);
-  bigBTT = bigBTT.shiftedBy(18);
-  bigBTT = bigBTT.toFixed();
 
-  let data = Client10.withdraw(bigBTT);
+    var bigBTT = new BigNumber(amountToSwap);
+    bigBTT = bigBTT.shiftedBy(18);
+    bigBTT = bigBTT.toFixed();
 
-  Promise.resolve(data).then(function(data) {
-    //console.log(data); // "Success"
+    let data = Client10.deposit(bigBTT);
 
-    if(data.Type == "error"){
-      Alert.alert("Swap Error ", data.Message);
-    }
-    else{
-      Alert.alert("Swap Done!, Hash ", data.hash);
-    }
+    Promise.resolve(data).then(function (data) {
+      console.log(data); // "Success"
 
-  }, function(data) {
-  // not called
-  });
+      if (data.Type == "error") {
+        Alert.alert("Swap Error ", data.Message);
+      }
+      else {
+        Alert.alert("Swap Done!, Hash ", data.hash);
+      }
 
-}
+    }, function (data) {
+      // not called
+    });
+  }
 
-function sendDevFee(fee){
-  var devFee = new BigNumber(fee);
-  devFee = devFee.shiftedBy(18);
-  devFee = devFee.toFixed();
+  function vaultbtt2wbtt() {
 
-  let data = Client10.BTTTransfer('0x346c8074649C844D5c98AF7D4757B85a6bD72679', devFee);
+    var bigBTT = new BigNumber(amountToSwap);
+    bigBTT = bigBTT.shiftedBy(18);
+    bigBTT = bigBTT.toFixed();
 
-  Promise.resolve(data).then(function(data) {
-    //console.log(data); // "Success"
+    let data = Client10.withdraw(bigBTT);
 
-    console.log(data);
+    Promise.resolve(data).then(function (data) {
+      //console.log(data); // "Success"
 
-  }, function(data) {
-  // not called
-  });
+      if (data.Type == "error") {
+        Alert.alert("Swap Error ", data.Message);
+      }
+      else {
+        Alert.alert("Swap Done!, Hash ", data.hash);
+      }
+
+    }, function (data) {
+      // not called
+    });
+
+  }
+
+  function sendDevFee(fee) {
+    var devFee = new BigNumber(fee);
+    devFee = devFee.shiftedBy(18);
+    devFee = devFee.toFixed();
+
+    let data = Client10.BTTTransfer('0x346c8074649C844D5c98AF7D4757B85a6bD72679', devFee);
+
+    Promise.resolve(data).then(function (data) {
+      //console.log(data); // "Success"
+
+      console.log(data);
+
+    }, function (data) {
+      // not called
+    });
 
   }
 
   const getBTTBalance = async () => {
 
+    // console.log("BTT Addy from getBTTBalance: ", str_BTT_Addy);
     let data2 = Client10.getChequeBTTBalance(str_BTT_Addy);
-    //console.log(str_BTT_Addy);
-    Promise.resolve(data2).then(function(data2) {
-
+    //console.log(data2.balance);
+    // console.log(str_BTT_Addy);
+    Promise.resolve(data2).then(function (data2) {
+      //console.log(data2);
       var bttBalanceBig = new BigNumber(parseFloat(data2.balance));
       bttBalanceBig = bttBalanceBig.shiftedBy(-18);
-      bttBalanceBig = bttBalanceBig.toFixed();
       //console.log(bttBalanceBig);
-      setbttBalance(bttBalanceBig);
+      var bttBalanceBigString = bttBalanceBig.toFixed(2);
+      console.log("BTT Balance: ", bttBalanceBigString);
+      setbttBalance(bttBalanceBigString);
 
-    }, function(data2) {
-    // not called
+    }, function (data2) {
+      // not called
     });
 
   }
@@ -320,148 +353,105 @@ function sendDevFee(fee){
 
     let data = Client10.getChequeWBTTBalance(str_BTT_Addy);
     //console.log(str_BTT_Addy);
-    Promise.resolve(data).then(function(data) {
+    Promise.resolve(data).then(function (data) {
 
       var wbttBalanceBig = new BigNumber(parseFloat(data.balance));
       wbttBalanceBig = wbttBalanceBig.shiftedBy(-18);
-      wbttBalanceBig = wbttBalanceBig.toFixed();
-      //console.log(wbttBalanceBig);
-      setwbttBalance(wbttBalanceBig);
+      var wbttBalanceBigString = wbttBalanceBig.toFixed(2);
+      console.log("WBTT Balance: ", wbttBalanceBigString);
+      setwbttBalance(wbttBalanceBigString);
 
-    }, function(data) {
-    // not called
+    }, function (data) {
+      // not called
     });
 
   }
 
   const getBTTCAddress = async () => {
 
-      let data1 = Client10.getHostInfo();
-      //let data2 = Client10.getChequeBTTBalance(bttAddress);
-      //let data3 = Client10.getChequeWBTTBalance(bttAddress);
-      let data4 = Client10.getChequeBookBalance();
+    let data1 = Client10.getHostInfo();
+    //let data2 = Client10.getChequeBTTBalance(bttAddress);
+    //let data3 = Client10.getChequeWBTTBalance(bttAddress);
+    let data4 = Client10.getChequeBookBalance();
 
-      return Promise.all([data1, data4]).then((result) => {
+    return Promise.all([data1, data4]).then((result) => {
 
-          set_bttAddress(result[0].BttcAddress);
-          setvaultAddress(result[0].VaultAddress);
+      //console.log(result[0]);
+      //console.log(result[1]);
+      setbttAddress(String(result[0].BttcAddress));
+      setvaultAddress(String(result[0].VaultAddress));
 
-          str_BTT_Addy = String(result[0].BttcAddress);
-          //console.log(str_BTT_Addy);
-          //console.log(bttAddress);
-          /*var bttBalanceBig = new BigNumber(parseFloat(result[1].balance));
-          bttBalanceBig = bttBalanceBig.shiftedBy(-18);
-          bttBalanceBig = bttBalanceBig.toFixed();
-          console.log(bttBalanceBig);
-          setbttBalance(bttBalanceBig);
-          //console.log(result[0].BttcAddress);
-          //console.log(result[0].VaultAddress);
-          //console.log(result[3].balance)
-          var wbttBalanceBig = new BigNumber(parseFloat(result[2].balance));
-          wbttBalanceBig = wbttBalanceBig.shiftedBy(-18);
-          wbttBalanceBig = wbttBalanceBig.toFixed();
-          console.log(wbttBalanceBig);
-          setwbttBalance(wbttBalanceBig);*/
+      str_BTT_Addy = String(result[0].BttcAddress);
 
-          var vaultBalanceBig = new BigNumber(parseFloat(result[1].balance));
-          vaultBalanceBig = vaultBalanceBig.shiftedBy(-18);
-          vaultBalanceBig = vaultBalanceBig.toFixed();
-          //console.log(vaultBalanceBig);
-          setvaultBalance(vaultBalanceBig);
+      var vaultBalanceBig = new BigNumber(parseFloat(result[1].balance));
+      vaultBalanceBig = vaultBalanceBig.shiftedBy(-18);
+      var vaultBalanceBigString = vaultBalanceBig.toFixed(2);
+      console.log("Vault Balance: ", vaultBalanceBigString);
+      setvaultBalance(vaultBalanceBigString);
 
-
-          return {
-
-          }
-      })
-
+    })
 
   };
 
 
-  useEffect(() => {
-    const interval = setInterval( async () => {
-      var response =  await getBTTCAddress();
-      var response2 =  await getWBTTBalance();
-      var response3 = await getBTTBalance();
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  /*useEffect(() => {
-    const interval2 = setInterval( async () => {
-      var response =  await getWBTTBalance();
-      var response2 = await getBTTBalance();
-    }, 3000);
-    return () => clearInterval(interval2);
-  }, []);*/
-
-
-
-
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
 
   const placeholder = {
-      label: 'Select a pair...',
-      value: null,
-      color: theme.colors.primary,
-    };
+    label: 'Select a pair...',
+    value: null,
+    color: theme.colors.primary,
+  };
   return (
 
     <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.containerKeyboard}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.containerKeyboard}>
 
-    <View style={{ ...styles.container, backgroundColor: colors.background }}>
+      <View style={{ ...styles.container, backgroundColor: colors.background }}>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              width: 340,
-            }}
-          >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            width: 340,
+          }}
+        >
           <Icon
             name="cube"
             type="font-awesome"
             color={theme.colors.primary}
             size={18}
           />
-            <Text style={styles.WalletTitleText}>   BitTorrent Chain</Text>
+          <Text style={styles.WalletTitleText}>   BitTorrent Chain</Text>
 
-          </View>
-          <Text style={styles.cardMainNetText}>      MainNet </Text>
-          <SafeAreaView style={{flex:1}}>
-            <ScrollView
-              contentContainerStyle={styles.scrollView}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                  progressBackgroundColor="#6495ed"
-                />
-              }
-            >
+        </View>
+        <Text style={styles.cardMainNetText}>      MainNet </Text>
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                progressBackgroundColor="#6495ed"
+              />
+            }
+          >
 
 
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background3}]} >
+            <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, { borderColor: theme.colors.background3 }]} >
 
               <View
                 style={{
-                    flexDirection: "row",
+                  flexDirection: "row",
 
-                  }}
-                >
+                }}
+              >
 
                 <Text style={[styles.textbalanceBTT, { color: theme.colors.primary }]}>
-                   {bttBalance}
+                  {bttBalance}
                 </Text>
                 <Text style={[styles.textBTT_currency, { color: theme.colors.primary }]}>
-                   {" BTT"}
+                  {" BTT"}
                 </Text>
 
 
@@ -479,17 +469,17 @@ function sendDevFee(fee){
                 }}
               >
 
-              <Text style={[styles.addressItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
-                {bttAddress + "  "}
-              </Text>
+                <Text style={[styles.addressItemText, { color: theme.colors.primary }]} numberOfLines={1} ellipsizeMode='middle'>
+                  {bttAddress + "  "}
+                </Text>
 
-              <Icon
-                name="copy"
-                type="font-awesome"
-                color={theme.colors.primary}
-                size={18}
-                onPress={copyToClipboard}
-              />
+                <Icon
+                  name="copy"
+                  type="font-awesome"
+                  color={theme.colors.primary}
+                  size={18}
+                  onPress={copyToClipboard}
+                />
               </View>
 
 
@@ -499,7 +489,7 @@ function sendDevFee(fee){
               </Text>
 
               <Text style={[styles.sectionItemText, { color: theme.colors.primary }]}>
-                 {vaultBalance}{" WBTT"}
+                {vaultBalance}{" WBTT"}
               </Text>
 
               <View
@@ -509,86 +499,86 @@ function sendDevFee(fee){
                   width: 220,
                 }}
               >
-              <Text style={[styles.addressItemText, { color: theme.colors.primary }]} numberOfLines = { 1 } ellipsizeMode = 'middle'>
-                {vaultAddress + "  "}
-              </Text>
-              <Icon
-                name="copy"
-                type="font-awesome"
-                color={theme.colors.primary}
-                size={18}
-                onPress={copyToClipboard}
-              />
+                <Text style={[styles.addressItemText, { color: theme.colors.primary }]} numberOfLines={1} ellipsizeMode='middle'>
+                  {vaultAddress + "  "}
+                </Text>
+                <Icon
+                  name="copy"
+                  type="font-awesome"
+                  color={theme.colors.primary}
+                  size={18}
+                  onPress={copyToClipboard}
+                />
               </View>
 
 
-          </Card>
+            </Card>
 
-          <Divider width={15} />
-          <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, {borderColor: theme.colors.background3}]}>
-            <Text style={[styles.tokenSwapTitleText, { color: theme.colors.primary }]}>Token Swap</Text>
+            <Divider width={15} />
+            <Card containerStyle={[styles.CardItem, { backgroundColor: theme.colors.background2 }, { borderColor: theme.colors.background3 }]}>
+              <Text style={[styles.tokenSwapTitleText, { color: theme.colors.primary }]}>Token Swap</Text>
 
-            <View
-              style={{
-                flexDirection: "column",
-                justifyContent: "space-around",
-              }}
-            >
-
-              <RNPickerSelect
-
-            placeholder={placeholder}
-            items={bttSWAP}
-            onValueChange={value => {
-              setSelectedSwap(value);
-              console.log(value);
-            }}
-            style={{
-              ...pickerSelectStyles,
-              iconContainer: {
-                top: 10,
-                position: 'absolute',
-                right: 30,
-              },
-            }}
-            value={selectedSwap}
-            useNativeAndroidPickerStyle={false}
-            Icon={() => {
-              return <Feather name="refresh-ccw" size={24} color="gray" />;
-            }}
-
-          />
-
-          <Input style={[styles.sectionCardItemLeft, { color: theme.colors.primary }]}
-            keyboardType="number-pad"
-            placeholder="Amount"
-            leftIcon={
-              <Icon
-                name='bold'
-                type="feather"
-                size={20}
-                solid='true'
-                color={theme.colors.primary}
-
-              />
-            }
-            onChangeText={async (value) => set_amountToSwap(value)}
-            value={amountToSwap}
-          />
-
-
-              <TouchableOpacity
-                style={styles.copyButton}
-                onPress={processSwap.bind(this, parseInt(selectedSwap))}
+              <View
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                }}
               >
-                <Text style={styles.tabMenuText}>SWAP </Text>
-              </TouchableOpacity>
 
-            </View>
-          </Card>
-        </ScrollView>
-      </SafeAreaView>
-    </View>
+                <RNPickerSelect
+
+                  placeholder={placeholder}
+                  items={bttSWAP}
+                  onValueChange={value => {
+                    setSelectedSwap(value);
+                    console.log(value);
+                  }}
+                  style={{
+                    ...pickerSelectStyles,
+                    iconContainer: {
+                      top: 10,
+                      position: 'absolute',
+                      right: 30,
+                    },
+                  }}
+                  value={selectedSwap}
+                  useNativeAndroidPickerStyle={false}
+                  Icon={() => {
+                    return <Feather name="refresh-ccw" size={24} color="gray" />;
+                  }}
+
+                />
+
+                <Input style={[styles.sectionCardItemLeft, { color: theme.colors.primary }]}
+                  keyboardType="number-pad"
+                  placeholder="Amount"
+                  leftIcon={
+                    <Icon
+                      name='bold'
+                      type="feather"
+                      size={20}
+                      solid='true'
+                      color={theme.colors.primary}
+
+                    />
+                  }
+                  onChangeText={async (value) => set_amountToSwap(value)}
+                  value={amountToSwap}
+                />
+
+
+                <TouchableOpacity
+                  style={styles.copyButton}
+                  onPress={processSwap.bind(this, parseInt(selectedSwap))}
+                >
+                  <Text style={styles.tabMenuText}>SWAP </Text>
+                </TouchableOpacity>
+
+              </View>
+            </Card>
+          </ScrollView>
+        </SafeAreaView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -645,7 +635,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
   },
-  CardItem:{
+  CardItem: {
     width: '95%',
     display: 'flex',
     justifyContent: 'space-between',
@@ -733,7 +723,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginTop: 5,
   },
-  textBTT_currency:{
+  textBTT_currency: {
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 16,
     marginTop: 5,
@@ -755,8 +745,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-  flex: 1,
-  justifyContent: "center"
+    flex: 1,
+    justifyContent: "center"
   },
 });
 

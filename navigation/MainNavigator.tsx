@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {Platform, Text,View,StyleSheet,Image,NativeModules,ActivityIndicator,Alert} from 'react-native';
+import { Platform, Text, View, StyleSheet, Image, NativeModules, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStackNavigator from './HomeStackNavigator';
@@ -17,7 +17,7 @@ import NodeLoadedGIF from '../assets/nodeHungry.gif';
 import BTFSLoadingFilledGIF from '../assets/loading_test.gif';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const {BTFSmodule} = NativeModules;
+const { BTFSmodule } = NativeModules;
 import { Icon } from "react-native-elements";
 import Clipboard from "@react-native-clipboard/clipboard";
 /* Slider Intro section End */
@@ -25,6 +25,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 const Tab = createBottomTabNavigator();
 var bttcWalletTestSts = '';
 var str_BTT_Addy = '';
+var interval: any;
 export const MainNavigator: React.FC = () => {
   const { colors } = useAppSelector((state) => state.theme.theme);
   //const platform = Platform.OS === 'android'? 'android' : 'ios';
@@ -38,7 +39,7 @@ export const MainNavigator: React.FC = () => {
   const [bttcAddress, setbttcAddress] = useState('');
   const [btfsRepo, setbtfsRepo] = useState(false);
   const [enableDaemon, setenableDaemon] = useState(false);
-  const [bttcWalletStatus,setbttcWalletStatus] = useState('');
+  const [bttcWalletStatus, setbttcWalletStatus] = useState('');
   const { theme } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
 
@@ -46,68 +47,65 @@ export const MainNavigator: React.FC = () => {
 
 
   useEffect(() => {
-    const interval = setInterval( async () => {
+    interval = setInterval(async () => {
 
-      var response =  await getNodeBasicStats();
+      var response = await getNodeBasicStats();
       //console.log(btfs_sts);
       var response2 = await getGuideData();
 
-    }, 1200);
+    }, 3200);
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(()  => {
-    const setPreviousInitRepoSts= async () => {
-    const storedRepoSts= await AsyncStorage.getItem('btfsrepo_enable');
-    console.log("BTFS repo created: " + storedRepoSts);
-    let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
-    setbtfsRepo(boolStoredRepoSts);
-    setenableDaemon(boolStoredRepoSts);
-    if (boolStoredRepoSts)
-    {
-      enableBTFSDaemon();
-    }
-    else if (boolStoredRepoSts == false)
-    {
-      initializeRepo();
-      const firstDaemonRunTimeout = setTimeout(triggerAppRestart, 10000);
+  useEffect(() => {
+    const setPreviousInitRepoSts = async () => {
+      const storedRepoSts = await AsyncStorage.getItem('btfsrepo_enable');
+      console.log("BTFS repo created: " + storedRepoSts);
+      let boolStoredRepoSts = (storedRepoSts === 'true');   //Converting string to boolean
+      setbtfsRepo(boolStoredRepoSts);
+      setenableDaemon(boolStoredRepoSts);
+      if (boolStoredRepoSts) {
+        enableBTFSDaemon();
+      }
+      else if (boolStoredRepoSts == false) {
+        initializeRepo();
+        const firstDaemonRunTimeout = setTimeout(triggerAppRestart, 10000);
 
-    }
+      }
 
     };
     setPreviousInitRepoSts();
-    },[]);
+  }, []);
 
 
-    useEffect(()  => {
-      const setPreviousBTCCWalletSts = async () => {
+  useEffect(() => {
+    const setPreviousBTCCWalletSts = async () => {
       const storedBTCCWalletSts = await AsyncStorage.getItem('bttcWalletSts');
       console.log("Wallet Sts: " + storedBTCCWalletSts);
       bttcWalletTestSts = storedBTCCWalletSts;
       setbttcWalletStatus(storedBTCCWalletSts);
 
-      };
-      setPreviousBTCCWalletSts();
+    };
+    setPreviousBTCCWalletSts();
 
-    },[]);
+  }, []);
 
 
   const enableBTFSDaemon = async () => {
 
-      BTFSmodule.main("daemon --chain-id 199","commands");
-      console.log("Starting daemon on chain id 199");
+    BTFSmodule.main("daemon --chain-id 199", "commands");
+    console.log("Starting daemon on chain id 199");
   }
 
   const initializeRepo = async () => {
 
-    try
-    {
-      BTFSmodule.main("init","commands");
+    try {
+      BTFSmodule.main("init", "commands");
       await AsyncStorage.setItem('btfsrepo_enable', 'true');
       console.log("Initializing Repo...")
     }
     catch (err) {
-     console.log(err);
+      console.log(err);
     }
   }
 
@@ -119,121 +117,118 @@ export const MainNavigator: React.FC = () => {
   };
 
 
-  function triggerAppRestart(){
+  function triggerAppRestart() {
     Alert.alert("Init completed", "Please restart app");
     //enableBTFSDaemon();
   }
 
 
-  function getGuideData(){
+  function getGuideData() {
 
     let data = Client10.requestGuide();
-    Promise.resolve(data).then(function(data) {
-
-      if(data.Type == 'error')
-        {
-          //console.log(data);
+    Promise.resolve(data).then(function (data) {
+      console.log("Accessing getGuideData function");
+      if (data.Type == 'error') {
+        //console.log(data);
         //  console.log("Guide is DONE, nothing else to do");
-          //setnodeFilledWithBTT(true);
-        }
+        //setnodeFilledWithBTT(true);
+        clearInterval(interval);
+      }
 
-      else{
+      else {
         //setbttcAddress(data.info['bttc_address']? data.info['bttc_address'] : '--');
         str_BTT_Addy = String(data.info['bttc_address']);
         setbttcAddress(str_BTT_Addy);
         console.log(str_BTT_Addy)
-        if(str_BTT_Addy != '')
-        {
-            setnodeLoadingText("Send at least 1K BTT to your address and wait a moment...");
-            setslideTitleText("Setup your Wallet")
-            AsyncStorage.setItem('bttcWalletSts', 'fillOngoing');
-            setflagGuideDone(true);
-            setenableGuide(true);
+        if (str_BTT_Addy != '') {
+          setnodeLoadingText("Send at least 1K BTT to your address and wait a moment...");
+          setslideTitleText("Setup your Wallet")
+          AsyncStorage.setItem('bttcWalletSts', 'fillOngoing');
+          setflagGuideDone(true);
+          setenableGuide(true);
         }
         //setflagGuideDone(false);
       }
 
 
-  }, function(data) {
-    // not called
-  });
+    }, function (data) {
+      // not called
+    });
   }
 
 
   const getNodeBasicStats = async () => {
-      let data1 = Client10.getHostInfo();
-      let data2 = Client10.getHostScore();
-      let data3 = Client10.getPeers();
-      let data4 = Client10.getHostVersion();
-      let data5 = Client10.getNetworkStatus();
-      //let data6 = Client10.requestGuide();
-      //console.log("Network Status update");
-      return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
-          //console.log(result[4]);
-          //console.log(result[0].BttcAddress);
-          setbttcAddress(result[0].BttcAddress);
+    let data1 = Client10.getHostInfo();
+    let data2 = Client10.getHostScore();
+    let data3 = Client10.getPeers();
+    let data4 = Client10.getHostVersion();
+    let data5 = Client10.getNetworkStatus();
+    //let data6 = Client10.requestGuide();
+    console.log("Network Status update");
+    return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
+      //console.log(result[4]);
+      //console.log(result[0].BttcAddress);
+      setbttcAddress(result[0].BttcAddress);
 
 
 
 
-          //set_host_score
-          let status = null;
-          let message = null;
-          if (result[4]['code_bttc'] === 2 && result[4]['code_status'] === 2) {
-              status = 1;
-              message = 'online';
-              setbtfs_sts('Online');
-              //console.log("Network Status update:Online");
-              setslideTitleText("All Set :)")
-              setnodeLoadingText("Tap Next to finalize setup");
-              setnodeFilledWithBTT(true);
-              setenableGuide(false);
-              setshowRealApp(true);
-              AsyncStorage.setItem('bttcWalletSts', 'filled');
-              setbttcWalletStatus('filled');
-          }
-          if (result[4]['code_bttc'] === 2 && result[4]['code_status'] === 1) {
-              status = 1;
-              message = 'online';
-              setbtfs_sts('Online');
-          }
-          if (result[4]['code_bttc'] === 3) {
-              status = 2;
-              message = ['network_unstable_bttc', 'check_network_request'];
-              setbtfs_sts('Offline');
+      //set_host_score
+      let status = null;
+      let message = null;
+      if (result[4]['code_bttc'] === 2 && result[4]['code_status'] === 2) {
+        status = 1;
+        message = 'online';
+        setbtfs_sts('Online');
+        //console.log("Network Status update:Online");
+        setslideTitleText("All Set :)")
+        setnodeLoadingText("Tap Next to finalize setup");
+        setnodeFilledWithBTT(true);
+        setenableGuide(false);
+        setshowRealApp(true);
+        AsyncStorage.setItem('bttcWalletSts', 'filled');
+        setbttcWalletStatus('filled');
+      }
+      if (result[4]['code_bttc'] === 2 && result[4]['code_status'] === 1) {
+        status = 1;
+        message = 'online';
+        setbtfs_sts('Online');
+      }
+      if (result[4]['code_bttc'] === 3) {
+        status = 2;
+        message = ['network_unstable_bttc', 'check_network_request'];
+        setbtfs_sts('Offline');
 
-          }
-          if (result[4]['code_status'] === 3) {
-              status = 2;
-              message = ['network_unstable_btfs', 'check_network_request'];
-              setbtfs_sts('Offline');
-          }
-          if (result[4]['code_bttc'] === 3 && result[4]['code_status'] === 3) {
-              status = 3;
-              message = ['network_unstable_bttc', 'network_unstable_btfs', 'check_network_request'];
-              setbtfs_sts('Offline');
-          }
-         if (result[4].Message ==="network error or host version not up to date")
-         {
-              message = 'offline';
-              setbtfs_sts('Offline');
-              //dispatch(setSnack({ message: 'Awaiting Network readiness...' }));
-         }
+      }
+      if (result[4]['code_status'] === 3) {
+        status = 2;
+        message = ['network_unstable_btfs', 'check_network_request'];
+        setbtfs_sts('Offline');
+      }
+      if (result[4]['code_bttc'] === 3 && result[4]['code_status'] === 3) {
+        status = 3;
+        message = ['network_unstable_bttc', 'network_unstable_btfs', 'check_network_request'];
+        setbtfs_sts('Offline');
+      }
+      if (result[4].Message === "network error or host version not up to date") {
+        message = 'offline';
+        setbtfs_sts('Offline');
+        //dispatch(setSnack({ message: 'Awaiting Network readiness...' }));
+      }
 
-          return {
-              ID: result[0]['ID'] ? result[0]['ID'] : '--',
-              uptime: result[1]['host_stats'] ? (result[1]['host_stats']['uptime'] * 100).toFixed(0) : '--',
-              peers: result[2]['Peers'] ? result[2]['Peers'].length : '--',
-              version: result[3]['Version'] ? result[3]['Version'] : '--',
-              status: status,
-              message: message,
-          }
-      })
+      return {
+        ID: result[0]['ID'] ? result[0]['ID'] : '--',
+        uptime: result[1]['host_stats'] ? (result[1]['host_stats']['uptime'] * 100).toFixed(0) : '--',
+        peers: result[2]['Peers'] ? result[2]['Peers'].length : '--',
+        version: result[3]['Version'] ? result[3]['Version'] : '--',
+        status: status,
+        message: message,
+      }
+    })
   };
 
 
-  if((showRealApp || btfs_sts == 'Online') & bttcWalletStatus == 'filled')
-  {
+  if ((showRealApp || btfs_sts == 'Online') & bttcWalletStatus == 'filled') {
     return (
       <Tab.Navigator
         initialRouteName="dBrowse"
@@ -263,54 +258,54 @@ export const MainNavigator: React.FC = () => {
         <Tab.Screen name="dBrowse" component={HomeStackNavigator} />
         <Tab.Screen name="dWeb" component={Web} />
         <Tab.Screen name="Wallet" component={FileTransfer} />
-        <Tab.Screen name="Terminal"  component={TerminalScreen}/>
+        <Tab.Screen name="Terminal" component={TerminalScreen} />
         <Tab.Screen name="Settings" component={SettingsStackNavigator} />
       </Tab.Navigator>
     );
   }
   else if (bttcWalletStatus == 'filled')
-  return(
-    <View style={styles.container}>
-    <Image
-        style={styles.logo}
-        source={BTFSLoadingFilledGIF}
-    />
-    <Text style={[styles.text, { color: theme.colors.primary }]}> starting BTFS, please wait... </Text>
+    return (
+      <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={BTFSLoadingFilledGIF}
+        />
+        <Text style={[styles.text, { color: theme.colors.primary }]}> starting BTFS, please wait... </Text>
 
-</View>
+      </View>
 
 
-  )
+    )
   else
-  return(
-    <View style={styles.container}>
-    <Text style={[styles.text, { color: theme.colors.primary }]}> {slideTitleText} </Text>
-    <Image
-        style={styles.logo}
-        source={BTFSLoadingFilledGIF}
-    />
-    <Text style={[styles.text, { color: theme.colors.primary }]}> {nodeLoadingText} </Text>
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        width: 220,
-      }}
-    >
-    <Text style={styles.text }  numberOfLines={1} ellipsizeMode = 'middle' >{str_BTT_Addy}</Text>
-    </View>
-    {enableGuide && <Icon
-      name="copy"
-      type="font-awesome"
-      color={theme.colors.primary}
-      size={25}
-      onPress={copyToClipboard}
-    />}
+    return (
+      <View style={styles.container}>
+        <Text style={[styles.text, { color: theme.colors.primary }]}> {slideTitleText} </Text>
+        <Image
+          style={styles.logo}
+          source={BTFSLoadingFilledGIF}
+        />
+        <Text style={[styles.text, { color: theme.colors.primary }]}> {nodeLoadingText} </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            width: 220,
+          }}
+        >
+          <Text style={styles.text} numberOfLines={1} ellipsizeMode='middle' >{str_BTT_Addy}</Text>
+        </View>
+        {enableGuide && <Icon
+          name="copy"
+          type="font-awesome"
+          color={theme.colors.primary}
+          size={25}
+          onPress={copyToClipboard}
+        />}
 
-</View>
+      </View>
 
 
-  )
+    )
 };
 
 

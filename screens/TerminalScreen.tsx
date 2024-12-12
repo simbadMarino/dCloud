@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
-import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TextInput, Button, Alert, NativeModules, KeyboardAvoidingView} from 'react-native';
-const {width} = Dimensions.get('window');
+import { View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TextInput, Button, Alert, NativeModules, KeyboardAvoidingView, Platform } from 'react-native';
+const { width } = Dimensions.get('window');
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -16,29 +16,27 @@ export default TerminalScreen = () => {
   const [terminalText, setterminalText] = useState('@dcloudterminal:~$ ');
 
 
-  function sendCommand(cmd){
-    if(cmd == "clear screen")
-    {
+  function sendCommand(cmd) {
+    if (cmd == "clear screen") {
       setterminalText("@dcloudterminal:~$ ");
     }
-    else
-    {
-      cmd = cmd.replace(" ","/");
+    else {
+      cmd = cmd.replace(" ", "/");
       console.log("Sending command: " + cmd);
       var cmdReady = '/api/v1/' + cmd + '?arg=' + text;
       let data = Client10.generalCommand(cmdReady);
       //BTFSModule("init","G");
 
-      Promise.resolve(data).then(function(data) {
+      Promise.resolve(data).then(function (data) {
         console.log(data); // "Success"
-        setterminalText(terminalText.concat('\n@dcloudterminal:~$ ' + JSON.stringify(data).replaceAll(",","\n")));
-      }, function(data) {
+        setterminalText(terminalText.concat('\n@dcloudterminal:~$ ' + JSON.stringify(data).replaceAll(",", "\n")));
+      }, function (data) {
         // not called
       });
 
     }
 
-}
+  }
 
   const btfs_commands = [
     'accesskey',
@@ -339,86 +337,86 @@ export default TerminalScreen = () => {
 
 
     <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={styles.container}>
-      <View style={{...styles.viewContainer, backgroundColor: colors.background}}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <View style={{ ...styles.viewContainer, backgroundColor: colors.background }}>
 
-      <View style={{backgroundColor: 'black', flex: 1}} >
-      <ScrollView
-        showsVerticalScrollIndicator={true}
-        alwaysBounceVertical={true}
-        contentContainerStyle={styles.scrollViewContainer}>
+        <View style={{ backgroundColor: 'black', flex: 1 }} >
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            alwaysBounceVertical={true}
+            contentContainerStyle={styles.scrollViewContainer}>
 
 
-          <Text style={styles.baseText} >
-            <Text selectable={true} >{terminalText}</Text>
-          </Text>
+            <Text style={styles.baseText} >
+              <Text selectable={true} >{terminalText}</Text>
+            </Text>
 
-        </ScrollView>
+          </ScrollView>
         </View>
 
-          <SelectDropdown
-            data={btfs_commands}
-            style={{flex: 1}}
-             defaultValueByIndex={287}
-            // defaultValue={'England'}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-              setcommandSelectedString(selectedItem);
-            }}
-            defaultButtonText={'Select command'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              return item;
-            }}
-            buttonStyle={styles.dropdown2BtnStyle}
-            buttonTextStyle={styles.dropdown2BtnTxtStyle}
-            renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#FFF'} size={18} />;
-            }}
-            dropdownIconPosition={'right'}
-            dropdownStyle={styles.dropdown2DropdownStyle}
-            rowStyle={styles.dropdown2RowStyle}
-            rowTextStyle={styles.dropdown2RowTxtStyle}
-            selectedRowStyle={styles.dropdown2SelectedRowStyle}
-            search
-            searchInputStyle={styles.dropdown2searchInputStyleStyle}
-            searchPlaceHolder={'Search here'}
-            searchPlaceHolderColor={'#F8F8F8'}
-            renderSearchInputLeftIcon={() => {
-              return <FontAwesome name={'search'} color={'#FFF'} size={18} />;
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 0.1,
-            }}>
+        <SelectDropdown
+          data={btfs_commands}
+          style={{ flex: 1 }}
+          defaultValueByIndex={287}
+          // defaultValue={'England'}
+          onSelect={(selectedItem, index) => {
+            console.log(selectedItem, index);
+            setcommandSelectedString(selectedItem);
+          }}
+          defaultButtonText={'Select command'}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem;
+          }}
+          rowTextForSelection={(item, index) => {
+            return item;
+          }}
+          buttonStyle={styles.dropdown2BtnStyle}
+          buttonTextStyle={styles.dropdown2BtnTxtStyle}
+          renderDropdownIcon={isOpened => {
+            return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#FFF'} size={18} />;
+          }}
+          dropdownIconPosition={'right'}
+          dropdownStyle={styles.dropdown2DropdownStyle}
+          rowStyle={styles.dropdown2RowStyle}
+          rowTextStyle={styles.dropdown2RowTxtStyle}
+          selectedRowStyle={styles.dropdown2SelectedRowStyle}
+          search
+          searchInputStyle={styles.dropdown2searchInputStyleStyle}
+          searchPlaceHolder={'Search here'}
+          searchPlaceHolderColor={'#F8F8F8'}
+          renderSearchInputLeftIcon={() => {
+            return <FontAwesome name={'search'} color={'#FFF'} size={18} />;
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 0.1,
+          }}>
           <TextInput
             style={styles.input}
             onChangeText={onChangeText}
             value={text}
             numberOfLines={2}
-            placeholder="type the cmd arguments separated by a semicolon, eg: 24;true"
+            placeholder="Type the cmd arguments separated by a semicolon, eg: 24;true"
           />
           <Button
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 10,
-            margin: 5
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 10,
+              margin: 5
 
-          }}
+            }}
             backgroundColor="black"
             title="Send"
             textAlign="center"
             onPress={() => sendCommand(commandSelectedString)}
           />
-          </View>
+        </View>
       </View>
-      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -436,7 +434,7 @@ const styles = StyleSheet.create({
   },
 
   //saveAreaViewContainer: {flex: 1, backgroundColor: '#000'},
-  viewContainer: {flex: 1, backgroundColor: '#FFF'},
+  viewContainer: { flex: 1, backgroundColor: '#FFF' },
   scrollViewContainer: {
     flexGrow: 1,
     //justifyContent: 'space-between',
@@ -463,13 +461,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#444',
     borderRadius: 12,
   },
-  dropdown2RowStyle: {backgroundColor: '#444', borderBottomColor: '#C5C5C5'},
+  dropdown2RowStyle: { backgroundColor: '#444', borderBottomColor: '#C5C5C5' },
   dropdown2RowTxtStyle: {
     color: '#FFF',
     textAlign: 'left',
     fontWeight: 'bold',
   },
-  dropdown2SelectedRowStyle: {backgroundColor: 'rgba(255,255,255,0.2)'},
+  dropdown2SelectedRowStyle: { backgroundColor: 'rgba(255,255,255,0.2)' },
   dropdown2searchInputStyleStyle: {
     backgroundColor: '#444',
     borderBottomWidth: 1,
@@ -483,6 +481,7 @@ const styles = StyleSheet.create({
     color: 'white',
     borderRadius: 12,
     width: '85%',
+    fontSize: 10,
   },
 
 

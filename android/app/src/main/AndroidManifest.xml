@@ -40,6 +40,7 @@
   android:roundIcon="@mipmap/ic_launcher_round" 
   android:allowBackup="true" 
   android:theme="@style/AppTheme" 
+  android:supportsRtl="true"
   android:requestLegacyExternalStorage="true">
     <meta-data 
     	android:name="expo.modules.updates.ENABLED" 
