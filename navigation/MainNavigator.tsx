@@ -12,8 +12,8 @@ import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 
 /* Slider Intro section Start */
 import Client10 from '../utils/APIClient10.js'
-import NodeLoadingGIF from '../assets/nodeLoading.gif';
-import NodeLoadedGIF from '../assets/nodeHungry.gif';
+//import NodeLoadingGIF from '../assets/nodeLoading.gif';
+//import NodeLoadedGIF from '../assets/nodeHungry.gif';
 import BTFSLoadingFilledGIF from '../assets/loading_test.gif';
 import { setSnack, snackActionPayload } from '../features/files/snackbarSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,14 +22,17 @@ import { Icon } from "react-native-elements";
 import Clipboard from "@react-native-clipboard/clipboard";
 /* Slider Intro section End */
 
+import { SafeAreaView } from 'react-native-safe-area-context';  //Safe area view
+
 const Tab = createBottomTabNavigator();
 var bttcWalletTestSts = '';
 var str_BTT_Addy = '';
 var interval: any;
+var appLoadingFlag: boolean = true;
 export const MainNavigator: React.FC = () => {
   const { colors } = useAppSelector((state) => state.theme.theme);
   //const platform = Platform.OS === 'android'? 'android' : 'ios';
-  const [showRealApp, setshowRealApp] = useState(false);
+  const [showRealApp, setshowRealApp] = useState<boolean>(false);
   const [nodeLoadingText, setnodeLoadingText] = useState('Just a few seconds...')
   const [slideTitleText, setslideTitleText] = useState('Setting Up your Node')
   const [flagGuideDone, setflagGuideDone] = useState(false);
@@ -97,6 +100,12 @@ export const MainNavigator: React.FC = () => {
     console.log("Starting daemon on chain id 199");
   }
 
+  const disableTokenAuth = async () => {
+
+    BTFSmodule.main("config API --json '{\"EnableTokenAuth\":false}'", "commands")
+    console.log("TRying to disable token auth");
+  }
+
   const initializeRepo = async () => {
 
     try {
@@ -130,9 +139,12 @@ export const MainNavigator: React.FC = () => {
       console.log("Accessing getGuideData function");
       if (data.Type == 'error') {
         //console.log(data);
-        //  console.log("Guide is DONE, nothing else to do");
+        console.log("Guide is DONE, nothing else to do, clearing interval");
         //setnodeFilledWithBTT(true);
-        clearInterval(interval);
+        console.log("showREalApp var: ", appLoadingFlag);
+        if (appLoadingFlag == false) {    //Clear Interval once the BTFS process is fully loaded to prevent memory leaks and unneceray loops
+          clearInterval(interval);
+        }
       }
 
       else {
@@ -166,7 +178,7 @@ export const MainNavigator: React.FC = () => {
     //let data6 = Client10.requestGuide();
     console.log("Network Status update");
     return Promise.all([data1, data2, data3, data4, data5]).then((result) => {
-      //console.log(result[4]);
+      console.log(result[4]);
       //console.log(result[0].BttcAddress);
       setbttcAddress(result[0].BttcAddress);
 
@@ -180,12 +192,13 @@ export const MainNavigator: React.FC = () => {
         status = 1;
         message = 'online';
         setbtfs_sts('Online');
-        //console.log("Network Status update:Online");
+        console.log("Network Status update:Online");
         setslideTitleText("All Set :)")
         setnodeLoadingText("Tap Next to finalize setup");
         setnodeFilledWithBTT(true);
         setenableGuide(false);
         setshowRealApp(true);
+        appLoadingFlag = false;
         AsyncStorage.setItem('bttcWalletSts', 'filled');
         setbttcWalletStatus('filled');
       }
@@ -228,40 +241,47 @@ export const MainNavigator: React.FC = () => {
   };
 
 
-  if ((showRealApp || btfs_sts == 'Online') & bttcWalletStatus == 'filled') {
+  if (showRealApp == true && btfs_sts == 'Online' && bttcWalletStatus == 'filled') {
     return (
-      <Tab.Navigator
-        initialRouteName="dBrowse"
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarActiveTintColor: '#6495ed',
-          tabBarInactiveTintColor: 'gray',
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName: any;
-            if (route.name === 'dBrowse') {
-              iconName = focused ? 'folder-open' : 'folder';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'cog-outline' : 'cog';
-            } else if (route.name === 'Terminal') {
-              iconName = 'terminal';
-            } else if (route.name === 'dWeb') {
-              iconName = 'globe';
-            } else if (route.name === 'Wallet') {
-              iconName = 'wallet';
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveBackgroundColor: colors.background,
-          tabBarInactiveBackgroundColor: colors.background,
-        })}
-      >
-        <Tab.Screen name="dBrowse" component={HomeStackNavigator} />
-        <Tab.Screen name="dWeb" component={Web} />
-        <Tab.Screen name="Wallet" component={FileTransfer} />
-        <Tab.Screen name="Terminal" component={TerminalScreen} />
-        <Tab.Screen name="Settings" component={SettingsStackNavigator} />
-      </Tab.Navigator>
+      <SafeAreaView style={{ flex: 1, marginBottom: 1, marginTop: 1 }} edges={['bottom']}>
+
+        <Tab.Navigator
+          initialRouteName="dBrowse"
+          screenOptions={({ route }) => ({
+
+            headerShown: false,
+            tabBarActiveTintColor: '#6495ed',
+            tabBarInactiveTintColor: 'gray',
+            tabBarPosition: "bottom",
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName: any;
+              if (route.name === 'dBrowse') {
+                iconName = focused ? 'folder-open' : 'folder';
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'cog-outline' : 'cog';
+              } else if (route.name === 'Terminal') {
+                iconName = 'terminal';
+              } else if (route.name === 'dWeb') {
+                iconName = 'globe';
+              } else if (route.name === 'Wallet') {
+                iconName = 'wallet';
+              }
+              return <Ionicons style={styles.bottomMenu} name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveBackgroundColor: colors.background,
+            tabBarInactiveBackgroundColor: colors.background,
+
+
+          })}
+        >
+          <Tab.Screen name="dBrowse" component={HomeStackNavigator} />
+          <Tab.Screen name="Wallet" component={FileTransfer} />
+          <Tab.Screen name="Terminal" component={TerminalScreen} />
+          <Tab.Screen name="Settings" component={SettingsStackNavigator} />
+        </Tab.Navigator>
+      </SafeAreaView>
     );
+
   }
   else if (bttcWalletStatus == 'filled')
     return (
@@ -313,7 +333,6 @@ const styles = StyleSheet.create({
 
 
   bottomMenu: {
-    height: 55,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',

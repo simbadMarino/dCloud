@@ -415,7 +415,7 @@ const Browser = ({ route }: IBrowserProps) => {
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage' && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home' && file != 'TempFiles' && file != 'RandomFiles' //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
+            (file) => file !== 'RCTAsyncLocalStorage' && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home' && file != 'TempFiles' && file != 'RandomFiles' && file != 'profileInstalled' && file != 'dev.expo.modules.core.logging.dev.expo.updates' && file != 'BridgeReactNativeDevBundle.js' //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
@@ -873,14 +873,7 @@ const Browser = ({ route }: IBrowserProps) => {
     dispatch(setSnack(data));
   };
 
-  const Separator = () => {
-    return <View style={{
-      height: .5,
-      backgroundColor: "#292929",
-      marginHorizontal: 20
-    }}
-    />;
-  };
+
 
 
   return (
@@ -1015,10 +1008,10 @@ const Browser = ({ route }: IBrowserProps) => {
       <View style={{ ...styles.fileList, borderTopColor: colors.primary }}>
         <FlatList
           data={files}
+
           showsVerticalScrollIndicator={true}
           renderItem={renderItem}
           keyExtractor={_keyExtractor}
-          ItemSeparatorComponent={Separator}
         />
       </View>
       {multiSelect && (
@@ -1054,8 +1047,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 1,
     marginHorizontal: 10,
+    borderBottomWidth: 1,
   },
   topLeft: {
     display: 'flex',
@@ -1073,8 +1067,8 @@ const styles = StyleSheet.create({
   },
   fileList: {
     flex: 1,
-    borderTopWidth: 0.5,
-    marginTop: 10,
+    borderTopWidth: 0,
+    marginTop: 15,
     marginHorizontal: 5,
 
   },
