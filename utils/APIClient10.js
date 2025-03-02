@@ -33,7 +33,7 @@ class APIClient10 {
                     let message;
                     if (e.response && e.response.status === 401) {
                         message = e.response['data'];
-                        window.location.href = '/#/login';
+                        //window.location.href = '/#/login';
                     }
                     if (e.response && e.response.status === 500) {
                         message = e.response['data']['Message'];
@@ -62,7 +62,7 @@ class APIClient10 {
                     }
                 }
             }).catch(err => {
-                // console.log(err)
+                //console.log(err)
             });
         }
     }

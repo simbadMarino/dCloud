@@ -53,6 +53,7 @@ export const MainNavigator: React.FC = () => {
     interval = setInterval(async () => {
 
       var response = await getNodeBasicStats();
+      //disableTokenAuth();
       //console.log(btfs_sts);
       var response2 = await getGuideData();
 
@@ -69,6 +70,7 @@ export const MainNavigator: React.FC = () => {
       setenableDaemon(boolStoredRepoSts);
       if (boolStoredRepoSts) {
         enableBTFSDaemon();
+        //disableTokenAuth();
       }
       else if (boolStoredRepoSts == false) {
         initializeRepo();
@@ -102,7 +104,7 @@ export const MainNavigator: React.FC = () => {
 
   const disableTokenAuth = async () => {
 
-    BTFSmodule.main("config API --json '{\"EnableTokenAuth\":false}'", "commands")
+    BTFSmodule.main("config API.EnableTokenAuth false --bool", "commands")
     console.log("TRying to disable token auth");
   }
 
