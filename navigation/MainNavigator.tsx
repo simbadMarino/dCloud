@@ -69,12 +69,15 @@ export const MainNavigator: React.FC = () => {
       setbtfsRepo(boolStoredRepoSts);
       setenableDaemon(boolStoredRepoSts);
       if (boolStoredRepoSts) {
-        enableBTFSDaemon();
         //disableTokenAuth();
+        enableBTFSDaemon();
+        const firstDaemonRunTimeout = setTimeout(startDaemonProcess, 5000);
+
       }
       else if (boolStoredRepoSts == false) {
         initializeRepo();
-        const firstDaemonRunTimeout = setTimeout(triggerAppRestart, 10000);
+        const appRestartTimeOut = setTimeout(triggerAppRestart, 20000);
+
 
       }
 
@@ -105,7 +108,7 @@ export const MainNavigator: React.FC = () => {
   const disableTokenAuth = async () => {
 
     BTFSmodule.main("config API.EnableTokenAuth false --bool", "commands")
-    console.log("TRying to disable token auth");
+    console.log("Trying to disable token auth");
   }
 
   const initializeRepo = async () => {
@@ -129,8 +132,13 @@ export const MainNavigator: React.FC = () => {
 
 
   function triggerAppRestart() {
+
     Alert.alert("Init completed", "Please restart app");
-    //enableBTFSDaemon();
+  }
+
+  function startDaemonProcess() {
+    enableBTFSDaemon();
+    //disableTokenAuth();
   }
 
 
