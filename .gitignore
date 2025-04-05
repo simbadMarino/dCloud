@@ -54,7 +54,7 @@ buck-out/
 *.apk
 *.aab
 *.zip
-
+*.a
 
 
 
