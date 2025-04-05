@@ -10,6 +10,12 @@ build/
 local.properties
 *.iml
 *.hprof
+*.dm
 
 # Bundle artifacts
 *.jsbundle
+*.so
+*.a
+
+# Android release keys
+dCloud_key_rel
