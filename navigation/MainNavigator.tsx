@@ -57,7 +57,7 @@ export const MainNavigator: React.FC = () => {
       //console.log(btfs_sts);
       var response2 = await getGuideData();
 
-    }, 3200);
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 
