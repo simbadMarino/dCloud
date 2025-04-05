@@ -69,14 +69,13 @@ export const MainNavigator: React.FC = () => {
       setbtfsRepo(boolStoredRepoSts);
       setenableDaemon(boolStoredRepoSts);
       if (boolStoredRepoSts) {
-        //disableTokenAuth();
         enableBTFSDaemon();
-        const firstDaemonRunTimeout = setTimeout(startDaemonProcess, 5000);
+        //const firstDaemonRunTimeout = setTimeout(startDaemonProcess, 5000);
 
       }
       else if (boolStoredRepoSts == false) {
         initializeRepo();
-        const appRestartTimeOut = setTimeout(triggerAppRestart, 20000);
+        const appRestartTimeOut = setTimeout(triggerAppRestart, 5000);
 
 
       }
@@ -100,15 +99,23 @@ export const MainNavigator: React.FC = () => {
 
 
   const enableBTFSDaemon = async () => {
-
-    BTFSmodule.main("daemon --chain-id 199", "commands");
-    console.log("Starting daemon on chain id 199");
+    try {
+      BTFSmodule.main("daemon --chain-id 199", "commands");
+      console.log("Starting daemon on chain id 199");
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   const disableTokenAuth = async () => {
-
-    BTFSmodule.main("config API.EnableTokenAuth false --bool", "commands")
-    console.log("Trying to disable token auth");
+    try {
+      BTFSmodule.main("config API.EnableTokenAuth false --bool", "commands")
+      console.log("Trying to disable token auth");
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   const initializeRepo = async () => {
@@ -132,13 +139,13 @@ export const MainNavigator: React.FC = () => {
 
 
   function triggerAppRestart() {
+    disableTokenAuth();
+    const appDaemonTimeOut = setTimeout(requestRestart, 10000);
 
-    Alert.alert("Init completed", "Please restart app");
   }
 
-  function startDaemonProcess() {
-    enableBTFSDaemon();
-    //disableTokenAuth();
+  function requestRestart() {
+    Alert.alert("Init completed", "Please restart app");
   }
 
 
@@ -322,7 +329,7 @@ export const MainNavigator: React.FC = () => {
             width: 220,
           }}
         >
-          <Text style={styles.text} numberOfLines={1} ellipsizeMode='middle' >{str_BTT_Addy}</Text>
+          <Text style={[styles.text, { color: theme.colors.primary }]} numberOfLines={1} ellipsizeMode='middle' >{str_BTT_Addy}</Text>
         </View>
         {enableGuide && <Icon
           name="copy"
