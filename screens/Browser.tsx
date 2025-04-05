@@ -132,7 +132,7 @@ const Browser = ({ route }: IBrowserProps) => {
       key: 'one',
       title: slideTitleText,
       text: nodeLoadingText,
-      image: flagGuideDone?NodeLoadedGIF:NodeLoadingGIF,
+      image: flagGuideDone ? NodeLoadedGIF : NodeLoadingGIF,
       backgroundColor: '#59b2ab',
     },
     {
@@ -146,9 +146,9 @@ const Browser = ({ route }: IBrowserProps) => {
 
 
 
-  useEffect(()  => {
+  useEffect(() => {
 
-    if(Platform.OS == "android")  //Determine HOME dir per OS
+    if (Platform.OS == "android")  //Determine HOME dir per OS
     {
       OSpath = "files";
       OSpathHomeSize = 5;
@@ -163,8 +163,7 @@ const Browser = ({ route }: IBrowserProps) => {
         'close',
       ];
     }
-    else if (Platform.OS == "ios")
-    {
+    else if (Platform.OS == "ios") {
       OSpath = "Documents";
       OSpathHomeSize = 9;
       actionItemsVar = [
@@ -181,7 +180,7 @@ const Browser = ({ route }: IBrowserProps) => {
       ];
     }
 
-  },[]);
+  }, []);
 
 
 
@@ -219,7 +218,7 @@ const Browser = ({ route }: IBrowserProps) => {
           ? prev + route.params.folderName
           : prev + '/' + route.params.folderName
       );
-        //console.log("Updated directory: " + currentDir);
+      //console.log("Updated directory: " + currentDir);
     }
 
   }, [route]);
@@ -239,95 +238,94 @@ const Browser = ({ route }: IBrowserProps) => {
   }, []);
 
 
-/*
-  useEffect(()  => {
-    const setPreviousStorageDuration = async () => {
-    const storedStorageDuration = await AsyncStorage.getItem('storage_duration');
-    console.log(storedStorageDuration);
-    let numericstoredStorageDuration = parseInt(storedStorageDuration);
-    set_default_storage(numericstoredStorageDuration);
+  /*
+    useEffect(()  => {
+      const setPreviousStorageDuration = async () => {
+      const storedStorageDuration = await AsyncStorage.getItem('storage_duration');
+      console.log(storedStorageDuration);
+      let numericstoredStorageDuration = parseInt(storedStorageDuration);
+      set_default_storage(numericstoredStorageDuration);
+  
+      };
+      setPreviousStorageDuration();
+  
+    },[]);*/
 
-    };
-    setPreviousStorageDuration();
-
-  },[]);*/
-
-  function makedir(directory){
+  function makedir(directory) {
     console.log("MAKEDIR:" + directory);
     let data = Client10.mkdir(directory);
     //BTFSModule("init","G");
 
-    Promise.resolve(data).then(function(data) {
+    Promise.resolve(data).then(function (data) {
       console.log(data); // "Success"
 
 
 
-  }, function(data) {
-    // not called
-  });
-}
-
-async function getStorageDuration(){
-
-  const storedStorageDuration = await AsyncStorage.getItem('storage_duration');
-  if (storedStorageDuration == null)
-  {
-    await AsyncStorage.setItem('storage_duration', '32');
+    }, function (data) {
+      // not called
+    });
   }
-  console.log(storedStorageDuration);
-  //let numericstoredStorageDuration = parseInt(storedStorageDuration);
-  set_default_storage(storedStorageDuration);
+
+  async function getStorageDuration() {
+
+    const storedStorageDuration = await AsyncStorage.getItem('storage_duration');
+    if (storedStorageDuration == null) {
+      await AsyncStorage.setItem('storage_duration', '32');
+    }
+    console.log(storedStorageDuration);
+    //let numericstoredStorageDuration = parseInt(storedStorageDuration);
+    set_default_storage(storedStorageDuration);
 
 
-}
+  }
 
-async function getStorageSaverFlag(){
-
-  const storedStorageSaver = await AsyncStorage.getItem('storage_saver');
-  console.log(storedStorageSaver);
-  //let numericstoredStorageDuration = parseInt(storedStorageDuration);
-  set_storage_saver(storedStorageSaver);
-
-
-}
-
-
-
-const CopyQmHash = () => {
-  Clipboard.setString("http://gateway.btfs.io/btfs/" + currentFileQMhash);
-  dispatch(setSnack({ message: 'QmHash Copied to Clipboard' }));
-};
-
-function addBTFS(directory){
-  console.log(directory);
-  let data = Client10.addBTFSfile(directory);
-
-  Promise.resolve(data).then(function(data) {
-    console.log(data); // "Success"
+  /*async function getStorageSaverFlag(){
+  
+    const storedStorageSaver = await AsyncStorage.getItem('storage_saver');
+    console.log(storedStorageSaver);
+    //let numericstoredStorageDuration = parseInt(storedStorageDuration);
+    set_storage_saver(storedStorageSaver);
+  
+  
+  }*/
 
 
 
-}, function(data) {
-  // not called
-});
-}
+  const CopyQmHash = () => {
+    Clipboard.setString("http://gateway.btfs.io/btfs/" + currentFileQMhash);
+    dispatch(setSnack({ message: 'QmHash Copied to Clipboard' }));
+  };
 
-function addFileToBTFS(file)
-{
-  let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
-  let file_stripped = file.slice(homePointer);
-  console.log("File to be added: " + file_stripped);
-  let data = Client10.addBTFSfile(file_stripped);
-
-  Promise.resolve(data).then(function(data) {
-    console.log(data); //Success??
-
+  /*function addBTFS(directory){
+    console.log(directory);
+    let data = Client10.addBTFSfile(directory);
+  
+    Promise.resolve(data).then(function(data) {
+      console.log(data); // "Success"
+  
+  
+  
   }, function(data) {
     // not called
   });
+  }*/
 
-
-}
+  /*function addFileToBTFS(file)
+  {
+    let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+    let file_stripped = file.slice(homePointer);
+    console.log("File to be added: " + file_stripped);
+    let data = Client10.addBTFSfile(file_stripped);
+  
+    Promise.resolve(data).then(function(data) {
+      console.log(data); //Success??
+  
+    }, function(data) {
+      // not called
+    });
+  
+  
+  }*/
 
   const renderItem = ({ item }: { item: fileItem }) => (
     <FileItem
@@ -417,7 +415,7 @@ function addFileToBTFS(file)
       .then((dirFiles) => {
         if (currentDir !== route?.params?.prevDir) {
           const filteredFiles = dirFiles.filter(
-            (file) => file !== 'RCTAsyncLocalStorage'  && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home' && file != 'TempFiles' && file != 'RandomFiles' //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
+            (file) => file !== 'RCTAsyncLocalStorage' && file != 'ReactNativeDevBundle.js' && file != '.expo-internal' && file != '.btfs' && file != 'home' && file != 'TempFiles' && file != 'RandomFiles' && file != 'profileInstalled' && file != 'dev.expo.modules.core.logging.dev.expo.updates' && file != 'BridgeReactNativeDevBundle.js' //We have to filter here all system related hidden folders toa void user accidentaly erasing them ;)
           );
           const filesProms = filteredFiles.map((fileName) =>
             FileSystem.getInfoAsync(currentDir + '/' + fileName)
@@ -428,9 +426,9 @@ function addFileToBTFS(file)
               //console.log(file);
               const name = file.uri.endsWith('/')
                 ? file.uri
-                    .slice(0, file.uri.length - 1)
-                    .split('/')
-                    .pop()
+                  .slice(0, file.uri.length - 1)
+                  .split('/')
+                  .pop()
                 : file.uri.split('/').pop();
               return Object({
                 ...file,
@@ -454,7 +452,7 @@ function addFileToBTFS(file)
           });
         }
       })
-      .catch((_) => {});
+      .catch((_) => { });
   };
 
   async function createDirectory(name: string) {
@@ -465,16 +463,14 @@ function addFileToBTFS(file)
         setFolderDialogVisible(false);
 
         console.log("CURRENT DIR MAKE_FOLDER: " + currentDir);
-        if(currentDir == FileSystem.documentDirectory)
-        {
-            //console.log("You are in home dir!");
-            //console.log(currentDir.search("Documents"))
-            let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + OSpath home folder, 9 is the "Documents" string magic number
-            console.log(homePointer);
-            makedir(currentDir.slice(homePointer)  + name);
+        if (currentDir == FileSystem.documentDirectory) {
+          //console.log("You are in home dir!");
+          //console.log(currentDir.search("Documents"))
+          let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + OSpath home folder, 9 is the "Documents" string magic number
+          console.log(homePointer);
+          makedir(currentDir.slice(homePointer) + name);
         }
-        else
-        {
+        else {
           //console.log("NOT IN HOME dir");
           let homePointer = currentDir.search(OSpath) + OSpathHomeSize;   // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
           //console.log(homePointer);
@@ -536,107 +532,106 @@ function addFileToBTFS(file)
         .catch((err) => console.log("PSTTT " + err));
 
 
-        async function processPic(file)
-        {
-          const formData = new FormData();
+      async function processPic(file) {
+        const formData = new FormData();
 
-          console.log(file);
+        console.log(file);
         //  var urresponse = decodeURIComponent(file.uri);
-          //console.log("urresponse: " + urresponse);
+        //console.log("urresponse: " + urresponse);
 
 
 
-          formData.append(file.name, {
-                uri: file.uri,
-                name: file.name ,
-                type: file.type
+        formData.append(file.name, {
+          uri: file.uri,
+          name: file.name,
+          type: file.type
+        });
+
+        var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(function (addFileData) {
+            //console.log(addFileData);
+            currentFileQMhash = addFileData.data;
+            let hashpointer = currentFileQMhash.search("Name\":\"\",\"Hash\":");
+            currentFileQMhash = currentFileQMhash.slice(hashpointer + 17);
+            currentFileQMhash = currentFileQMhash.slice(0, 46);
+            setqmhash(currentFileQMhash);
+            console.log("File BTFS QMhash: " + currentFileQMhash);
+            //file.qmhash = currentFileQMhash;
+            console.log("Step 2");
+            //console.log(file);
+            console.log("QMhash obtained :), proceeding to upload file...");
+            let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, O is the "Documents" string magic number
+            let currentdir_stripped = currentDir.slice(homePointer);
+            console.log(currentdir_stripped);
+            var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
+              .then(function (fileCopyToMFS) {
+                console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase());
+                console.log(fileCopyToMFS);
+                console.log("Step 3");
+                //  getStorageDuration();
+              })
+
+              .catch(function (error) {
+                console.log('There has been a problem with the BTFS copy command: ' + error.message);
+                //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+                Alert.alert("BTFS Copy MFS Error", "Format error u.u ");
+              });
+            console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
+            console.log("Step 4");
+            var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
+              .then(function (fileUploadID) {
+                console.log(fileUploadID.data.ID);
+                console.log(file.name + " Uploaded to BTFS :) for: " + default_storage + " days");
+
+                //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
+                Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [{ text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel' }, { text: 'Close', onPress: () => console.log('Cancel Pressed') },], { cancelable: true });
+
+                //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
+
+              })
+              .catch(function (error) {
+                console.log('There has been a problem with the BTFS upload command: ' + error.message);
+                //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+                Alert.alert("BTFS file upload Error", "Format error u.u ");
               });
 
-          var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true", formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            })
-            .then(function (addFileData) {
-                    //console.log(addFileData);
-                    currentFileQMhash = addFileData.data;
-                    let hashpointer = currentFileQMhash.search("Name\":\"\",\"Hash\":");
-                    currentFileQMhash = currentFileQMhash.slice(hashpointer + 17);
-                    currentFileQMhash = currentFileQMhash.slice(0,46);
-                    setqmhash(currentFileQMhash);
-                    console.log("File BTFS QMhash: " + currentFileQMhash);
-                    //file.qmhash = currentFileQMhash;
-                    console.log("Step 2");
-                    //console.log(file);
-                    console.log("QMhash obtained :), proceeding to upload file...");
-                    let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, O is the "Documents" string magic number
-                    let currentdir_stripped = currentDir.slice(homePointer);
-                    console.log(currentdir_stripped);
-                    var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
-                    .then(function (fileCopyToMFS){
-                      console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase());
-                      console.log(fileCopyToMFS);
-                      console.log("Step 3");
-                    //  getStorageDuration();
-                    })
-
-                    .catch(function(error) {
-                     console.log('There has been a problem with the BTFS copy command: ' + error.message);
-                                //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                                //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                                Alert.alert("BTFS Copy MFS Error", "Format error u.u ");
-                     });
-                    console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
-                    console.log("Step 4");
-                    var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
-                    .then(function (fileUploadID){
-                       console.log(fileUploadID.data.ID);
-                       console.log(file.name + " Uploaded to BTFS :) for: " + default_storage + " days");
-
-                       //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-                       Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
-
-                       //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
-
-                     })
-                     .catch(function(error) {
-                      console.log('There has been a problem with the BTFS upload command: ' + error.message);
-                                 //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                                 //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                                 Alert.alert("BTFS file upload Error", "Format error u.u ");
-                      });
-
-                     })
-                     .catch(function(error) {
-                      console.log('There has been a problem with the BTFS Add command: ' + error.message);
-                                 //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                                 //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                                 Alert.alert("BTFS Add Error", "Something was wrong while adding your file x.X");
-                      });
+          })
+          .catch(function (error) {
+            console.log('There has been a problem with the BTFS Add command: ' + error.message);
+            //Alert.alert("Error", "Password already set, use cli to change it if needed");
+            //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+            Alert.alert("BTFS Add Error", "Something was wrong while adding your file x.X");
+          });
 
 
-                      //const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
-                      //let filenameStr = file.name.replace(' ','_').replace('-', '_');
-                      //filenameStr = filenameStr.replace(/-/,'_');
-                      //console.log("str filename: " + filenameStr);
-                      //let toDirectory = currentDir + '/' + JSON.stringify(file.name);
-                    //  console.log("toDIR: " + file.name.replace(/ /g, "%20"));
+        //const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
+        //let filenameStr = file.name.replace(' ','_').replace('-', '_');
+        //filenameStr = filenameStr.replace(/-/,'_');
+        //console.log("str filename: " + filenameStr);
+        //let toDirectory = currentDir + '/' + JSON.stringify(file.name);
+        //  console.log("toDIR: " + file.name.replace(/ /g, "%20"));
 
-                    }
+      }
     }
   };
 
-  const pickDocument =  async () => {
+  const pickDocument = async () => {
 
 
     try {
       var response = [];
 
-         response = await DocumentPicker.pick({
-          presentationStyle: 'fullScreen',
-          allowMultiSelection: true,
-          //copyTo: "cachesDirectory", //TODO: Android Only?
-        });
+      response = await DocumentPicker.pick({
+        presentationStyle: 'fullScreen',
+        allowMultiSelection: true,
+        //copyTo: "cachesDirectory", //TODO: Android Only?
+      });
 
       console.log(response);
       //setResult(response);
@@ -644,10 +639,10 @@ function addFileToBTFS(file)
       response.forEach(await processDocuments)
 
 
-         console.log("FILE_PATH: " + currentDir + '/' + response[0].name);
+      console.log("FILE_PATH: " + currentDir + '/' + response[0].name);
 
-   }
-     catch (err) {
+    }
+    catch (err) {
       console.log(err);
     }
 
@@ -665,99 +660,99 @@ function addFileToBTFS(file)
 
 
 
-        FileSystem.copyAsync({
-          from: file.uri,  //TODO:Check if this is OK for Android
-          to: currentDir  + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase(),
-        })
-        console.log("Step 1");
-        //addFileToBTFS(currentDir + '/' + file.name);
-        getFiles();
-        formData.append(file.name, {
-              uri: file.uri,
-              name: file.name,
-              type: file.type
-            });
+      FileSystem.copyAsync({
+        from: file.uri,  //TODO:Check if this is OK for Android
+        to: currentDir + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase(),
+      })
+      console.log("Step 1");
+      //addFileToBTFS(currentDir + '/' + file.name);
+      getFiles();
+      formData.append(file.name, {
+        uri: file.uri,
+        name: file.name,
+        type: file.type
+      });
 
 
 
 
 
       var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true", formData, {  //TODO: Future implementation: Enable storage saver by not copying files to btfs repo with http://localhost:5001/api/v1/add?w=true&n=true
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
         .then(function (addFileData) {
-                //console.log(addFileData);
-                currentFileQMhash = addFileData.data;
-                let hashpointer = currentFileQMhash.search("Name\":\"\",\"Hash\":");
-                currentFileQMhash = currentFileQMhash.slice(hashpointer + 17);
-                currentFileQMhash = currentFileQMhash.slice(0,46);
-                setqmhash(currentFileQMhash);
-                console.log("File BTFS QMhash: " + currentFileQMhash);
-                //file.qmhash = currentFileQMhash;
-                console.log("Step 2");
-                //console.log(file);
-                console.log("QMhash obtained :), proceeding to upload file...");
-                let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
-                let currentdir_stripped = currentDir.slice(homePointer);
-                console.log("currentdir_Stripped: " + currentdir_stripped);
-                //Now proceeding to copy to Mutable File System
+          //console.log(addFileData);
+          currentFileQMhash = addFileData.data;
+          let hashpointer = currentFileQMhash.search("Name\":\"\",\"Hash\":");
+          currentFileQMhash = currentFileQMhash.slice(hashpointer + 17);
+          currentFileQMhash = currentFileQMhash.slice(0, 46);
+          setqmhash(currentFileQMhash);
+          console.log("File BTFS QMhash: " + currentFileQMhash);
+          //file.qmhash = currentFileQMhash;
+          console.log("Step 2");
+          //console.log(file);
+          console.log("QMhash obtained :), proceeding to upload file...");
+          let homePointer = currentDir.search(OSpath) + OSpathHomeSize; // Ripping off the whole path + Documents home folder, 9 is the "Documents" string magic number
+          let currentdir_stripped = currentDir.slice(homePointer);
+          console.log("currentdir_Stripped: " + currentdir_stripped);
+          //Now proceeding to copy to Mutable File System
 
-                  var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
-                  .then(function (fileCopyToMFS){
-                    console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase());
-                    console.log(fileCopyToMFS);
-                    console.log("Step 3");
-                  //  getStorageDuration();
-                  })
+          var fileCopyToMFS = axios.post("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase())
+            .then(function (fileCopyToMFS) {
+              console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentdir_stripped + "/" + file.name.replace(/ /g, "_").replace(/-/g, "_").toLowerCase());
+              console.log(fileCopyToMFS);
+              console.log("Step 3");
+              //  getStorageDuration();
+            })
 
-                  .catch(function(error) {
-                   console.log('There has been a problem with the BTFS copy command: ' + error.message);
-                              //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                              //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                              Alert.alert("BTFS Copy MFS Error", "Format error u.u ");
-                   });
-
-
-
-                console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
-                console.log("Step 4");
-                var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
-                .then(function (fileUploadID){
-                   console.log(fileUploadID.data.ID);
-                   console.log(file.name + " Uploading to BTFS... for: " + default_storage + " days");
-
-                   //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-                   Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [ {text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel'}, {text: 'Close', onPress: () => console.log('Cancel Pressed')}, ], { cancelable: true});
-
-                   //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
-
-                 })
-                 .catch(function(error) {
-                  console.log('There has been a problem with the BTFS upload command: ' + error.message);
-                             //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                             //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                             Alert.alert("BTFS file upload Error", "Format error u.u ");
-                  });
-
-                 })
-                 .catch(function(error) {
-                  console.log('There has been a problem with the BTFS Add command: ' + error.message);
-                             //Alert.alert("Error", "Password already set, use cli to change it if needed");
-                             //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-                             Alert.alert("BTFS Add Error", "Something was wrong while adding your file x.X");
-                  });
+            .catch(function (error) {
+              console.log('There has been a problem with the BTFS copy command: ' + error.message);
+              //Alert.alert("Error", "Password already set, use cli to change it if needed");
+              //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+              Alert.alert("BTFS Copy MFS Error", "Format error u.u ");
+            });
 
 
-                  //const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
-                  //let filenameStr = file.name.replace(' ','_').replace('-', '_');
-                  //filenameStr = filenameStr.replace(/-/,'_');
-                  //console.log("str filename: " + filenameStr);
-                  //let toDirectory = currentDir + '/' + JSON.stringify(file.name);
-                //  console.log("toDIR: " + file.name.replace(/ /g, "%20"));
 
-                }
+          console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
+          console.log("Step 4");
+          var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
+            .then(function (fileUploadID) {
+              console.log(fileUploadID.data.ID);
+              console.log(file.name + " Uploading to BTFS... for: " + default_storage + " days");
+
+              //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
+              Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [{ text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel' }, { text: 'Close', onPress: () => console.log('Cancel Pressed') },], { cancelable: true });
+
+              //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
+
+            })
+            .catch(function (error) {
+              console.log('There has been a problem with the BTFS upload command: ' + error.message);
+              //Alert.alert("Error", "Password already set, use cli to change it if needed");
+              //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+              Alert.alert("BTFS file upload Error", "Format error u.u ");
+            });
+
+        })
+        .catch(function (error) {
+          console.log('There has been a problem with the BTFS Add command: ' + error.message);
+          //Alert.alert("Error", "Password already set, use cli to change it if needed");
+          //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+          Alert.alert("BTFS Add Error", "Something was wrong while adding your file x.X");
+        });
+
+
+      //const { exists: fileExists } = FileSystem.getInfoAsync(urresponse);
+      //let filenameStr = file.name.replace(' ','_').replace('-', '_');
+      //filenameStr = filenameStr.replace(/-/,'_');
+      //console.log("str filename: " + filenameStr);
+      //let toDirectory = currentDir + '/' + JSON.stringify(file.name);
+      //  console.log("toDIR: " + file.name.replace(/ /g, "%20"));
+
+    }
 
   }
 
@@ -793,7 +788,7 @@ function addFileToBTFS(file)
             to: destination + '/' + file.name,
           });
       });
-      allProgress(transferPromises, (p) => {}).then((_) => {
+      allProgress(transferPromises, (p) => { }).then((_) => {
         setDestinationDialogVisible(false);
         setMoveDir('');
         setMoveOrCopy('');
@@ -807,8 +802,7 @@ function addFileToBTFS(file)
     if (confLen > 0) {
       Alert.alert(
         'Conflicting Files',
-        `The destination folder has ${confLen} ${
-          confLen === 1 ? 'file' : 'files'
+        `The destination folder has ${confLen} ${confLen === 1 ? 'file' : 'files'
         } with the same ${confLen === 1 ? 'name' : 'names'}.`,
         [
           {
@@ -879,13 +873,7 @@ function addFileToBTFS(file)
     dispatch(setSnack(data));
   };
 
-  const Separator = () => {
-    return <View style={{
-        height: .5,
-        backgroundColor: "#292929",
-        marginHorizontal: 20}}
-    />;
-    };
+
 
 
   return (
@@ -898,19 +886,17 @@ function addFileToBTFS(file)
         itemIcons={itemIconsVar}
         onClose={setNewFileActionSheet}
         onItemPressed={(buttonIndex) => {
-          if(Platform.OS=='ios')
-          {
+          if (Platform.OS == 'ios') {
             if (buttonIndex === 0) {
               pickImage();
-            }  else if (buttonIndex === 1) {
+            } else if (buttonIndex === 1) {
               pickDocument();
             } else if (buttonIndex === 2) {
               setDownloadDialogVisible(true);
             }
           }
-          if(Platform.OS=='android')
-          {
-             if (buttonIndex === 0) {
+          if (Platform.OS == 'android') {
+            if (buttonIndex === 0) {
               pickDocument();
             } else if (buttonIndex === 1) {
               setDownloadDialogVisible(true);
@@ -919,7 +905,7 @@ function addFileToBTFS(file)
 
 
         }}
-        cancelButtonIndex={Platform.OS == 'ios'?3:2}
+        cancelButtonIndex={Platform.OS == 'ios' ? 3 : 2}
         modalStyle={{ backgroundColor: colors.background2 }}
         itemTextStyle={{ color: colors.text }}
         titleStyle={{ color: colors.secondary }}
@@ -984,14 +970,14 @@ function addFileToBTFS(file)
         <View style={styles.topLeft}>
 
           <TouchableOpacity onPress={() => setNewFileActionSheet(true)}>
-          <SvgComponentFile />
+            <SvgComponentFile />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setFolderDialogVisible(true)}>
-          <SvgComponentFolder />
+            <SvgComponentFolder />
 
           </TouchableOpacity>
           <Text style={styles.fileTabTitleText}
-             >dBrowse</Text>
+          >dBrowse</Text>
         </View>
         {multiSelect && (
           <View style={styles.topRight}>
@@ -1022,10 +1008,10 @@ function addFileToBTFS(file)
       <View style={{ ...styles.fileList, borderTopColor: colors.primary }}>
         <FlatList
           data={files}
+
           showsVerticalScrollIndicator={true}
           renderItem={renderItem}
           keyExtractor={_keyExtractor}
-          ItemSeparatorComponent={Separator}
         />
       </View>
       {multiSelect && (
@@ -1061,8 +1047,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 1,
     marginHorizontal: 10,
+    borderBottomWidth: 1,
   },
   topLeft: {
     display: 'flex',
@@ -1080,8 +1067,8 @@ const styles = StyleSheet.create({
   },
   fileList: {
     flex: 1,
-    borderTopWidth: 0.5,
-    marginTop: 10,
+    borderTopWidth: 0,
+    marginTop: 15,
     marginHorizontal: 5,
 
   },
@@ -1109,8 +1096,8 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   tagView: {
-  flexWrap: "wrap"
-},
+    flexWrap: "wrap"
+  },
 });
 
 export default Browser;

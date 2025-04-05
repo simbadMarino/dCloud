@@ -1,44 +1,43 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
-import {View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TextInput, Button, Alert, NativeModules, KeyboardAvoidingView} from 'react-native';
-const {width} = Dimensions.get('window');
+import { View, Text, SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, Image, TextInput, Button, Alert, NativeModules, KeyboardAvoidingView, Platform } from 'react-native';
+const { width } = Dimensions.get('window');
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+const FAIcon = FontAwesome as any;
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import Client10 from '../utils/APIClient10.js'
 
-export default TerminalScreen = () => {
+const TerminalScreen = () => {
   const { colors } = useAppSelector((state) => state.theme.theme);
   const [text, onChangeText] = React.useState('');
   //const bodyText = "$ echo \" Under construction...\"\n   Under construction..."
-  const [commandSelectedString, setcommandSelectedString] = useState('version');
+  const [commandSelectedString, setcommandSelectedString] = useState('clear screen');
   const [terminalText, setterminalText] = useState('@dcloudterminal:~$ ');
 
 
-  function sendCommand(cmd){
-    if(cmd == "clear screen")
-    {
+  function sendCommand(cmd) {
+    if (cmd == "clear screen") {
       setterminalText("@dcloudterminal:~$ ");
     }
-    else
-    {
-      cmd = cmd.replace(" ","/");
+    else {
+      cmd = cmd.replace(" ", "/");
       console.log("Sending command: " + cmd);
       var cmdReady = '/api/v1/' + cmd + '?arg=' + text;
       let data = Client10.generalCommand(cmdReady);
       //BTFSModule("init","G");
 
-      Promise.resolve(data).then(function(data) {
+      Promise.resolve(data).then(function (data) {
         console.log(data); // "Success"
-        setterminalText(terminalText.concat('\n@dcloudterminal:~$ ' + JSON.stringify(data).replaceAll(",","\n")));
-      }, function(data) {
+        setterminalText(terminalText.concat('\n@dcloudterminal:~$ ' + JSON.stringify(data).replaceAll(",", "\n")));
+      }, function (data) {
         // not called
       });
 
     }
 
-}
+  }
 
   const btfs_commands = [
     'accesskey',
@@ -339,28 +338,35 @@ export default TerminalScreen = () => {
 
 
     <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={styles.container}>
-      <View style={{...styles.viewContainer, backgroundColor: colors.background}}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <View style={{ ...styles.viewContainer, backgroundColor: colors.background }}>
 
-      <View style={{backgroundColor: 'black', flex: 1}} >
-      <ScrollView
-        showsVerticalScrollIndicator={true}
-        alwaysBounceVertical={true}
-        contentContainerStyle={styles.scrollViewContainer}>
+        <View style={{ backgroundColor: colors.background, flex: 1 }} >
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            alwaysBounceVertical={true}
+            persistentScrollbar={true}
+            contentContainerStyle={styles.scrollViewContainer}>
 
 
-          <Text style={styles.baseText} >
-            <Text selectable={true} >{terminalText}</Text>
-          </Text>
+            <Text style={styles.terminalBoxText} >
+              <Text selectable={true} >{terminalText}</Text>
+            </Text>
 
-        </ScrollView>
+          </ScrollView>
         </View>
-
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 0,
+            margin: 'auto'
+          }}>
+          <Text style={styles.cmdTextStyle} numberOfLines={1}>{'Cmd'}</Text>
           <SelectDropdown
+
             data={btfs_commands}
-            style={{flex: 1}}
-             defaultValueByIndex={287}
+            defaultValueByIndex={85}
             // defaultValue={'England'}
             onSelect={(selectedItem, index) => {
               console.log(selectedItem, index);
@@ -376,11 +382,12 @@ export default TerminalScreen = () => {
             buttonStyle={styles.dropdown2BtnStyle}
             buttonTextStyle={styles.dropdown2BtnTxtStyle}
             renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#FFF'} size={18} />;
+              return <FAIcon name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#FFF'} size={18} />;
             }}
             dropdownIconPosition={'right'}
             dropdownStyle={styles.dropdown2DropdownStyle}
             rowStyle={styles.dropdown2RowStyle}
+
             rowTextStyle={styles.dropdown2RowTxtStyle}
             selectedRowStyle={styles.dropdown2SelectedRowStyle}
             search
@@ -388,68 +395,71 @@ export default TerminalScreen = () => {
             searchPlaceHolder={'Search here'}
             searchPlaceHolderColor={'#F8F8F8'}
             renderSearchInputLeftIcon={() => {
-              return <FontAwesome name={'search'} color={'#FFF'} size={18} />;
+              return <FAIcon name={'search'} color={'#FFF'} size={20} />;
             }}
           />
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 0.1,
-            }}>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            flex: 0,
+            margin: 'auto'
+          }}>
+          <Text style={styles.cmdParamStyle} numberOfLines={1}>{'Pars'}</Text>
           <TextInput
             style={styles.input}
             onChangeText={onChangeText}
             value={text}
             numberOfLines={2}
-            placeholder="type the cmd arguments separated by a semicolon, eg: 24;true"
+            placeholder="Type the cmd arguments separated by a semicolon, eg: 24;true"
           />
-          <Button
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 10,
-            margin: 5
 
-          }}
-            backgroundColor="black"
-            title="Send"
-            textAlign="center"
+        </View>
+        <View
+          style={{
+            flex: 0,
+            justifyContent: 'space-evenly',
+          }}>
+          <Button
+            title="Execute command"
+            color={'#006400'}
             onPress={() => sendCommand(commandSelectedString)}
           />
-          </View>
+        </View>
       </View>
-      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
+export default TerminalScreen;
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 
-  baseText: {
-    //fontFamily: 'terminal',
-    fontSize: 16,
-    color: 'green',
-    marginTop: 40,
-    marginLeft: 10
+  terminalBoxText: {
+    fontSize: 13,
+    color: '#006400',
+    marginTop: 30,
+    marginLeft: 5
   },
 
   //saveAreaViewContainer: {flex: 1, backgroundColor: '#000'},
-  viewContainer: {flex: 1, backgroundColor: '#FFF'},
+  viewContainer: { flex: 1, backgroundColor: '#FFF' },
   scrollViewContainer: {
     flexGrow: 1,
-    //justifyContent: 'space-between',
-    //alignItems: 'center',
-    //paddingVertical: '10%',
-    //paddingBottom: '20%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingVertical: '1%',
+    paddingBottom: '1%',
   },
 
 
 
   dropdown2BtnStyle: {
     width: '85%',
-    backgroundColor: '#444',
+    backgroundColor: '#666',
     borderRadius: 8,
     margin: 1
   },
@@ -460,30 +470,40 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   dropdown2DropdownStyle: {
-    backgroundColor: '#444',
+    backgroundColor: '#666',
     borderRadius: 12,
   },
-  dropdown2RowStyle: {backgroundColor: '#444', borderBottomColor: '#C5C5C5'},
+  dropdown2RowStyle: { backgroundColor: '#666', borderBottomColor: '#C5C5C5' },
   dropdown2RowTxtStyle: {
     color: '#FFF',
     textAlign: 'left',
     fontWeight: 'bold',
   },
-  dropdown2SelectedRowStyle: {backgroundColor: 'rgba(255,255,255,0.2)'},
+  dropdown2SelectedRowStyle: { backgroundColor: 'rgba(255,255,255,0.2)' },
   dropdown2searchInputStyleStyle: {
-    backgroundColor: '#444',
+    backgroundColor: '#666',
     borderBottomWidth: 1,
     borderBottomColor: '#FFF',
   },
 
   input: {
     margin: 1,
-    backgroundColor: '#444',
+    backgroundColor: '#666',
     padding: 10,
     color: 'white',
     borderRadius: 12,
     width: '85%',
+    fontSize: 10,
   },
+
+  cmdTextStyle: {
+    color: 'gray',
+    margin: 10
+  },
+  cmdParamStyle: {
+    color: 'gray',
+    margin: 10
+  }
 
 
 });

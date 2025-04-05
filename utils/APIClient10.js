@@ -1,35 +1,69 @@
-import axios from 'axios';
+import xhr from "axios/index";
+//import { MULTIPLE_CURRENCY_RATE} from "utils/constants";
+import Cookies from 'js-cookie';
+
+
 class APIClient10 {
     constructor() {
-        this.apiUrl =  "http://localhost:5001";
-        //this.apiUrl = "http://127.0.0.1:5001";
-        this.request = async (url) => {
+        this.apiUrl = "http://localhost:5001";
+        //this.apiUrl = "http://";
+        this.token = Cookies.get(this.apiUrl) || '';
+        // console.log("Token used:", this.token);
+        this.request = async (url, body, config) => {
+            const isFormData = body instanceof FormData
+            const addToken = url.includes('?') ? `&token=${this.token}` : `?token=${this.token}`
             return new Promise(async (resolve, reject) => {
                 try {
-                    let {data} = await axios.post(this.apiUrl + url);
 
-                    //console.log(data);
+                    let { data } = await xhr.post(
+                        this.apiUrl + url + addToken,
+                        isFormData ? body :
+                            {
+                                ...body
+                            },
+                        { ...config }
+                    );
+
                     resolve(data);
+                    //console.log(data);
 
                 }
                 catch (e) {
+                    // console.log(e);
                     let message;
+                    if (e.response && e.response.status === 401) {
+                        message = e.response['data'];
+                        //window.location.href = '/#/login';
+                    }
                     if (e.response && e.response.status === 500) {
                         message = e.response['data']['Message'];
                     }
                     if (e.response && e.response.status === 400) {
                         message = e.response['data'];
                     }
-                    resolve({
-                        Type: 'error',
-                        Message: message ? message : 'network error or host version not up to date'
-                    });
 
+                    if (e.response && e.response?.data && !e.response?.data?.success && e.response?.data?.type === 'application/json') {
+                        const fileReader = new FileReader()
+                        fileReader.readAsText(e.response.data, 'utf-8')
+                        fileReader.onload = function () {
+                            const result = JSON.parse(fileReader.result)
+                            message = result['Message']
+                            resolve({
+                                Type: 'error',
+                                Message: message ? message : 'network error or host version not up to date'
+                            });
+                            return;
+                        }
+                    } else {
+                        resolve({
+                            Type: 'error',
+                            Message: message ? message : 'network error or host version not up to date'
+                        });
+                    }
                 }
-                }).catch(err => {
-                    console.log(err)
-                });
-
+            }).catch(err => {
+                //console.log(err)
+            });
         }
     }
 
@@ -170,7 +204,7 @@ class APIClient10 {
     getFiles(hash) {
         return this.request('/api/v1/ls?arg=' + hash);
     }
-    mkdir(dir){
+    mkdir(dir) {
         return this.request('/api/v1/files/mkdir?parents=true&arg=' + dir)
     }
 
@@ -240,19 +274,23 @@ class APIClient10 {
 
     enableStorageSaver(en) {
         return this.request('/api/v1/config?arg=Experimental.FilestoreEnabled&arg=' + en + '&json=true');
-          //"http://localhost:5001/api/v1/config?arg=Experimental.FilestoreEnabled&arg=false&json=true"
+        //"http://localhost:5001/api/v1/config?arg=Experimental.FilestoreEnabled&arg=false&json=true"
+    }
+    disableAuthToken() {
+        return this.request('/api/v1/config?arg=API.EnableTokenAuth&arg=false&bool=false&json=true');
+
     }
 
-    requestGuide(){
-      return this.request('/api/v1/guide-info')
+    requestGuide() {
+        return this.request('/api/v1/guide-info')
     }
 
     getUploadStatus(sessionID) {
-      return this.request('/api/v1/storage/upload/status?arg=' + sessionID)
+        return this.request('/api/v1/storage/upload/status?arg=' + sessionID)
     }
 
-    generalCommand(cmd){
-      return this.request(cmd)
+    generalCommand(cmd) {
+        return this.request(cmd)
     }
 
 }
