@@ -55,7 +55,8 @@ import DocumentPicker, {
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
+//import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
+import { ImagePickerAsset } from 'expo-image-picker/build/ImagePicker.types';
 import { ExtendedAsset, fileItem } from '../types';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { setImages } from '../features/files/imagesSlice';
@@ -509,7 +510,7 @@ const Browser = ({ route }: IBrowserProps) => {
     });
 
     if (!result.canceled) {
-      const { uri, type } = result as ImageInfo;
+      const { uri, type } = result as ImagePickerAsset;
       const filename: string = uri.replace(/^.*[\\\/]/, '');
       const ext: string | null = reExt.exec(filename)![1];
       const fileNamePrefix = type === 'image' ? 'IMG_' : 'VID_';
@@ -545,7 +546,7 @@ const Browser = ({ route }: IBrowserProps) => {
           uri: file.uri,
           name: file.name,
           type: file.type
-        });
+        } as any);
 
         var addFileData = axios.post("http://localhost:5001/api/v1/add?w=true", formData, {
           headers: {
@@ -671,7 +672,7 @@ const Browser = ({ route }: IBrowserProps) => {
         uri: file.uri,
         name: file.name,
         type: file.type
-      });
+      } as any);
 
 
 
@@ -705,6 +706,24 @@ const Browser = ({ route }: IBrowserProps) => {
               console.log(fileCopyToMFS);
               console.log("Step 3");
               //  getStorageDuration();
+              var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
+                .then(function (fileUploadID) {
+                  console.log("Step 4");
+                  console.log(fileUploadID.data.ID);
+                  console.log(file.name + " Uploading to BTFS... for: " + default_storage + " days");
+
+                  //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
+                  Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [{ text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel' }, { text: 'Close', onPress: () => console.log('Cancel Pressed') },], { cancelable: true });
+
+                  //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
+
+                })
+                .catch(function (error) {
+                  console.log('There has been a problem with the BTFS upload command: ' + error.message);
+                  //Alert.alert("Error", "Password already set, use cli to change it if needed");
+                  //console.log("Call response: " + JSON.stringify(depositBTT_resp));
+                  Alert.alert("BTFS file upload Error", "Format error u.u ");
+                });
             })
 
             .catch(function (error) {
@@ -716,25 +735,9 @@ const Browser = ({ route }: IBrowserProps) => {
 
 
 
-          console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
-          console.log("Step 4");
-          var fileUploadID = axios.post("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
-            .then(function (fileUploadID) {
-              console.log(fileUploadID.data.ID);
-              console.log(file.name + " Uploading to BTFS... for: " + default_storage + " days");
+          //console.log("http://localhost:5001/api/v1/storage/upload?arg=" + currentFileQMhash + "&len=" + default_storage)
 
-              //Alert.alert("BTFS Upload in progress...", "Storage duration: " + default_storage + " days");
-              Alert.alert(file.name + " Uploading to BTFS... please wait at least 1 min more", "for: " + default_storage + " days", [{ text: 'Copy Link', onPress: () => CopyQmHash(), style: 'cancel' }, { text: 'Close', onPress: () => console.log('Cancel Pressed') },], { cancelable: true });
 
-              //console.log("http://localhost:5001/api/v1/files/cp?arg=/btfs/" + currentFileQMhash + "&arg=" + currentDir + file.name);
-
-            })
-            .catch(function (error) {
-              console.log('There has been a problem with the BTFS upload command: ' + error.message);
-              //Alert.alert("Error", "Password already set, use cli to change it if needed");
-              //console.log("Call response: " + JSON.stringify(depositBTT_resp));
-              Alert.alert("BTFS file upload Error", "Format error u.u ");
-            });
 
         })
         .catch(function (error) {

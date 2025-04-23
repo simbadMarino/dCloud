@@ -22,9 +22,10 @@ const TerminalScreen = () => {
       setterminalText("@dcloudterminal:~$ ");
     }
     else {
-      cmd = cmd.replace(" ", "/");
-      console.log("Sending command: " + cmd);
+      cmd = cmd.replaceAll(" ", "/");
+
       var cmdReady = '/api/v1/' + cmd + '?arg=' + text;
+      console.log("Sending command: " + cmdReady);
       let data = Client10.generalCommand(cmdReady);
       //BTFSModule("init","G");
 
